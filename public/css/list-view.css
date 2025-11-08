@@ -1,0 +1,437 @@
+/**
+ * List View Styles
+ *
+ * Mobile-first responsive styles for list view.
+ */
+
+/* List Wrapper */
+.gcal-list-wrapper {
+    max-width: 800px;
+    margin: 20px auto;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* Loading State */
+.gcal-list-loading {
+    display: none;
+    text-align: center;
+    padding: 40px;
+}
+
+.gcal-list-wrapper.loading .gcal-list-loading {
+    display: block;
+}
+
+.gcal-list-wrapper.loading .gcal-list {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* List Container */
+.gcal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Event Card */
+.gcal-list-event-card {
+    display: flex;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-left: 4px solid #2271b1;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.gcal-list-event-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Event Date Badge */
+.gcal-event-date {
+    background: #f8f9fa;
+    padding: 16px;
+    text-align: center;
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #e9ecef;
+}
+
+.gcal-event-month {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gcal-event-day {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529;
+    line-height: 1;
+    margin-top: 4px;
+}
+
+/* Event Details */
+.gcal-event-details {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gcal-event-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.gcal-event-category {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #2271b1;
+    background: #e7f3ff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+}
+
+.gcal-event-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    color: #495057;
+    font-weight: 500;
+}
+
+.gcal-event-time::before {
+    content: "🕐";
+    font-size: 1rem;
+}
+
+.gcal-event-description {
+    color: #6c757d;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 8px 0;
+}
+
+.gcal-event-location {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.875rem;
+    color: #495057;
+}
+
+.gcal-event-location a {
+    color: #2271b1;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.gcal-event-location a:hover {
+    color: #135e96;
+    text-decoration: underline;
+}
+
+.gcal-location-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* Read More Button */
+.gcal-event-read-more {
+    background: none;
+    border: none;
+    color: #2271b1;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 0;
+    text-align: left;
+    transition: color 0.2s;
+    margin-top: 8px;
+}
+
+.gcal-event-read-more:hover {
+    color: #135e96;
+}
+
+/* Skeleton Loading Cards */
+.gcal-skeleton-card {
+    display: flex;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 150px;
+}
+
+.gcal-skeleton-date {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    min-width: 80px;
+}
+
+.gcal-skeleton-content {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gcal-skeleton-line {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+    height: 16px;
+}
+
+.gcal-skeleton-line.short {
+    width: 60%;
+}
+
+.gcal-skeleton-line.medium {
+    width: 80%;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Empty State */
+.gcal-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.gcal-empty-state::before {
+    content: "📅";
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.gcal-empty-state p {
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+/* Error State */
+.gcal-error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.gcal-error::before {
+    content: "⚠️";
+    font-size: 1.5rem;
+    margin-right: 8px;
+}
+
+.gcal-error p {
+    margin: 0;
+    display: inline;
+}
+
+/* Pagination (if implemented) */
+.gcal-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 32px;
+    padding: 20px 0;
+}
+
+.gcal-pagination-button {
+    background: #2271b1;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.gcal-pagination-button:hover:not(:disabled) {
+    background: #135e96;
+}
+
+.gcal-pagination-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.gcal-pagination-info {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+/* Responsive - Tablet */
+@media (min-width: 768px) {
+    .gcal-list {
+        gap: 20px;
+    }
+
+    .gcal-event-date {
+        min-width: 100px;
+        padding: 20px;
+    }
+
+    .gcal-event-day {
+        font-size: 2.5rem;
+    }
+
+    .gcal-event-details {
+        padding: 20px;
+        gap: 10px;
+    }
+
+    .gcal-event-title {
+        font-size: 1.5rem;
+    }
+
+    .gcal-event-description {
+        font-size: 1rem;
+    }
+}
+
+/* Responsive - Desktop */
+@media (min-width: 1024px) {
+    .gcal-list-wrapper {
+        max-width: 900px;
+    }
+
+    .gcal-event-date {
+        min-width: 120px;
+    }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 640px) {
+    .gcal-list-wrapper {
+        margin: 10px;
+    }
+
+    .gcal-list {
+        gap: 12px;
+    }
+
+    .gcal-event-date {
+        min-width: 60px;
+        padding: 12px 8px;
+    }
+
+    .gcal-event-month {
+        font-size: 0.75rem;
+    }
+
+    .gcal-event-day {
+        font-size: 1.5rem;
+    }
+
+    .gcal-event-details {
+        padding: 12px;
+        gap: 6px;
+    }
+
+    .gcal-event-title {
+        font-size: 1.125rem;
+    }
+
+    .gcal-event-category {
+        font-size: 0.625rem;
+        padding: 3px 8px;
+    }
+
+    .gcal-event-time,
+    .gcal-event-location {
+        font-size: 0.8125rem;
+    }
+
+    .gcal-event-description {
+        font-size: 0.8125rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .gcal-list-event-card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+
+    .gcal-event-read-more {
+        display: none;
+    }
+
+    .gcal-pagination {
+        display: none;
+    }
+}
+
+/* Dark Mode Support (if theme supports it) */
+@media (prefers-color-scheme: dark) {
+    .gcal-list-event-card {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+
+    .gcal-event-date {
+        background: #1a1a1a;
+        border-color: #444;
+    }
+
+    .gcal-event-day,
+    .gcal-event-title {
+        color: #f8f9fa;
+    }
+
+    .gcal-event-month,
+    .gcal-event-time,
+    .gcal-event-description,
+    .gcal-event-location {
+        color: #adb5bd;
+    }
+
+    .gcal-empty-state {
+        background: #1a1a1a;
+        color: #adb5bd;
+    }
+}

@@ -1,0 +1,296 @@
+/**
+ * Admin Styles
+ *
+ * Styles for the plugin settings page in WordPress admin.
+ */
+
+/* Admin Container */
+.gcal-admin-container {
+    max-width: 1200px;
+    margin: 20px 0;
+}
+
+/* Admin Sections */
+.gcal-admin-section {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.gcal-admin-section h2 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Connection Status */
+.gcal-connection-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.gcal-connection-status .dashicons {
+    margin-right: 8px;
+}
+
+.gcal-connection-status.gcal-connected {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.gcal-connection-status.gcal-disconnected {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Actions */
+.gcal-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.gcal-button-danger {
+    color: #a00 !important;
+    border-color: #a00 !important;
+}
+
+.gcal-button-danger:hover {
+    background: #a00 !important;
+    color: #fff !important;
+}
+
+/* Category Manager */
+.gcal-category-manager {
+    margin-top: 20px;
+}
+
+.gcal-add-category-form {
+    background: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 30px;
+}
+
+.gcal-add-category-form h3 {
+    margin-top: 0;
+}
+
+.gcal-categories-list {
+    margin-top: 30px;
+}
+
+.gcal-categories-list h3 {
+    margin-bottom: 15px;
+}
+
+.gcal-color-preview {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+/* Color Picker */
+.gcal-color-picker {
+    max-width: 100px;
+}
+
+/* Modal */
+.gcal-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+}
+
+.gcal-modal-dialog {
+    background: #fff;
+    border-radius: 4px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.gcal-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.gcal-modal-header h3 {
+    margin: 0;
+}
+
+.gcal-modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+}
+
+.gcal-modal-close:hover {
+    color: #333;
+}
+
+.gcal-modal-body {
+    padding: 20px;
+}
+
+.gcal-modal-footer {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    gap: 10px;
+}
+
+/* Cache Settings */
+.gcal-cache-settings {
+    margin-top: 20px;
+}
+
+.gcal-cache-slider {
+    width: 300px;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+
+#cache_duration_display {
+    font-weight: 600;
+    color: #2271b1;
+}
+
+.gcal-cache-stats {
+    background: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 30px;
+}
+
+.gcal-cache-stats h3 {
+    margin-top: 0;
+}
+
+.gcal-cache-stats .form-table th {
+    width: 200px;
+}
+
+/* Loading Spinner */
+.gcal-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #2271b1;
+    animation: gcal-spin 0.8s linear infinite;
+}
+
+@keyframes gcal-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+    .gcal-actions {
+        flex-direction: column;
+    }
+
+    .gcal-actions .button {
+        width: 100%;
+    }
+
+    .gcal-cache-slider {
+        width: 100%;
+    }
+}
+
+/* WordPress Admin Notices Integration */
+.gcal-admin-section .notice {
+    margin: 15px 0;
+}
+
+/* Table Improvements */
+.gcal-categories-list .wp-list-table {
+    margin-top: 10px;
+}
+
+.gcal-categories-list .wp-list-table code {
+    background: #f0f0f1;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* Form Improvements */
+.gcal-admin-section input[type="text"],
+.gcal-admin-section input[type="password"],
+.gcal-admin-section select {
+    padding: 6px 10px;
+}
+
+.gcal-admin-section .description {
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* Success/Error Messages */
+.gcal-message {
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-left: 4px solid;
+    border-radius: 2px;
+}
+
+.gcal-message.success {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.gcal-message.error {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+/* Help Text */
+.gcal-help-text {
+    background: #e7f3ff;
+    border-left: 4px solid #2271b1;
+    padding: 12px;
+    margin: 15px 0;
+}
+
+.gcal-help-text strong {
+    display: block;
+    margin-bottom: 5px;
+}

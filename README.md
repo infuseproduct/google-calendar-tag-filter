@@ -1,0 +1,226 @@
+# Google Calendar Tag Filter Plugin
+
+A WordPress plugin that embeds Google Calendar events with tag-based filtering capabilities using OAuth 2.0 authentication.
+
+## Features
+
+- **OAuth 2.0 Authentication**: Secure read-only access to Google Calendar
+- **Tag-Based Filtering**: Filter events using customizable category tags
+- **Multiple Views**: Calendar view (month/week) and list view
+- **Category Whitelist**: Admin-managed categories with custom colors
+- **Smart Caching**: Configurable 1-minute caching for optimal performance
+- **Mobile-First**: Responsive design that works on all devices
+- **Timezone Support**: Automatic timezone conversion for visitors
+- **Localization Ready**: Fully translatable with text domain support
+
+## Requirements
+
+- **WordPress**: 5.8 or higher
+- **PHP**: 7.4 or higher
+- **Composer**: For installing PHP dependencies
+- **Google Cloud Console**: OAuth 2.0 credentials with Calendar API enabled
+- **HTTPS**: Required for OAuth redirect (production)
+
+## Installation
+
+### 1. Install Dependencies
+
+```bash
+cd /path/to/wp-content/plugins/ccfhk-calendar-wp-plugin
+composer install
+```
+
+This will install the Google API PHP Client library.
+
+### 2. Activate the Plugin
+
+1. Log in to your WordPress admin dashboard
+2. Navigate to **Plugins** → **Installed Plugins**
+3. Find "Google Calendar Tag Filter" and click **Activate**
+
+### 3. Configure Google Cloud Console
+
+Before the plugin can connect to Google Calendar, you need to set up OAuth credentials:
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project (or select an existing one)
+3. Enable the **Google Calendar API**:
+   - Navigate to **APIs & Services** → **Library**
+   - Search for "Google Calendar API"
+   - Click **Enable**
+
+4. Create OAuth 2.0 credentials:
+   - Navigate to **APIs & Services** → **Credentials**
+   - Click **Create Credentials** → **OAuth 2.0 Client ID**
+   - Select **Web application**
+   - Add your redirect URI (found in plugin settings):
+     ```
+     https://your-site.com/wp-admin/admin.php?page=gcal-tag-filter-settings&gcal_oauth_callback=1
+     ```
+   - Copy the **Client ID** and **Client Secret**
+
+### 4. Connect to Google Calendar
+
+1. Navigate to **Settings** → **Calendar Filter** in WordPress admin
+2. Enter your **Client ID** and **Client Secret**
+3. Click **Save and Connect with Google**
+4. You'll be redirected to Google to authorize access
+5. After authorization, select which calendar to display
+6. Save your settings
+
+### 5. Configure Categories
+
+1. In the plugin settings, add categories to the whitelist:
+   - **Category ID**: Uppercase alphanumeric (e.g., `COMMUNITY`)
+   - **Display Name**: User-friendly name (e.g., "Community Events")
+   - **Color**: Choose a color for calendar color-coding
+
+2. Example categories:
+   - `COMMUNITY` → "Community Events" (Blue)
+   - `WORKSHOP` → "Workshops" (Green)
+   - `TRAINING` → "Training Sessions" (Yellow)
+
+## Usage
+
+### Tagging Events in Google Calendar
+
+To tag events for filtering, add tags to the event **description** using this format:
+
+```
+[[[TAG:CATEGORY_ID]]]
+```
+
+**Examples:**
+
+- Single tag:
+  ```
+  [[[TAG:COMMUNITY]]]
+  Join us for our monthly community meetup!
+  ```
+
+- Multiple tags:
+  ```
+  [[[TAG:WORKSHOP]]][[[TAG:TRAINING]]]
+  Learn React.js in this hands-on workshop.
+  ```
+
+- Tags with location:
+  ```
+  [[[TAG:COMMUNITY]]]
+  Community potluck dinner - bring your favorite dish!
+
+  Location: 123 Main St
+  ```
+
+**Note:** Tags are stripped from the description before displaying to users.
+
+### Embedding Calendars with Shortcodes
+
+Use the `[gcal_embed]` shortcode to display events on any page or post.
+
+**Parameters:**
+
+- `view` (required): `calendar` or `list`
+- `period` (required): `week`, `month`, or `future`
+- `tags` (optional): Comma-separated category IDs
+
+**Examples:**
+
+```wordpress
+<!-- Show all events for the current month in calendar view -->
+[gcal_embed view="calendar" period="month"]
+
+<!-- Show upcoming workshops in list view -->
+[gcal_embed tags="WORKSHOP" view="list" period="future"]
+
+<!-- Show this week's community events and training in calendar view -->
+[gcal_embed tags="COMMUNITY,TRAINING" view="calendar" period="week"]
+
+<!-- Show next month's events (all categories) -->
+[gcal_embed view="list" period="month"]
+```
+
+## Cache Management
+
+The plugin caches events to minimize API calls and improve performance:
+
+- **Default**: 1-minute cache
+- **Configurable**: 0-60 minutes
+- **Manual Clear**: Use the "Clear Cache Now" button in settings
+
+## Troubleshooting
+
+### OAuth Connection Issues
+
+- **Redirect URI mismatch**: Ensure the redirect URI in Google Cloud Console exactly matches the one shown in plugin settings
+- **HTTPS required**: OAuth requires HTTPS in production (HTTP is OK for localhost)
+- **Token expired**: Click "Disconnect" and reconnect to refresh OAuth tokens
+
+### No Events Displaying
+
+- **Check calendar selection**: Ensure a calendar is selected in settings
+- **Check tags**: Verify events have correctly formatted tags in their descriptions
+- **Check whitelist**: Ensure the tags used match categories in the whitelist
+- **Clear cache**: Try clearing the cache to fetch fresh data
+
+### API Rate Limits
+
+- **Increase cache duration**: Set cache to 5-10 minutes if hitting rate limits
+- **Monitor quota**: Check API usage in Google Cloud Console
+
+## Development
+
+### File Structure
+
+```
+ccfhk-calendar-wp-plugin/
+├── gcal-tag-filter.php          # Main plugin file
+├── composer.json                 # Dependencies
+├── includes/                     # Core classes
+│   ├── class-gcal-oauth.php     # OAuth authentication
+│   ├── class-gcal-calendar.php  # Calendar API service
+│   ├── class-gcal-parser.php    # Tag parsing
+│   ├── class-gcal-cache.php     # Cache management
+│   ├── class-gcal-categories.php # Category whitelist
+│   └── class-gcal-shortcode.php  # Shortcode handler
+├── admin/                        # Admin interface
+│   ├── class-gcal-admin.php
+│   ├── partials/
+│   ├── css/
+│   └── js/
+├── public/                       # Frontend display
+│   ├── class-gcal-display.php
+│   ├── css/
+│   └── js/
+└── languages/                    # Translations
+```
+
+### Localization
+
+The plugin is translation-ready with text domain `gcal-tag-filter`. To translate:
+
+1. Generate POT file: `wp i18n make-pot . languages/gcal-tag-filter.pot`
+2. Create translation files (.po/.mo) for your language
+3. Place in the `languages/` directory
+
+## Security
+
+- OAuth tokens are encrypted before storage
+- All input is sanitized and validated
+- Output is properly escaped to prevent XSS
+- Nonce verification for all admin actions
+- Capability checks for administrative functions
+
+## Support
+
+For issues, feature requests, or contributions:
+- **GitHub**: https://github.com/ccfhk/ccfhk-calendar-wp-plugin
+- **Documentation**: See `/DOCS` folder
+
+## License
+
+GPL v2 or later
+
+## Credits
+
+Developed by CCFHK

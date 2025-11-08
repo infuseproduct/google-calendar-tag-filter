@@ -1,0 +1,390 @@
+/**
+ * Calendar View Styles
+ *
+ * Mobile-first responsive styles for calendar view.
+ */
+
+/* Calendar Wrapper */
+.gcal-calendar-wrapper {
+    max-width: 100%;
+    margin: 20px auto;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* Calendar Header */
+.gcal-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.gcal-calendar-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: #333;
+    flex: 1;
+    text-align: center;
+}
+
+.gcal-nav-prev,
+.gcal-nav-next {
+    background: #2271b1;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.gcal-nav-prev:hover,
+.gcal-nav-next:hover {
+    background: #135e96;
+}
+
+.gcal-nav-prev:disabled,
+.gcal-nav-next:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Loading State */
+.gcal-calendar-loading {
+    display: none;
+    text-align: center;
+    padding: 40px;
+}
+
+.gcal-calendar-wrapper.loading .gcal-calendar-loading {
+    display: block;
+}
+
+.gcal-calendar-wrapper.loading .gcal-calendar-grid {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.gcal-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #2271b1;
+    animation: gcal-spin 0.8s linear infinite;
+}
+
+@keyframes gcal-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Month View */
+.gcal-month-view {
+    width: 100%;
+}
+
+/* Weekday Headers */
+.gcal-weekday-headers {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: #e9ecef;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+
+.gcal-weekday {
+    background: #fff;
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #495057;
+    text-transform: uppercase;
+}
+
+/* Days Grid */
+.gcal-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: #e9ecef;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    min-height: 400px;
+}
+
+.gcal-day {
+    background: #fff;
+    padding: 8px;
+    min-height: 80px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.gcal-day:hover {
+    background: #f8f9fa;
+}
+
+.gcal-day-other-month {
+    background: #f8f9fa;
+    color: #adb5bd;
+}
+
+.gcal-day-today {
+    background: #e7f3ff;
+}
+
+.gcal-day-today .gcal-day-number {
+    background: #2271b1;
+    color: #fff;
+}
+
+.gcal-day-number {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 4px;
+}
+
+/* Event Items in Calendar */
+.gcal-day-events {
+    margin-top: 4px;
+}
+
+.gcal-event-item {
+    background: #fff;
+    border-left: 3px solid #2271b1;
+    padding: 4px 6px;
+    margin-bottom: 4px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gcal-event-item:hover {
+    background: #f0f0f0;
+    transform: translateX(2px);
+}
+
+.gcal-event-time {
+    font-weight: 600;
+    margin-right: 4px;
+    color: #495057;
+}
+
+.gcal-event-title {
+    color: #212529;
+}
+
+/* Week View */
+.gcal-week-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.gcal-week-day {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.gcal-week-day:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gcal-week-day-header {
+    background: #f8f9fa;
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.gcal-week-day-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #495057;
+    text-transform: uppercase;
+}
+
+.gcal-week-day-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-top: 4px;
+}
+
+.gcal-week-day.gcal-day-today .gcal-week-day-header {
+    background: #2271b1;
+    color: #fff;
+}
+
+.gcal-week-day.gcal-day-today .gcal-week-day-name,
+.gcal-week-day.gcal-day-today .gcal-week-day-number {
+    color: #fff;
+}
+
+.gcal-week-day-events {
+    padding: 12px;
+    min-height: 100px;
+}
+
+.gcal-no-events {
+    color: #adb5bd;
+    font-style: italic;
+    font-size: 0.875rem;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Empty State */
+.gcal-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.gcal-empty-state p {
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+/* Error State */
+.gcal-error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.gcal-error p {
+    margin: 0;
+}
+
+/* Responsive - Tablet */
+@media (min-width: 768px) {
+    .gcal-calendar-title {
+        font-size: 1.75rem;
+    }
+
+    .gcal-day {
+        min-height: 100px;
+        padding: 12px;
+    }
+
+    .gcal-event-item {
+        font-size: 0.875rem;
+        padding: 6px 8px;
+    }
+
+    .gcal-weekday {
+        padding: 15px;
+    }
+}
+
+/* Responsive - Desktop */
+@media (min-width: 1024px) {
+    .gcal-calendar-wrapper {
+        max-width: 1200px;
+    }
+
+    .gcal-day {
+        min-height: 120px;
+    }
+
+    .gcal-week-view {
+        grid-template-columns: repeat(7, 1fr);
+    }
+}
+
+/* Responsive - Mobile (Portrait) */
+@media (max-width: 640px) {
+    .gcal-calendar-header {
+        padding: 10px;
+    }
+
+    .gcal-calendar-title {
+        font-size: 1.25rem;
+    }
+
+    .gcal-nav-prev,
+    .gcal-nav-next {
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+    }
+
+    .gcal-weekday {
+        padding: 8px 4px;
+        font-size: 0.75rem;
+    }
+
+    .gcal-day {
+        min-height: 60px;
+        padding: 4px;
+    }
+
+    .gcal-day-number {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        font-size: 0.75rem;
+    }
+
+    .gcal-event-item {
+        font-size: 0.625rem;
+        padding: 3px 4px;
+    }
+
+    .gcal-event-time {
+        display: none; /* Hide time on very small screens */
+    }
+
+    /* Switch to single column week view on mobile */
+    .gcal-week-view {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .gcal-calendar-header {
+        background: none;
+    }
+
+    .gcal-nav-prev,
+    .gcal-nav-next {
+        display: none;
+    }
+
+    .gcal-event-item {
+        page-break-inside: avoid;
+    }
+}

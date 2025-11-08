@@ -1,0 +1,28 @@
+{
+    "name": "ccfhk/gcal-tag-filter",
+    "description": "WordPress plugin for displaying Google Calendar events with tag-based filtering",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "CCFHK",
+            "email": "info@ccfhk.org"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "google/apiclient": "^2.15"
+    },
+    "autoload": {
+        "classmap": [
+            "includes/",
+            "admin/",
+            "public/"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    }
+}
