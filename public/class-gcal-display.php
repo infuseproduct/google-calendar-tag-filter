@@ -426,7 +426,7 @@ class GCal_Display {
         if ( ! $event['is_all_day'] ) {
             $start_time = new DateTime( $event['start'] );
             $end_time = new DateTime( $event['end'] );
-            $time = $start_time->format( 'g:i A' ) . ' - ' . $end_time->format( 'g:i A' );
+            $time = $this->format_time( $start_time ) . ' - ' . $this->format_time( $end_time );
         }
 
         // Add warning emoji for untagged or unknown-tag events
@@ -509,7 +509,7 @@ class GCal_Display {
                         <?php
                         $end_date = new DateTime( $event['end'] );
                         ?>
-                        <span class="gcal-event-start"><?php echo esc_html( $start_date->format( 'g:i A' ) . ' - ' . $end_date->format( 'g:i A' ) ); ?></span>
+                        <span class="gcal-event-start"><?php echo esc_html( $this->format_time( $start_date ) . ' - ' . $this->format_time( $end_date ) ); ?></span>
                     <?php endif; ?>
                 </div>
 
@@ -722,5 +722,19 @@ class GCal_Display {
      */
     private function get_category_display_name( $category ) {
         return GCal_Categories::get_category_display_name( $category );
+    }
+
+    /**
+     * Format time without :00 minutes.
+     *
+     * @param DateTime $datetime DateTime object.
+     * @return string Formatted time (e.g., "6 PM" instead of "6:00 PM").
+     */
+    private function format_time( $datetime ) {
+        $minutes = $datetime->format( 'i' );
+        if ( $minutes === '00' ) {
+            return $datetime->format( 'g A' );
+        }
+        return $datetime->format( 'g:i A' );
     }
 }
