@@ -623,10 +623,13 @@ class GCal_Display {
             <div class="gcal-event-date">
                 <?php
                 $french_months_short = array( 'jan', 'fév', 'mar', 'avr', 'mai', 'juin', 'juil', 'aoû', 'sep', 'oct', 'nov', 'déc' );
+                $french_days_short = array( 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.', 'Dim.' );
                 $month_index = (int) $start_date->format( 'n' ) - 1;
+                $day_of_week_index = (int) $start_date->format( 'N' ) - 1; // 1 (Monday) to 7 (Sunday)
                 ?>
-                <div class="gcal-event-month"><?php echo esc_html( $french_months_short[ $month_index ] ); ?></div>
+                <div class="gcal-event-weekday"><?php echo esc_html( $french_days_short[ $day_of_week_index ] ); ?></div>
                 <div class="gcal-event-day"><?php echo esc_html( $start_date->format( 'd' ) ); ?></div>
+                <div class="gcal-event-month"><?php echo esc_html( $french_months_short[ $month_index ] ); ?></div>
                 <div class="gcal-event-time">
                     <?php if ( $event['is_all_day'] ) : ?>
                         <?php esc_html_e( 'Toute la journée', 'gcal-tag-filter' ); ?>

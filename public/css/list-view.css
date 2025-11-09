@@ -91,8 +91,8 @@
     border-right: 1px solid #e9ecef;
 }
 
-.gcal-event-month {
-    font-size: 0.875rem;
+.gcal-event-weekday {
+    font-size: 0.75rem;
     font-weight: 600;
     color: #6c757d;
     text-transform: uppercase;
@@ -104,7 +104,16 @@
     font-weight: 700;
     color: #212529;
     line-height: 1;
-    margin-top: 4px;
+    margin-top: 2px;
+}
+
+.gcal-event-month {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
 }
 
 .gcal-event-date .gcal-event-time {
@@ -433,12 +442,17 @@
         padding: 8px 6px;
     }
 
-    .gcal-event-month {
+    .gcal-event-weekday {
         font-size: 0.625rem;
     }
 
     .gcal-event-day {
         font-size: 1.125rem;
+        margin-top: 2px;
+    }
+
+    .gcal-event-month {
+        font-size: 0.625rem;
         margin-top: 2px;
     }
 
