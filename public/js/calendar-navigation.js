@@ -303,8 +303,8 @@
             }
 
             // Apply contrast colors to newly rendered events
-            if (window.GCalContrastHandler) {
-                window.GCalContrastHandler.applyContrastColors();
+            if (window.GCalContrast) {
+                window.GCalContrast.applyContrastColors();
             }
         },
 
