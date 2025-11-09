@@ -399,40 +399,4 @@
     }
 }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    .gcal-modal-content {
-        background: #2d2d2d;
-        color: #f8f9fa;
-    }
-
-    .gcal-modal-title,
-    .gcal-modal-meta-value,
-    .gcal-modal-date {
-        color: #f8f9fa;
-    }
-
-    .gcal-modal-meta-label,
-    .gcal-modal-time,
-    .gcal-modal-description {
-        color: #adb5bd;
-    }
-
-    .gcal-modal-meta {
-        border-bottom-color: #444;
-    }
-
-    .gcal-modal-footer {
-        background: #1a1a1a;
-        border-top-color: #444;
-    }
-
-    .gcal-modal-close {
-        background: rgba(255, 255, 255, 0.1);
-        color: #f8f9fa;
-    }
-
-    .gcal-modal-close:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-}
+/* Dark Mode Disabled - Plugin uses light mode only */

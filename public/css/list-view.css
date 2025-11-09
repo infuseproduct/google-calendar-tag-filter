@@ -493,32 +493,4 @@
     }
 }
 
-/* Dark Mode Support (if theme supports it) */
-@media (prefers-color-scheme: dark) {
-    .gcal-list-event-card {
-        background: #2d2d2d;
-        border-color: #444;
-    }
-
-    .gcal-event-date {
-        background: #1a1a1a;
-        border-color: #444;
-    }
-
-    .gcal-event-day,
-    .gcal-event-title {
-        color: #f8f9fa;
-    }
-
-    .gcal-event-month,
-    .gcal-event-time,
-    .gcal-event-description,
-    .gcal-event-location {
-        color: #adb5bd;
-    }
-
-    .gcal-empty-state {
-        background: #1a1a1a;
-        color: #adb5bd;
-    }
-}
+/* Dark Mode Disabled - Plugin uses light mode only */
