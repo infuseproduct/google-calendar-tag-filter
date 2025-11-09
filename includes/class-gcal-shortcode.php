@@ -125,15 +125,26 @@ class GCal_Shortcode {
         $events = $this->calendar->get_events( $period, $tags, $url_year, $url_month, $url_week );
 
         // Debug events count
-        error_log( 'GCal Shortcode - Fetched ' . ( is_array( $events ) ? count( $events ) : '0' ) . ' events' );
-        add_action( 'wp_footer', function() use ( $events ) {
-            $count = is_array( $events ) ? count( $events ) : ( is_wp_error( $events ) ? 'ERROR: ' . $events->get_error_message() : '0' );
-            echo '<script>console.log("PHP Shortcode fetched events: ' . esc_js( $count ) . '");</script>';
+        $event_count = is_array( $events ) ? count( $events ) : 0;
+        $is_error = is_wp_error( $events );
+        error_log( 'GCal Shortcode - Fetched ' . $event_count . ' events' . ( $is_error ? ' (ERROR: ' . $events->get_error_message() . ')' : '' ) );
+
+        add_action( 'wp_footer', function() use ( $events, $event_count, $is_error ) {
+            if ( $is_error ) {
+                echo '<script>console.error("PHP Shortcode ERROR: ' . esc_js( $events->get_error_message() ) . '");</script>';
+            } else {
+                echo '<script>console.log("PHP Shortcode fetched events: ' . esc_js( $event_count ) . '");</script>';
+            }
         } );
 
         // Handle errors
         if ( is_wp_error( $events ) ) {
             return $this->display->render_error( $events->get_error_message() );
+        }
+
+        // Debug: Show visible warning if no events
+        if ( empty( $events ) ) {
+            error_log( 'GCal Shortcode - EMPTY EVENTS for period=' . $period . ', year=' . $url_year . ', month=' . $url_month . ', week=' . $url_week );
         }
 
         // Render appropriate view
