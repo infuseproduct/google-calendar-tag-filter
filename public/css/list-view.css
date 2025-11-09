@@ -400,7 +400,7 @@
         padding: 12px;
     }
 
-    .gcal-header-left {
+    .gcal-list-wrapper .gcal-header-left {
         width: 100%;
         justify-content: space-between;
     }
@@ -409,7 +409,7 @@
         font-size: 1.125rem;
     }
 
-    .gcal-view-toggle {
+    .gcal-list-wrapper .gcal-view-toggle {
         width: 100%;
         justify-content: center;
     }

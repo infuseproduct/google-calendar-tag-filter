@@ -62,7 +62,7 @@ class GCal_Shortcode {
         $show_display_style = filter_var( $atts['show_display_style'], FILTER_VALIDATE_BOOLEAN );
 
         // Check for URL parameter override (from view toggle)
-        if ( isset( $_GET['gcal_view'] ) && $view === 'calendar' ) {
+        if ( isset( $_GET['gcal_view'] ) ) {
             $url_period = sanitize_text_field( $_GET['gcal_view'] );
             $validated_url_period = $this->validate_period( $url_period );
             if ( $validated_url_period ) {
