@@ -68,13 +68,16 @@ class GCal_Parser {
      * Validate tags against whitelist.
      *
      * @param array $tags Array of tag strings.
-     * @return array Array of validated tags.
+     * @return array Array with 'valid' and 'invalid' tags.
      */
     private function validate_tags( $tags ) {
         $categories = GCal_Categories::get_categories();
 
         if ( empty( $categories ) ) {
-            return array(); // No categories defined, no tags are valid
+            return array(
+                'valid'   => array(),
+                'invalid' => $tags, // All tags are invalid if no categories defined
+            );
         }
 
         // Get valid category IDs
@@ -85,12 +88,14 @@ class GCal_Parser {
 
         // Filter tags
         $validated = array();
+        $invalid = array();
         foreach ( $tags as $tag ) {
             $tag_upper = strtoupper( trim( $tag ) );
 
             if ( in_array( $tag_upper, $valid_ids, true ) ) {
                 $validated[] = $tag_upper;
             } else {
+                $invalid[] = $tag_upper;
                 // Log invalid tag for admin awareness
                 error_log( sprintf(
                     'GCal Tag Filter: Invalid tag "%s" found in event. Not in whitelist.',
@@ -99,8 +104,10 @@ class GCal_Parser {
             }
         }
 
-        // Remove duplicates
-        return array_unique( $validated );
+        return array(
+            'valid'   => array_unique( $validated ),
+            'invalid' => array_unique( $invalid ),
+        );
     }
 
     /**

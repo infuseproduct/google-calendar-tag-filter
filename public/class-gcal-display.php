@@ -388,7 +388,19 @@ class GCal_Display {
      */
     private function render_event_item( $event ) {
         $category_color = '';
-        if ( ! empty( $event['tags'] ) ) {
+        $is_untagged = ! empty( $event['is_untagged'] );
+        $has_unknown_tags = ! empty( $event['has_unknown_tags'] );
+        $css_class = '';
+
+        if ( $is_untagged ) {
+            // Untagged events get black background (for admins only)
+            $category_color = '#000000';
+            $css_class = 'gcal-event-untagged';
+        } elseif ( $has_unknown_tags ) {
+            // Events with unknown tags get dark red background (for admins only)
+            $category_color = '#8B0000'; // Dark red
+            $css_class = 'gcal-event-unknown-tags';
+        } elseif ( ! empty( $event['tags'] ) ) {
             $category_color = GCal_Categories::get_category_color( $event['tags'][0] );
         }
 
@@ -399,15 +411,18 @@ class GCal_Display {
             $time = $start_time->format( 'g:i A' ) . ' - ' . $end_time->format( 'g:i A' );
         }
 
+        // Add warning emoji for untagged or unknown-tag events
+        $title = ( $is_untagged || $has_unknown_tags ) ? '⚠️ ' . $event['title'] : $event['title'];
+
         ob_start();
         ?>
-        <div class="gcal-event-item"
+        <div class="gcal-event-item <?php echo esc_attr( $css_class ); ?>"
              data-event-id="<?php echo esc_attr( $event['id'] ); ?>"
-             style="background-color: <?php echo esc_attr( $category_color ); ?>">
+             style="background-color: <?php echo esc_attr( $category_color ); ?>;">
             <?php if ( $time ) : ?>
                 <span class="gcal-event-time"><?php echo esc_html( $time ); ?></span>
             <?php endif; ?>
-            <span class="gcal-event-title"><?php echo esc_html( $event['title'] ); ?></span>
+            <span class="gcal-event-title"><?php echo esc_html( $title ); ?></span>
         </div>
         <?php
         return ob_get_clean();
@@ -423,15 +438,33 @@ class GCal_Display {
         $start_date = new DateTime( $event['start'] );
         $category_color = '';
         $category_name = '';
+        $is_untagged = ! empty( $event['is_untagged'] );
+        $has_unknown_tags = ! empty( $event['has_unknown_tags'] );
+        $css_class = '';
 
-        if ( ! empty( $event['tags'] ) ) {
+        if ( $is_untagged ) {
+            // Untagged events get black background (for admins only)
+            $category_color = '#000000';
+            $category_name = '⚠️ Non catégorisé';
+            $css_class = 'gcal-event-untagged';
+        } elseif ( $has_unknown_tags ) {
+            // Events with unknown tags get dark red background (for admins only)
+            $category_color = '#8B0000';
+            // Show the first invalid tag
+            $first_invalid = ! empty( $event['invalid_tags'][0] ) ? $event['invalid_tags'][0] : 'UNKNOWN';
+            $category_name = '⚠️ Tag inconnu: ' . $first_invalid;
+            $css_class = 'gcal-event-unknown-tags';
+        } elseif ( ! empty( $event['tags'] ) ) {
             $category_color = GCal_Categories::get_category_color( $event['tags'][0] );
             $category_name = GCal_Categories::get_category_display_name( $event['tags'][0] );
         }
 
+        // Add warning emoji for untagged or unknown-tag events
+        $title = ( $is_untagged || $has_unknown_tags ) ? '⚠️ ' . $event['title'] : $event['title'];
+
         ob_start();
         ?>
-        <div class="gcal-list-event-card"
+        <div class="gcal-list-event-card <?php echo esc_attr( $css_class ); ?>"
              data-event-id="<?php echo esc_attr( $event['id'] ); ?>"
              style="border-left-color: <?php echo esc_attr( $category_color ); ?>">
 
@@ -445,7 +478,7 @@ class GCal_Display {
             </div>
 
             <div class="gcal-event-details">
-                <h3 class="gcal-event-title"><?php echo esc_html( $event['title'] ); ?></h3>
+                <h3 class="gcal-event-title"><?php echo esc_html( $title ); ?></h3>
 
                 <?php if ( $category_name ) : ?>
                     <div class="gcal-event-category"><?php echo esc_html( $category_name ); ?></div>
@@ -595,17 +628,28 @@ class GCal_Display {
     private function render_category_sidebar( $events, $selected_category, $instance_id ) {
         // Collect all unique categories from events
         $all_categories = array();
+        $has_untagged = false;
+        $has_unknown_tags = false;
         foreach ( $events as $event ) {
             if ( ! empty( $event['tags'] ) ) {
                 foreach ( $event['tags'] as $tag ) {
                     $all_categories[] = strtoupper( $tag );
                 }
             }
+            if ( ! empty( $event['is_untagged'] ) ) {
+                $has_untagged = true;
+            }
+            if ( ! empty( $event['has_unknown_tags'] ) ) {
+                $has_unknown_tags = true;
+            }
         }
 
         // Remove duplicates and sort alphabetically
         $all_categories = array_unique( $all_categories );
         sort( $all_categories );
+
+        // Check if current user is admin
+        $is_admin = current_user_can( 'manage_options' );
 
         ob_start();
         ?>
@@ -626,6 +670,22 @@ class GCal_Display {
                         </button>
                     </li>
                 <?php endforeach; ?>
+                <?php if ( $is_admin && $has_untagged ) : ?>
+                    <li>
+                        <button class="gcal-category-btn <?php echo strtoupper( $selected_category ) === 'UNTAGGED' ? 'active' : ''; ?>"
+                                data-category="UNTAGGED">
+                            ⚠️ <?php esc_html_e( 'Sans catégorie', 'gcal-tag-filter' ); ?>
+                        </button>
+                    </li>
+                <?php endif; ?>
+                <?php if ( $is_admin && $has_unknown_tags ) : ?>
+                    <li>
+                        <button class="gcal-category-btn <?php echo strtoupper( $selected_category ) === 'UNKNOWN' ? 'active' : ''; ?>"
+                                data-category="UNKNOWN">
+                            ⚠️ <?php esc_html_e( 'Tags inconnus', 'gcal-tag-filter' ); ?>
+                        </button>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
         <?php

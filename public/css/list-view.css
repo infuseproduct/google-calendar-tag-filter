@@ -110,7 +110,19 @@
     align-self: flex-start;
 }
 
-.gcal-event-time {
+/* Untagged event styling */
+.gcal-event-untagged .gcal-event-category {
+    background: #000000;
+    color: #ffffff;
+}
+
+/* Unknown tags event styling */
+.gcal-event-unknown-tags .gcal-event-category {
+    background: #8B0000;
+    color: #ffffff;
+}
+
+.gcal-list-event-card .gcal-event-time {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -119,7 +131,7 @@
     font-weight: 500;
 }
 
-.gcal-event-time::before {
+.gcal-list-event-card .gcal-event-time::before {
     content: "🕐";
     font-size: 1rem;
 }

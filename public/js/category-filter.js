@@ -173,6 +173,24 @@
                 return events.map(e => e.id);
             }
 
+            // Special handling for "UNTAGGED" category (admin-only)
+            if (category.toUpperCase() === 'UNTAGGED') {
+                return events
+                    .filter(event => !event.tags || event.tags.length === 0)
+                    .map(e => e.id);
+            }
+
+            // Special handling for "UNKNOWN" category (admin-only) - events with unknown tags
+            if (category.toUpperCase() === 'UNKNOWN') {
+                return events
+                    .filter(event => {
+                        // Event has invalid tags but no valid tags
+                        return (!event.tags || event.tags.length === 0) &&
+                               event.invalidTags && event.invalidTags.length > 0;
+                    })
+                    .map(e => e.id);
+            }
+
             // Filter by category
             return events
                 .filter(event => {

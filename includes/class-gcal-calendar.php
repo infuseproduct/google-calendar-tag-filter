@@ -90,6 +90,18 @@ class GCal_Calendar {
         if ( ! empty( $tags ) ) {
             $processed_events = $this->filter_events_by_tags( $processed_events, $tags );
             error_log( 'After tag filter: ' . count( $processed_events ) . ' events' );
+        } else {
+            // When no tags specified, hide untagged and unknown-tag events from non-admins
+            if ( ! current_user_can( 'manage_options' ) ) {
+                $processed_events = array_filter(
+                    $processed_events,
+                    function ( $event ) {
+                        // Show only events with valid tags
+                        return ! empty( $event['tags'] );
+                    }
+                );
+                error_log( 'After untagged/unknown filter (non-admin): ' . count( $processed_events ) . ' events' );
+            }
         }
 
         // Cache the results
@@ -220,8 +232,10 @@ class GCal_Calendar {
         foreach ( $events as $event ) {
             $description = $event->getDescription() ?? '';
 
-            // Extract tags from description
-            $tags = $this->parser->extract_tags( $description );
+            // Extract tags from description (returns array with 'valid' and 'invalid' keys)
+            $tag_result = $this->parser->extract_tags( $description );
+            $valid_tags = isset( $tag_result['valid'] ) ? $tag_result['valid'] : array();
+            $invalid_tags = isset( $tag_result['invalid'] ) ? $tag_result['invalid'] : array();
 
             // Clean description (remove tags)
             $clean_description = $this->parser->strip_tags( $description );
@@ -239,17 +253,25 @@ class GCal_Calendar {
             // Get location
             $location = $event->getLocation() ?? '';
 
+            // Determine event status
+            $has_valid_tags = ! empty( $valid_tags );
+            $has_invalid_tags = ! empty( $invalid_tags );
+            $has_no_tags = empty( $valid_tags ) && empty( $invalid_tags );
+
             $processed[] = array(
-                'id'          => $event->getId(),
-                'title'       => $event->getSummary() ?? __( '(Sans titre)', 'gcal-tag-filter' ),
-                'description' => $clean_description,
-                'location'    => $location,
-                'start'       => $start_time,
-                'end'         => $end_time,
-                'is_all_day'  => $is_all_day,
-                'tags'        => $tags,
-                'html_link'   => $event->getHtmlLink(),
-                'map_link'    => $this->generate_map_link( $location ),
+                'id'               => $event->getId(),
+                'title'            => $event->getSummary() ?? __( '(Sans titre)', 'gcal-tag-filter' ),
+                'description'      => $clean_description,
+                'location'         => $location,
+                'start'            => $start_time,
+                'end'              => $end_time,
+                'is_all_day'       => $is_all_day,
+                'tags'             => $valid_tags,
+                'invalid_tags'     => $invalid_tags,
+                'is_untagged'      => $has_no_tags,
+                'has_unknown_tags' => $has_invalid_tags && ! $has_valid_tags, // Only invalid tags, no valid ones
+                'html_link'        => $event->getHtmlLink(),
+                'map_link'         => $this->generate_map_link( $location ),
             );
         }
 
@@ -267,11 +289,20 @@ class GCal_Calendar {
         // Normalize tags to uppercase for comparison
         $tags = array_map( 'strtoupper', $tags );
 
+        // Check if current user is admin
+        $is_admin = current_user_can( 'manage_options' );
+
         return array_filter(
             $events,
-            function ( $event ) use ( $tags ) {
+            function ( $event ) use ( $tags, $is_admin ) {
+                // For events with unknown tags only (no valid tags): show to admins, hide from non-admins
+                if ( ! empty( $event['has_unknown_tags'] ) ) {
+                    return $is_admin;
+                }
+
+                // For untagged events: show to admins, hide from non-admins
                 if ( empty( $event['tags'] ) ) {
-                    return false;
+                    return $is_admin;
                 }
 
                 // Check if event has ANY of the specified tags (OR logic)
