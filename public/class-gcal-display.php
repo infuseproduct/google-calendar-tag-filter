@@ -648,21 +648,32 @@ class GCal_Display {
                 <?php if ( ! empty( $event['description'] ) ) : ?>
                     <div class="gcal-event-description">
                         <?php
-                        // Check if description has HTML
-                        $has_html = strip_tags( $event['description'] ) !== $event['description'];
+                        // First, make links clickable (handles both HTML and plain text)
+                        $description_with_links = $this->make_links_clickable( $event['description'] );
 
-                        if ( $has_html ) {
-                            // Preserve HTML and trim by characters instead
-                            $description = mb_substr( $event['description'], 0, 200 );
-                            if ( mb_strlen( $event['description'] ) > 200 ) {
+                        // Trim to 30 words, preserving HTML
+                        // wp_trim_words strips tags by default, so we need to manually handle HTML trimming
+                        $words = str_word_count( strip_tags( $description_with_links ), 2, '0123456789' );
+                        if ( count( $words ) > 30 ) {
+                            // Find position of 30th word in the original HTML
+                            $word_positions = array_keys( $words );
+                            $cut_position = $word_positions[29] + strlen( $words[ $word_positions[29] ] );
+
+                            // Cut at the character position in the stripped text
+                            $stripped_text = strip_tags( $description_with_links );
+                            $trimmed_text = substr( $stripped_text, 0, $cut_position );
+
+                            // Find this position in the HTML version and cut there
+                            // For simplicity with HTML, just use character-based trimming
+                            $description = mb_substr( $description_with_links, 0, 400 );
+                            if ( mb_strlen( $description_with_links ) > 400 ) {
                                 $description .= '...';
                             }
                         } else {
-                            // Plain text - use word trimming
-                            $description = wp_trim_words( $event['description'], 30, '...' );
+                            $description = $description_with_links;
                         }
 
-                        echo $this->make_links_clickable( $description );
+                        echo $description;
                         ?>
                     </div>
                 <?php endif; ?>
@@ -979,6 +990,10 @@ class GCal_Display {
         );
 
         $sanitized = wp_kses( $html, $allowed_tags );
+
+        // Normalize excessive line breaks (Google Calendar often uses multiple <br> tags)
+        // Replace 3 or more consecutive <br> tags with just 2
+        $sanitized = preg_replace( '#(<br\s*/?>[\s]*){3,}#i', '<br><br>', $sanitized );
 
         // Ensure all links have target="_blank" and rel="noopener noreferrer"
         $sanitized = preg_replace_callback(
