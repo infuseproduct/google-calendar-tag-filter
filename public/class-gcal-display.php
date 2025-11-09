@@ -96,6 +96,10 @@ class GCal_Display {
 
         <script type="text/javascript">
             var gcalEvents_<?php echo esc_js( $instance_id ); ?> = <?php echo $events_json; ?>;
+            // Register events with modal handler
+            if (window.GCalEventModal) {
+                window.GCalEventModal.registerEvents('<?php echo esc_js( $instance_id ); ?>', gcalEvents_<?php echo esc_js( $instance_id ); ?>);
+            }
         </script>
         <?php
         return ob_get_clean();
@@ -239,9 +243,15 @@ class GCal_Display {
             return $this->render_empty_state();
         }
 
+        // Generate unique ID for this list instance
+        $instance_id = 'gcal-list-' . uniqid();
+
+        // Prepare events data for JavaScript
+        $events_json = wp_json_encode( $this->prepare_events_for_js( $events ) );
+
         ob_start();
         ?>
-        <div class="gcal-list-wrapper" data-period="<?php echo esc_attr( $period ); ?>" data-tags="<?php echo esc_attr( implode( ',', $tags ) ); ?>">
+        <div class="gcal-list-wrapper" id="<?php echo esc_attr( $instance_id ); ?>" data-period="<?php echo esc_attr( $period ); ?>" data-tags="<?php echo esc_attr( implode( ',', $tags ) ); ?>">
             <div class="gcal-list-loading">
                 <div class="gcal-spinner"></div>
             </div>
@@ -252,6 +262,23 @@ class GCal_Display {
                 <?php endforeach; ?>
             </div>
         </div>
+
+        <!-- Event Modal -->
+        <div class="gcal-modal" id="<?php echo esc_attr( $instance_id ); ?>-modal" style="display: none;">
+            <div class="gcal-modal-overlay"></div>
+            <div class="gcal-modal-content">
+                <button class="gcal-modal-close" aria-label="<?php esc_attr_e( 'Close', 'gcal-tag-filter' ); ?>">×</button>
+                <div class="gcal-modal-body"></div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var gcalEvents_<?php echo esc_js( $instance_id ); ?> = <?php echo $events_json; ?>;
+            // Register events with modal handler
+            if (window.GCalEventModal) {
+                window.GCalEventModal.registerEvents('<?php echo esc_js( $instance_id ); ?>', gcalEvents_<?php echo esc_js( $instance_id ); ?>);
+            }
+        </script>
         <?php
         return ob_get_clean();
     }
