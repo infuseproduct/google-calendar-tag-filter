@@ -81,28 +81,10 @@
          */
         navigatePeriod: function(wrapper, direction) {
             const period = wrapper.dataset.period;
-            const currentDate = this.getCurrentDate(wrapper);
 
-            let newDate;
-
-            if (period === 'week') {
-                // Move by 7 days
-                newDate = new Date(currentDate);
-                newDate.setDate(newDate.getDate() + (7 * direction));
-            } else if (period === 'month') {
-                // Move by 1 month
-                newDate = new Date(currentDate);
-                newDate.setMonth(newDate.getMonth() + direction);
-            } else {
-                // Future period doesn't navigate
-                return;
-            }
-
-            // Store new date
-            wrapper.dataset.currentDate = newDate.toISOString();
-
-            // Update calendar display
-            this.updateCalendar(wrapper, newDate);
+            // For now, just reload the page - server will fetch appropriate events
+            // Future enhancement: AJAX to fetch events without page reload
+            window.location.reload();
         },
 
         /**
