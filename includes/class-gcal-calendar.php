@@ -225,35 +225,33 @@ class GCal_Calendar {
                 break;
 
             case 'month':
-                // Get start of current month
-                $start_of_month = clone $now;
-                $start_of_month->modify( 'first day of this month' );
+                // Get start of month - use setDate for reliability
+                $start_of_month = new DateTime( 'now', new DateTimeZone( 'UTC' ) );
+                $start_of_month->setDate( $target_year, $target_month, 1 );
                 $start_of_month->setTime( 0, 0, 0 );
                 $time_min = $start_of_month->format( DateTime::RFC3339 );
 
-                // Get end of current month
+                // Get end of month - calculate last day
                 $end_of_month = clone $start_of_month;
-                $end_of_month->modify( 'last day of this month' );
+                $last_day = (int) $end_of_month->format( 't' ); // Days in month
+                $end_of_month->setDate( $target_year, $target_month, $last_day );
                 $end_of_month->setTime( 23, 59, 59 );
                 $time_max = $end_of_month->format( DateTime::RFC3339 );
                 break;
 
             case 'year':
             default:
-                // Get start of current year
-                $start_of_year = clone $now;
-                error_log( 'Year view - $now before modify: ' . $now->format( 'Y-m-d H:i:s' ) );
-                $start_of_year->modify( 'first day of January this year' );
+                // Get start of year - use setDate instead of modify() for reliability
+                $start_of_year = new DateTime( 'now', new DateTimeZone( 'UTC' ) );
+                $start_of_year->setDate( $target_year, 1, 1 );
                 $start_of_year->setTime( 0, 0, 0 );
                 $time_min = $start_of_year->format( DateTime::RFC3339 );
-                error_log( 'Year view - time_min: ' . $time_min );
 
-                // Get end of current year
+                // Get end of year
                 $end_of_year = clone $start_of_year;
-                $end_of_year->modify( 'last day of December this year' );
+                $end_of_year->setDate( $target_year, 12, 31 );
                 $end_of_year->setTime( 23, 59, 59 );
                 $time_max = $end_of_year->format( DateTime::RFC3339 );
-                error_log( 'Year view - time_max: ' . $time_max );
                 break;
         }
 
