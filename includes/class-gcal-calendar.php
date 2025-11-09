@@ -404,8 +404,22 @@ class GCal_Calendar {
                 $event_tags = array_map( 'strtoupper', $event['tags'] );
 
                 foreach ( $tags as $tag ) {
-                    if ( in_array( $tag, $event_tags, true ) ) {
-                        return true;
+                    // Check for wildcard pattern (e.g., "MESSE*")
+                    if ( strpos( $tag, '*' ) !== false ) {
+                        // Convert wildcard to regex pattern
+                        $pattern = '/^' . str_replace( '\*', '.*', preg_quote( $tag, '/' ) ) . '$/';
+
+                        // Check if any event tag matches the wildcard pattern
+                        foreach ( $event_tags as $event_tag ) {
+                            if ( preg_match( $pattern, $event_tag ) ) {
+                                return true;
+                            }
+                        }
+                    } else {
+                        // Exact match
+                        if ( in_array( $tag, $event_tags, true ) ) {
+                            return true;
+                        }
                     }
                 }
 

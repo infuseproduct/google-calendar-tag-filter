@@ -219,7 +219,19 @@ class GCal_Shortcode {
         $validated = array();
 
         foreach ( $tags_array as $tag ) {
-            if ( $parser->is_valid_tag( $tag ) ) {
+            // Check if tag contains wildcard (*)
+            if ( strpos( $tag, '*' ) !== false ) {
+                // Wildcard pattern - validate format but don't check against whitelist
+                // Format: uppercase letters, numbers, hyphens, underscores, and asterisk
+                if ( preg_match( '/^[A-Z0-9_\-\*]+$/i', $tag ) ) {
+                    $validated[] = strtoupper( $tag );
+                } else {
+                    error_log( sprintf(
+                        'GCal Shortcode: Invalid wildcard pattern "%s". Only alphanumeric, hyphens, underscores, and * allowed.',
+                        $tag
+                    ) );
+                }
+            } elseif ( $parser->is_valid_tag( $tag ) ) {
                 $validated[] = strtoupper( $tag );
             } else {
                 // Log invalid tag
