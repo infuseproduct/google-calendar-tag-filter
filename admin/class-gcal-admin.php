@@ -230,9 +230,25 @@ class GCal_Admin {
                             <?php esc_html_e( 'Connected', 'gcal-tag-filter' ); ?>
                         </div>
 
+                        <?php if ( $selected_calendar ) : ?>
+                            <p><?php printf( __( 'Selected Calendar: <strong>%s</strong>', 'gcal-tag-filter' ), esc_html( $selected_calendar ) ); ?></p>
+                        <?php endif; ?>
+
+                        <div class="gcal-actions" style="margin: 20px 0;">
+                            <button type="button" class="button" id="gcal-refresh-calendars" style="margin-right: 10px;">
+                                <?php esc_html_e( 'Refresh Calendar List', 'gcal-tag-filter' ); ?>
+                            </button>
+                            <button type="button" class="button" id="gcal-test-connection" style="margin-right: 10px;">
+                                <?php esc_html_e( 'Test Connection', 'gcal-tag-filter' ); ?>
+                            </button>
+                            <button type="button" class="button gcal-button-danger" id="gcal-disconnect">
+                                <?php esc_html_e( 'Disconnect', 'gcal-tag-filter' ); ?>
+                            </button>
+                        </div>
+
                         <?php
                         $calendars = $this->oauth->get_calendar_list();
-                        if ( $calendars !== false ) :
+                        if ( $calendars !== false && ! empty( $calendars ) ) :
                             ?>
                             <form method="post" action="options.php">
                                 <?php settings_fields( 'gcal_tag_filter_options' ); ?>
@@ -262,14 +278,9 @@ class GCal_Admin {
 
                                 <?php submit_button( __( 'Save Calendar Selection', 'gcal-tag-filter' ) ); ?>
                             </form>
-
-                            <div class="gcal-actions">
-                                <button type="button" class="button" id="gcal-test-connection">
-                                    <?php esc_html_e( 'Test Connection', 'gcal-tag-filter' ); ?>
-                                </button>
-                                <button type="button" class="button gcal-button-danger" id="gcal-disconnect">
-                                    <?php esc_html_e( 'Disconnect', 'gcal-tag-filter' ); ?>
-                                </button>
+                        <?php else : ?>
+                            <div class="notice notice-warning inline">
+                                <p><?php esc_html_e( 'Unable to retrieve calendar list. Click "Test Connection" to diagnose the issue.', 'gcal-tag-filter' ); ?></p>
                             </div>
                         <?php endif; ?>
 
