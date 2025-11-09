@@ -227,23 +227,29 @@ class GCal_Display {
         // Group events by date
         $events_by_date = $this->group_events_by_date( $events );
 
-        // Get current week (7 days from today)
+        // Get current week starting from Monday
         $now = new DateTime();
+        $day_of_week = $now->format( 'N' ); // 1 (Monday) through 7 (Sunday)
+        $monday = clone $now;
+        $monday->modify( '-' . ( $day_of_week - 1 ) . ' days' ); // Go back to Monday
+
+        // French day names
+        $french_days = array( 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim' );
 
         ob_start();
         ?>
         <div class="gcal-week-view">
             <?php for ( $i = 0; $i < 7; $i++ ) : ?>
                 <?php
-                $date = clone $now;
+                $date = clone $monday;
                 $date->modify( "+{$i} days" );
                 $date_str = $date->format( 'Y-m-d' );
                 $day_events = $events_by_date[ $date_str ] ?? array();
-                $is_today = $i === 0;
+                $is_today = $date_str === $now->format( 'Y-m-d' );
                 ?>
                 <div class="gcal-week-day <?php echo $is_today ? 'gcal-day-today' : ''; ?>" data-date="<?php echo esc_attr( $date_str ); ?>">
                     <div class="gcal-week-day-header">
-                        <div class="gcal-week-day-name"><?php echo esc_html( $date->format( 'D' ) ); ?></div>
+                        <div class="gcal-week-day-name"><?php echo esc_html( $french_days[ $i ] ); ?></div>
                         <div class="gcal-week-day-number"><?php echo esc_html( $date->format( 'j' ) ); ?></div>
                     </div>
                     <div class="gcal-week-day-events">
