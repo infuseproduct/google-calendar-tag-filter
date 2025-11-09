@@ -87,6 +87,36 @@
     border-bottom: 2px solid #e9ecef;
 }
 
+/* Mobile Dropdown - Hidden by default on desktop */
+.gcal-category-dropdown-wrapper {
+    display: none;
+}
+
+.gcal-category-dropdown {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    color: #495057;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3e%3cpolyline points="6 9 12 15 18 9"%3e%3c/polyline%3e%3c/svg%3e');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 36px;
+}
+
+.gcal-category-dropdown:focus {
+    outline: 2px solid #2271b1;
+    outline-offset: 2px;
+    border-color: #2271b1;
+}
+
+/* Desktop Button List - Shown by default */
 .gcal-category-list {
     list-style: none;
     margin: 0;
@@ -179,13 +209,36 @@
         order: 2;
     }
 
+    /* Hide category title on mobile */
     .gcal-category-title {
-        font-size: 0.9rem;
+        display: none;
     }
 
-    .gcal-category-btn {
-        font-size: 0.8rem;
-        padding: 8px 10px;
+    /* Remove border and padding from category sidebar on mobile */
+    .gcal-category-sidebar {
+        background: transparent;
+        border: none;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    /* Show dropdown on mobile */
+    .gcal-category-dropdown-wrapper {
+        display: block;
+        margin-bottom: 0;
+    }
+
+    /* Hide button list on mobile */
+    .gcal-category-list {
+        display: none;
+    }
+
+    /* Remove border and padding from display style toggle on mobile */
+    .gcal-display-style-toggle {
+        background: transparent;
+        border: none;
+        padding: 0;
+        box-shadow: none;
     }
 
     .gcal-display-btn {

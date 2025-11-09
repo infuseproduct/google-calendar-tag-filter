@@ -11,6 +11,34 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
+/* List Header */
+.gcal-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.gcal-list-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: #333;
+    flex: 1;
+    text-align: center;
+}
+
+.gcal-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
 /* Loading State */
 .gcal-list-loading {
     display: none;
@@ -363,6 +391,27 @@
 
     .gcal-list {
         gap: 12px;
+    }
+
+    /* Stack list header on mobile */
+    .gcal-list-header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .gcal-header-left {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .gcal-list-title {
+        font-size: 1.125rem;
+    }
+
+    .gcal-view-toggle {
+        width: 100%;
+        justify-content: center;
     }
 
     .gcal-event-date {

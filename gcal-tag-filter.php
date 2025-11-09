@@ -219,7 +219,7 @@ function gcal_tag_filter_enqueue_scripts() {
 add_action( 'wp_enqueue_scripts', 'gcal_tag_filter_enqueue_scripts' );
 
 /**
- * AJAX handler to fetch events for a specific month/week.
+ * AJAX handler to fetch events for a specific month/week/year.
  */
 function gcal_ajax_fetch_events() {
     // Verify nonce
@@ -227,17 +227,29 @@ function gcal_ajax_fetch_events() {
 
     // Get parameters
     $year  = isset( $_POST['year'] ) ? intval( $_POST['year'] ) : date( 'Y' );
-    $month = isset( $_POST['month'] ) ? intval( $_POST['month'] ) : date( 'm' );
+    $month = isset( $_POST['month'] ) ? intval( $_POST['month'] ) : null;
 
-    // Create a custom date range for this specific month
+    // Create date range based on whether month is provided
     $start = new DateTime();
-    $start->setDate( $year, $month, 1 );
-    $start->setTime( 0, 0, 0 );
     $start->setTimezone( new DateTimeZone( 'UTC' ) );
 
-    $end = clone $start;
-    $end->modify( 'last day of this month' );
-    $end->setTime( 23, 59, 59 );
+    if ( $month !== null ) {
+        // Month-specific range
+        $start->setDate( $year, $month, 1 );
+        $start->setTime( 0, 0, 0 );
+
+        $end = clone $start;
+        $end->modify( 'last day of this month' );
+        $end->setTime( 23, 59, 59 );
+    } else {
+        // Full year range
+        $start->setDate( $year, 1, 1 );
+        $start->setTime( 0, 0, 0 );
+
+        $end = clone $start;
+        $end->setDate( $year, 12, 31 );
+        $end->setTime( 23, 59, 59 );
+    }
 
     // Fetch events from API
     $calendar = new GCal_Calendar();

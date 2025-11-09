@@ -45,7 +45,7 @@ class GCal_Shortcode {
         $atts = shortcode_atts(
             array(
                 'view'               => 'list',     // Default to list view
-                'period'             => 'future',   // Default to future events
+                'period'             => 'year',     // Default to year view
                 'tags'               => '',         // Optional tags filter
                 'show_categories'    => 'false',    // Show category sidebar
                 'show_display_style' => 'false',    // Show display style toggle
@@ -144,17 +144,17 @@ class GCal_Shortcode {
      * Validate period parameter.
      *
      * @param string $period Period value.
-     * @return string Validated period ('week', 'month', or 'future').
+     * @return string Validated period ('week', 'month', or 'year').
      */
     private function validate_period( $period ) {
         $period = strtolower( trim( $period ) );
 
-        if ( in_array( $period, array( 'week', 'month', 'future' ), true ) ) {
+        if ( in_array( $period, array( 'week', 'month', 'year' ), true ) ) {
             return $period;
         }
 
-        // Default to future
-        return 'future';
+        // Default to year
+        return 'year';
     }
 
     /**

@@ -6,12 +6,15 @@ A WordPress plugin that embeds Google Calendar events with tag-based filtering c
 
 - **OAuth 2.0 Authentication**: Secure read-only access to Google Calendar
 - **Tag-Based Filtering**: Filter events using customizable category tags
-- **Multiple Views**: Calendar view (month/week) and list view
+- **Multiple Views**: Calendar view (year/month/week) and list view with display toggle
+- **Dynamic Navigation**: AJAX-based navigation between periods without page reloads
+- **Category Sidebar**: Optional category filter sidebar with display style toggle
 - **Category Whitelist**: Admin-managed categories with custom colors
 - **Smart Caching**: Configurable 1-minute caching for optimal performance
+- **WCAG Contrast**: Automatic text color adjustment for accessibility
 - **Mobile-First**: Responsive design that works on all devices
 - **Timezone Support**: Automatic timezone conversion for visitors
-- **Localization Ready**: Fully translatable with text domain support
+- **Localization Ready**: Fully translatable (French) with text domain support
 
 ## Requirements
 
@@ -120,25 +123,40 @@ Use the `[gcal_embed]` shortcode to display events on any page or post.
 
 **Parameters:**
 
-- `view` (required): `calendar` or `list`
-- `period` (required): `week`, `month`, or `future`
+- `view` (optional): `calendar` or `list` (default: `list`)
+- `period` (optional): `week`, `month`, or `year` (default: `year`)
 - `tags` (optional): Comma-separated category IDs
+- `show_categories` (optional): `true` or `false` - Show category filter sidebar (default: `false`)
+- `show_display_style` (optional): `true` or `false` - Show calendar/list toggle (default: `false`)
 
 **Examples:**
 
 ```wordpress
-<!-- Show all events for the current month in calendar view -->
-[gcal_embed view="calendar" period="month"]
+<!-- Show all events for the current year in calendar view -->
+[gcal_embed view="calendar" period="year"]
+
+<!-- Show current month with category sidebar -->
+[gcal_embed view="calendar" period="month" show_categories="true"]
 
 <!-- Show upcoming workshops in list view -->
-[gcal_embed tags="WORKSHOP" view="list" period="future"]
+[gcal_embed tags="WORKSHOP" view="list" period="year"]
 
-<!-- Show this week's community events and training in calendar view -->
-[gcal_embed tags="COMMUNITY,TRAINING" view="calendar" period="week"]
+<!-- Show this week's community events in calendar view with both sidebars -->
+[gcal_embed tags="COMMUNITY" view="calendar" period="week" show_categories="true" show_display_style="true"]
 
-<!-- Show next month's events (all categories) -->
-[gcal_embed view="list" period="month"]
+<!-- Show events with display style toggle (calendar/list) -->
+[gcal_embed view="list" period="month" show_display_style="true"]
 ```
+
+**URL Parameters:**
+
+Users can change the view dynamically using URL parameters:
+- `?gcal_view=week` - Switch to week view
+- `?gcal_view=month` - Switch to month view
+- `?gcal_view=year` - Switch to year view
+- `?gcal_display=calendar` - Switch to calendar display
+- `?gcal_display=list` - Switch to list display
+- `?gcal_category=WORKSHOP` - Filter by category
 
 ## Cache Management
 

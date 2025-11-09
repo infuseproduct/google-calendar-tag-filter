@@ -84,10 +84,24 @@ class GCal_Cache {
         // Sort tags for consistent cache keys
         sort( $tags );
 
+        // Add week/month start date to cache key to handle different time ranges
+        // This ensures that changes to the time range calculation create new cache entries
+        $date_key = '';
+        if ( $period === 'week' ) {
+            $now = new DateTime( 'now', new DateTimeZone( 'UTC' ) );
+            $day_of_week = (int) $now->format( 'N' );
+            $monday = clone $now;
+            $monday->modify( '-' . ( $day_of_week - 1 ) . ' days' );
+            $date_key = $monday->format( 'Y-m-d' );
+        } elseif ( $period === 'month' ) {
+            $date_key = date( 'Y-m' );
+        }
+
         // Create a unique key
         $key_parts = array(
             $calendar_id,
             $period,
+            $date_key,
             implode( '_', $tags ),
         );
 

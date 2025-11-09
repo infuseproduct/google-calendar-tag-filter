@@ -24,8 +24,13 @@
          */
         initializeCalendars: function() {
             const calendarWrappers = document.querySelectorAll('.gcal-calendar-wrapper');
+            const listWrappers = document.querySelectorAll('.gcal-list-wrapper');
 
             calendarWrappers.forEach(wrapper => {
+                this.initializeCalendar(wrapper);
+            });
+
+            listWrappers.forEach(wrapper => {
                 this.initializeCalendar(wrapper);
             });
         },
@@ -43,6 +48,9 @@
                 console.warn('Calendar wrapper missing ID');
                 return;
             }
+
+            // Initialize date from URL parameters if available
+            this.initializeDateFromURL(wrapper, period);
 
             // Set up navigation buttons
             const prevButton = wrapper.querySelector('.gcal-nav-prev');
@@ -74,6 +82,50 @@
         },
 
         /**
+         * Initialize calendar date from URL parameters
+         *
+         * @param {HTMLElement} wrapper - Calendar wrapper
+         * @param {string} period - Period type
+         */
+        initializeDateFromURL: function(wrapper, period) {
+            const url = new URL(window.location);
+            const yearParam = url.searchParams.get('year');
+            const monthParam = url.searchParams.get('month');
+
+            // If no URL parameters, use current date
+            if (!yearParam) {
+                return;
+            }
+
+            let date = new Date();
+
+            try {
+                const year = parseInt(yearParam, 10);
+
+                if (period === 'year') {
+                    date = new Date(year, 0, 1); // January 1st of the specified year
+                } else if (period === 'month' && monthParam) {
+                    const month = parseInt(monthParam, 10) - 1; // 0-indexed
+                    date = new Date(year, month, 1);
+                } else if (period === 'week' && monthParam) {
+                    const month = parseInt(monthParam, 10) - 1;
+                    const weekParam = url.searchParams.get('week');
+                    const week = weekParam ? parseInt(weekParam, 10) : 1;
+                    // Approximate the week start date
+                    const day = (week - 1) * 7 + 1;
+                    date = new Date(year, month, day);
+                }
+
+                // Store the date
+                wrapper.dataset.currentDate = date.toISOString();
+
+                console.log(`Initialized ${period} view with date from URL:`, date);
+            } catch (e) {
+                console.error('Failed to parse date from URL:', e);
+            }
+        },
+
+        /**
          * Navigate to next/previous period
          *
          * @param {HTMLElement} wrapper - Calendar wrapper
@@ -91,7 +143,7 @@
             } else if (period === 'month') {
                 // Move by 1 month
                 newDate.setMonth(newDate.getMonth() + direction);
-            } else if (period === 'future') {
+            } else if (period === 'year') {
                 // Move by 1 year
                 newDate.setFullYear(newDate.getFullYear() + direction);
             } else {
@@ -101,21 +153,62 @@
             // Store new date
             wrapper.dataset.currentDate = newDate.toISOString();
 
+            // Update URL to reflect new date
+            this.updateURL(period, newDate);
+
             // Update title
             this.updateTitle(wrapper, newDate);
 
             // Show loading state
             wrapper.classList.add('loading');
 
-            // Fetch events for the new month and re-render
+            // Fetch events for the new period and re-render
             this.fetchAndRenderMonth(wrapper, newDate);
         },
 
         /**
-         * Switch calendar view (week/month/future)
+         * Update URL with current period and date
+         *
+         * @param {string} period - Period type (week/month/year)
+         * @param {Date} date - Current date
+         */
+        updateURL: function(period, date) {
+            const url = new URL(window.location);
+
+            // Always include the view period
+            url.searchParams.set('gcal_view', period);
+
+            // Add date parameters based on period
+            if (period === 'year') {
+                url.searchParams.set('year', date.getFullYear());
+                // Remove month/week params if they exist
+                url.searchParams.delete('month');
+                url.searchParams.delete('week');
+            } else if (period === 'month') {
+                url.searchParams.set('year', date.getFullYear());
+                url.searchParams.set('month', date.getMonth() + 1); // 1-indexed for URL
+                url.searchParams.delete('week');
+            } else if (period === 'week') {
+                // For week, store the date of the Monday
+                const dayOfWeek = date.getDay();
+                const monday = new Date(date);
+                const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+                monday.setDate(date.getDate() + diff);
+
+                url.searchParams.set('year', monday.getFullYear());
+                url.searchParams.set('month', monday.getMonth() + 1);
+                url.searchParams.set('week', Math.ceil(monday.getDate() / 7));
+            }
+
+            // Update URL without reload
+            window.history.pushState({}, '', url);
+        },
+
+        /**
+         * Switch calendar view (week/month/year)
          *
          * @param {HTMLElement} wrapper - Calendar wrapper
-         * @param {string} newView - New view type (week/month/future)
+         * @param {string} newView - New view type (week/month/year)
          */
         switchView: function(wrapper, newView) {
             const currentView = wrapper.dataset.period;
@@ -176,7 +269,7 @@
          * @param {Date} date - Optional date (defaults to current)
          */
         updateTitle: function(wrapper, date = null) {
-            const titleElement = wrapper.querySelector('.gcal-calendar-title');
+            const titleElement = wrapper.querySelector('.gcal-calendar-title, .gcal-list-title');
 
             if (!titleElement) return;
 
@@ -211,7 +304,7 @@
 
                 title = formatter.format(currentDate);
             } else {
-                // Future/year view
+                // Year view
                 const formatter = new Intl.DateTimeFormat('fr-FR', {
                     year: 'numeric'
                 });
@@ -228,17 +321,27 @@
          * @param {Date} date - Date to fetch events for
          */
         fetchAndRenderMonth: function(wrapper, date) {
+            const period = wrapper.dataset.period;
             const year = date.getFullYear();
             const month = date.getMonth() + 1; // JavaScript months are 0-indexed
 
-            console.log(`Fetching events for ${year}-${month}`);
+            // For year view, fetch entire year; for month/week, fetch specific month
+            if (period === 'year') {
+                console.log(`Fetching events for year ${year}`);
+            } else {
+                console.log(`Fetching events for ${year}-${month}`);
+            }
 
             // Prepare AJAX request
             const formData = new FormData();
             formData.append('action', 'gcal_fetch_events');
             formData.append('nonce', gcalData.nonce);
             formData.append('year', year);
-            formData.append('month', month);
+
+            // Only add month parameter for month/week views
+            if (period !== 'year') {
+                formData.append('month', month);
+            }
 
             fetch(gcalData.ajaxUrl, {
                 method: 'POST',
@@ -256,6 +359,14 @@
 
                     // Re-render the calendar grid
                     this.renderCalendarGrid(wrapper, date);
+
+                    // Re-apply active category filter if one exists
+                    const url = new URL(window.location);
+                    const activeCategory = url.searchParams.get('gcal_category');
+                    if (activeCategory && window.GCalCategoryFilter) {
+                        console.log(`Re-applying category filter: ${activeCategory}`);
+                        window.GCalCategoryFilter.filterEvents(activeCategory, wrapper.id);
+                    }
                 } else {
                     console.error('Failed to fetch events:', data.data.message);
                 }
@@ -275,6 +386,13 @@
         renderCalendarGrid: function(wrapper, date) {
             const period = wrapper.dataset.period;
             const gridContainer = wrapper.querySelector('.gcal-calendar-grid');
+            const listContainer = wrapper.querySelector('.gcal-list');
+
+            // Check if this is a list or calendar view
+            if (listContainer) {
+                this.renderListView(wrapper, listContainer, date);
+                return;
+            }
 
             if (!gridContainer) return;
 
@@ -298,7 +416,7 @@
                 this.renderMonthGrid(gridContainer, date, events);
             } else if (period === 'week') {
                 this.renderWeekGrid(gridContainer, date, events);
-            } else if (period === 'future') {
+            } else if (period === 'year') {
                 this.renderYearGrid(gridContainer, date, events);
             }
 
@@ -306,6 +424,21 @@
             if (window.GCalContrast) {
                 window.GCalContrast.applyContrastColors();
             }
+        },
+
+        /**
+         * Render list view - reload page with new URL parameters
+         *
+         * @param {HTMLElement} wrapper - List wrapper
+         * @param {HTMLElement} container - List container
+         * @param {Date} date - Current date
+         */
+        renderListView: function(wrapper, container, date) {
+            // For list view, we reload the page to get proper PHP rendering
+            // Update URL and reload
+            const period = wrapper.dataset.period;
+            this.updateURL(period, date);
+            window.location.reload();
         },
 
         /**
@@ -432,9 +565,65 @@
          * Render year view grid
          */
         renderYearGrid: function(container, date, events) {
-            // Year view shows 12 months - implementation similar to PHP version
-            // For simplicity, just reload the page for year view
-            window.location.reload();
+            const year = date.getFullYear();
+            const frenchMonths = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+            // Group events by month
+            const eventsByMonth = {};
+            events.forEach(event => {
+                const eventDate = new Date(event.start);
+                const monthKey = `${eventDate.getFullYear()}-${String(eventDate.getMonth() + 1).padStart(2, '0')}`;
+                if (!eventsByMonth[monthKey]) {
+                    eventsByMonth[monthKey] = [];
+                }
+                eventsByMonth[monthKey].push(event);
+            });
+
+            let html = '<div class="gcal-year-view">';
+
+            for (let month = 1; month <= 12; month++) {
+                const monthKey = `${year}-${String(month).padStart(2, '0')}`;
+                const monthEvents = eventsByMonth[monthKey] || [];
+                const monthName = frenchMonths[month - 1];
+
+                html += `<div class="gcal-year-month">`;
+                html += `<div class="gcal-year-month-header">`;
+                html += `<h4>${monthName}</h4>`;
+                html += `<span class="gcal-year-month-count">${monthEvents.length} ${monthEvents.length === 1 ? 'événement' : 'événements'}</span>`;
+                html += `</div>`;
+                html += `<div class="gcal-year-month-events">`;
+
+                if (monthEvents.length > 0) {
+                    monthEvents.forEach((event, index) => {
+                        const eventDate = new Date(event.start);
+                        const dayOfMonth = eventDate.getDate();
+                        const isHidden = index >= 5;
+                        const categoryColor = this.getCategoryColor(event.tags && event.tags.length > 0 ? event.tags[0] : null);
+
+                        html += `<div class="gcal-year-event gcal-event-item ${isHidden ? 'gcal-year-event-hidden' : ''}" data-event-id="${event.id}" role="button" tabindex="0">`;
+                        if (event.tags && event.tags.length > 0) {
+                            html += `<span class="gcal-year-event-dot" style="background-color: ${categoryColor};"></span>`;
+                        }
+                        html += `<span class="gcal-year-event-date">${dayOfMonth}</span>`;
+                        html += `<span class="gcal-year-event-title">${this.escapeHtml(event.title)}</span>`;
+                        html += `</div>`;
+                    });
+
+                    if (monthEvents.length > 5) {
+                        html += `<button class="gcal-year-more" data-month="${monthKey}">`;
+                        html += `<span class="gcal-year-more-text">+${monthEvents.length - 5} de plus</span>`;
+                        html += `<span class="gcal-year-less-text" style="display: none;">Voir moins</span>`;
+                        html += `</button>`;
+                    }
+                } else {
+                    html += `<div class="gcal-no-events">Aucun événement</div>`;
+                }
+
+                html += `</div></div>`;
+            }
+
+            html += '</div>';
+            container.innerHTML = html;
         },
 
         /**

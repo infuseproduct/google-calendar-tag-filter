@@ -42,7 +42,7 @@ class GCal_Calendar {
     /**
      * Get events for a specific period.
      *
-     * @param string $period Period: 'week', 'month', or 'future'.
+     * @param string $period Period: 'week', 'month', or 'year'.
      * @param array  $tags   Optional. Array of tags to filter by.
      * @return array|WP_Error Array of events or WP_Error on failure.
      */
@@ -113,7 +113,7 @@ class GCal_Calendar {
     /**
      * Fetch events from Google Calendar API.
      *
-     * @param string $period Period: 'week', 'month', or 'future'.
+     * @param string $period Period: 'week', 'month', or 'year'.
      * @return array|WP_Error Array of events or WP_Error on failure.
      */
     private function fetch_events_from_api( $period ) {
@@ -181,7 +181,7 @@ class GCal_Calendar {
     /**
      * Get time range for period.
      *
-     * @param string $period Period: 'week', 'month', or 'future'.
+     * @param string $period Period: 'week', 'month', or 'year'.
      * @return array Array with timeMin and timeMax.
      */
     private function get_time_range( $period ) {
@@ -215,10 +215,19 @@ class GCal_Calendar {
                 $time_max = $end_of_month->format( DateTime::RFC3339 );
                 break;
 
-            case 'future':
+            case 'year':
             default:
-                $time_min = $now->format( DateTime::RFC3339 );
-                $time_max = null; // No end date for future events
+                // Get start of current year
+                $start_of_year = clone $now;
+                $start_of_year->modify( 'first day of January this year' );
+                $start_of_year->setTime( 0, 0, 0 );
+                $time_min = $start_of_year->format( DateTime::RFC3339 );
+
+                // Get end of current year
+                $end_of_year = clone $start_of_year;
+                $end_of_year->modify( 'last day of December this year' );
+                $end_of_year->setTime( 23, 59, 59 );
+                $time_max = $end_of_year->format( DateTime::RFC3339 );
                 break;
         }
 

@@ -23,14 +23,15 @@ The Google Calendar Tag Filter plugin allows you to display Google Calendar even
 
 ### Key Features
 
-- 📅 **Multiple Views:** Calendar (month/week) and list views with toggle switching
+- 📅 **Multiple Views:** Calendar (year/month/week) and list views with toggle switching
 - 🏷️ **Tag-Based Filtering:** Filter events by custom categories with interactive sidebar
 - 📱 **Mobile-First:** Responsive design that works on all devices
 - 🌍 **Timezone Smart:** Automatically displays times in visitor's timezone (French localization)
-- ⚡ **Fast:** Smart caching for optimal performance
+- ⚡ **Fast:** Smart caching with AJAX-based navigation for instant period switching
 - 🎨 **Customizable:** Color-coded categories with custom display names
 - 🔄 **Interactive Filtering:** Real-time category filtering without page reload
 - 📆 **Smart Date Ranges:** Shows past and future events within displayed period
+- ♿ **WCAG Accessible:** Automatic contrast adjustment for better readability
 
 ---
 
@@ -184,8 +185,8 @@ Every shortcode needs these parameters:
 
 | Parameter | Required | Options | Description |
 |-----------|----------|---------|-------------|
-| `view` | ✅ Yes | `calendar` or `list` | How to display events |
-| `period` | ✅ Yes | `week`, `month`, or `future` | Time range |
+| `view` | ❌ No | `calendar` or `list` (default: `list`) | How to display events |
+| `period` | ❌ No | `week`, `month`, or `year` (default: `year`) | Time range |
 | `tags` | ❌ No | Category IDs (comma-separated) | Filter by categories |
 | `show_categories` | ❌ No | `true` or `false` (default: `false`) | Show category filter sidebar |
 | `show_display_style` | ❌ No | `true` or `false` (default: `false`) | Show view toggle (calendar/list) |
@@ -202,13 +203,13 @@ Every shortcode needs these parameters:
 
 ---
 
-#### Show Upcoming Community Events (List View)
+#### Show All Events This Year (List View)
 
 ```
-[gcal_embed tags="COMMUNITY" view="list" period="future"]
+[gcal_embed tags="COMMUNITY" view="list" period="year"]
 ```
 
-**Result:** List of all future community events in chronological order
+**Result:** List of all community events for the current year (January-December)
 
 ---
 
@@ -256,6 +257,22 @@ This is the most interactive display option, perfect for main calendar pages.
 
 ---
 
+#### Show Year View with All Months
+
+```
+[gcal_embed view="calendar" period="year"]
+```
+
+**Result:** Displays a 12-month grid showing all events for the current year. Each month shows:
+- Month name and event count
+- First 5 events with date and title
+- "See more" button if more than 5 events
+- Color-coded dots for categories
+
+**Navigation:** Visitors can use prev/next arrows to navigate to different years (2024, 2025, 2026, etc.)
+
+---
+
 #### Pre-filter with Interactive Categories
 
 ```
@@ -287,17 +304,45 @@ This is the most interactive display option, perfect for main calendar pages.
 
 Most page builders have a "Shortcode" or "HTML" widget. Add the shortcode there.
 
+### Calendar Navigation
+
+The calendar includes interactive navigation features:
+
+**Period Navigation:**
+- **Prev/Next Arrows:** Navigate between periods (previous/next week, month, or year)
+- **AJAX Loading:** Navigation happens instantly without page reload
+- **View Toggle Buttons:** Switch between Week, Month, and Year views
+
+**URL Parameters:**
+
+Visitors can bookmark specific views using URL parameters:
+- `?gcal_view=week` - Show week view
+- `?gcal_view=month` - Show month view
+- `?gcal_view=year` - Show year view
+- `?gcal_display=calendar` - Show calendar display
+- `?gcal_display=list` - Show list display
+- `?gcal_category=WORKSHOP` - Filter by specific category
+
+**Example URLs:**
+```
+https://yoursite.com/calendar/?gcal_view=year
+https://yoursite.com/calendar/?gcal_view=month&gcal_category=COMMUNITY
+https://yoursite.com/calendar/?gcal_display=list&gcal_view=week
+```
+
 ### Tips for Content Editors
 
 ✅ **DO:**
 - Use descriptive tags to filter events
 - Mix calendar and list views on different pages
 - Test the shortcode after adding it
+- Use year view for annual overviews
+- Enable `show_display_style` for flexible viewing options
 
 ❌ **DON'T:**
 - Use tags that aren't in the whitelist (they'll be ignored)
-- Forget the required parameters (`view` and `period`)
 - Use lowercase in tag names (always UPPERCASE)
+- Overload a single page with too many calendar instances
 
 ---
 
@@ -519,7 +564,7 @@ After tagging events:
    - Set cache to 5-10 minutes
 
 2. **Limit events:**
-   - Use specific periods (`week` or `month` instead of `future`)
+   - Use specific periods (`week` or `month` instead of `year`)
    - Use tag filters to reduce event count
 
 3. **Check API quota:**
@@ -593,7 +638,7 @@ A: Yes! You can display multiple filtered views on the same page.
 ### Limits
 
 **Q: How many events can I display?**
-A: List view shows up to 100 future events. Calendar views show all events for the selected period.
+A: Up to 100 events per period. Calendar views show all events for the selected period (week, month, or year).
 
 **Q: How many categories can I create?**
 A: Unlimited! Create as many categories as you need.

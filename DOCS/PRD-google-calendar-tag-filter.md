@@ -8,18 +8,24 @@ Organizations need a flexible way to display calendar events on their WordPress 
 - Show different filtered views of the same calendar across multiple pages
 - Filter events by categories/tags without maintaining multiple calendars
 - Present events in different formats (calendar view vs. list view)
-- Control the time period displayed (week, month, or all future events)
+- Control the time period displayed (week, month, or year)
+- Navigate between time periods without page reloads
+- Show past events within the displayed period (not just future events)
 
 ## Solution
 A WordPress plugin that:
 1. Connects to Google Calendar via OAuth 2.0 authentication (read-only access)
 2. Allows admin to select which calendar to display from their accessible calendars
-3. Extracts tags from event description fields (format: `[[[TAG:CATEGORY]]]`)
-4. Provides a category whitelist system with customizable display names
+3. Extracts tags from event description fields (format: `[[[CATEGORY]]]`)
+4. Provides a category whitelist system with customizable display names and colors
 5. Provides a shortcode system for embedding filtered calendar views
-6. Supports multiple display formats and time periods
-7. Implements 1-minute caching to balance freshness with API limits
-8. Displays times in user's browser timezone
+6. Supports multiple display formats (calendar/list) and time periods (week/month/year)
+7. Implements AJAX-based navigation for instant period switching
+8. Implements 1-minute caching to balance freshness with API limits
+9. Displays times in user's browser timezone (French localization)
+10. Provides optional category filter sidebar and display style toggle
+11. Shows past and future events within the displayed period
+12. Automatically adjusts text contrast for WCAG accessibility
 
 ## User Stories
 
@@ -61,12 +67,12 @@ A WordPress plugin that:
 **So that** visitors can see all educational opportunities
 
 **Acceptance Criteria:**
-- Editor adds shortcode: `[gcal_embed tags="WORKSHOP,TRAINING" view="list" period="future"]`
-- Events with `[[[TAG:WORKSHOP]]]` OR `[[[TAG:TRAINING]]]` are shown
-- Events with multiple tags (e.g., `[[[TAG:WORKSHOP]]][[[TAG:TRAINING]]]`) appear when filtering by either tag
-- List displays all future events in chronological order (maximum 100 events)
+- Editor adds shortcode: `[gcal_embed tags="WORKSHOP,TRAINING" view="list" period="year"]`
+- Events with `[[[WORKSHOP]]]` OR `[[[TRAINING]]]` are shown
+- Events with multiple tags (e.g., `[[[WORKSHOP]]][[[TRAINING]]]`) appear when filtering by either tag
+- List displays all events for the current year in chronological order (maximum 100 events)
 - Each event shows date, time, title, and description
-- Times display in visitor's browser timezone
+- Times display in visitor's browser timezone (French 24-hour format)
 - List is mobile-responsive
 - Empty state message shown if no events match
 
@@ -89,11 +95,12 @@ A WordPress plugin that:
 
 **Acceptance Criteria:**
 - Manager edits event in Google Calendar
-- Manager adds `[[[TAG:COMMUNITY]]][[[TAG:WORKSHOP]]]` to description field
+- Manager adds `[[[COMMUNITY]]][[[WORKSHOP]]]` to description field
 - Event appears when filtered by COMMUNITY, WORKSHOP, or both
 - Only whitelisted categories are recognized (invalid tags are ignored)
 - Description text can be added before/after tags
-- Tags are not displayed to end users (only used for filtering)
+- Tags are not displayed to end users (stripped from description before display)
+- Admins can see untagged and unknown-tag events with visual warnings (⚠️)
 
 ### Story 6: Site Visitor - Mobile Experience
 **As a** site visitor on mobile

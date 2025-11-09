@@ -101,7 +101,7 @@ class GCal_Display {
                     <button class="gcal-view-btn <?php echo $period === 'month' ? 'active' : ''; ?>" data-view="month">
                         <?php esc_html_e( 'Mois', 'gcal-tag-filter' ); ?>
                     </button>
-                    <button class="gcal-view-btn <?php echo $period === 'future' ? 'active' : ''; ?>" data-view="future">
+                    <button class="gcal-view-btn <?php echo $period === 'year' ? 'active' : ''; ?>" data-view="year">
                         <?php esc_html_e( 'Année', 'gcal-tag-filter' ); ?>
                     </button>
                 </div>
@@ -114,7 +114,7 @@ class GCal_Display {
             <div class="gcal-calendar-grid" data-current-view="<?php echo esc_attr( $period ); ?>">
                 <?php if ( $period === 'week' ) : ?>
                     <?php echo $this->render_week_view( $events ); ?>
-                <?php elseif ( $period === 'future' ) : ?>
+                <?php elseif ( $period === 'year' ) : ?>
                     <?php echo $this->render_year_view( $events ); ?>
                 <?php else : ?>
                     <?php echo $this->render_month_view( $events ); ?>
@@ -398,6 +398,29 @@ class GCal_Display {
                  data-period="<?php echo esc_attr( $period ); ?>"
                  data-tags="<?php echo esc_attr( implode( ',', $tags ) ); ?>"
                  data-events="<?php echo esc_attr( $events_json ); ?>">
+            <div class="gcal-list-header">
+                <div class="gcal-header-left">
+                    <button class="gcal-nav-prev" aria-label="<?php esc_attr_e( 'Précédent', 'gcal-tag-filter' ); ?>">
+                        ‹
+                    </button>
+                    <h3 class="gcal-list-title"></h3>
+                    <button class="gcal-nav-next" aria-label="<?php esc_attr_e( 'Suivant', 'gcal-tag-filter' ); ?>">
+                        ›
+                    </button>
+                </div>
+                <div class="gcal-view-toggle">
+                    <button class="gcal-view-btn <?php echo $period === 'week' ? 'active' : ''; ?>" data-view="week">
+                        <?php esc_html_e( 'Semaine', 'gcal-tag-filter' ); ?>
+                    </button>
+                    <button class="gcal-view-btn <?php echo $period === 'month' ? 'active' : ''; ?>" data-view="month">
+                        <?php esc_html_e( 'Mois', 'gcal-tag-filter' ); ?>
+                    </button>
+                    <button class="gcal-view-btn <?php echo $period === 'year' ? 'active' : ''; ?>" data-view="year">
+                        <?php esc_html_e( 'Année', 'gcal-tag-filter' ); ?>
+                    </button>
+                </div>
+            </div>
+
             <div class="gcal-list-loading">
                 <div class="gcal-spinner"></div>
             </div>
@@ -701,6 +724,33 @@ class GCal_Display {
         ?>
         <div class="gcal-category-sidebar" data-instance="<?php echo esc_attr( $instance_id ); ?>">
             <h3 class="gcal-category-title"><?php esc_html_e( 'Catégories', 'gcal-tag-filter' ); ?></h3>
+
+            <!-- Mobile Dropdown -->
+            <div class="gcal-category-dropdown-wrapper">
+                <select class="gcal-category-dropdown" data-instance="<?php echo esc_attr( $instance_id ); ?>">
+                    <option value="" <?php echo empty( $selected_category ) ? 'selected' : ''; ?>>
+                        <?php esc_html_e( 'Toutes les catégories', 'gcal-tag-filter' ); ?>
+                    </option>
+                    <?php foreach ( $all_categories as $category ) : ?>
+                        <option value="<?php echo esc_attr( $category ); ?>"
+                                <?php echo $category === strtoupper( $selected_category ) ? 'selected' : ''; ?>>
+                            <?php echo esc_html( $this->get_category_display_name( $category ) ); ?>
+                        </option>
+                    <?php endforeach; ?>
+                    <?php if ( $is_admin && $has_untagged ) : ?>
+                        <option value="UNTAGGED" <?php echo strtoupper( $selected_category ) === 'UNTAGGED' ? 'selected' : ''; ?>>
+                            ⚠️ <?php esc_html_e( 'Sans catégorie', 'gcal-tag-filter' ); ?>
+                        </option>
+                    <?php endif; ?>
+                    <?php if ( $is_admin && $has_unknown_tags ) : ?>
+                        <option value="UNKNOWN" <?php echo strtoupper( $selected_category ) === 'UNKNOWN' ? 'selected' : ''; ?>>
+                            ⚠️ <?php esc_html_e( 'Tags inconnus', 'gcal-tag-filter' ); ?>
+                        </option>
+                    <?php endif; ?>
+                </select>
+            </div>
+
+            <!-- Desktop Button List -->
             <ul class="gcal-category-list">
                 <li>
                     <button class="gcal-category-btn <?php echo empty( $selected_category ) ? 'active' : ''; ?>"

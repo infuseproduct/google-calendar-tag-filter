@@ -41,6 +41,20 @@
                 }
             });
 
+            // Delegate change events for category dropdown (mobile)
+            document.addEventListener('change', function(e) {
+                const categoryDropdown = e.target.closest('.gcal-category-dropdown');
+
+                if (categoryDropdown) {
+                    const category = categoryDropdown.value;
+                    const instanceId = categoryDropdown.dataset.instance;
+
+                    if (instanceId) {
+                        self.filterByCategory(category, instanceId);
+                    }
+                }
+            });
+
             // Delegate click events for display style toggle
             document.addEventListener('click', function(e) {
                 const displayBtn = e.target.closest('.gcal-display-btn');
@@ -156,6 +170,8 @@
                 return;
             }
 
+            console.log(`Filtering events by category: "${category}" for instance: ${instanceId}`);
+
             // Get all events
             const eventsJson = wrapper.dataset.events;
             if (!eventsJson) {
@@ -187,6 +203,8 @@
 
             // Filter events by category
             const filteredEventIds = this.getFilteredEventIds(events, category);
+
+            console.log(`Filtered ${filteredEventIds.length} events out of ${events.length} total`);
 
             // Update DOM visibility
             this.updateEventVisibility(wrapper, filteredEventIds);
@@ -272,8 +290,33 @@
                 }
             });
 
+            // For year view - update month counts
+            this.updateYearViewCounts(wrapper);
+
             // Show empty state if no events visible
             this.updateEmptyState(wrapper, visibleEventIds.length === 0);
+        },
+
+        /**
+         * Update event counts in year view months
+         *
+         * @param {HTMLElement} wrapper - Calendar wrapper element
+         */
+        updateYearViewCounts: function(wrapper) {
+            const yearView = wrapper.querySelector('.gcal-year-view');
+            if (!yearView) return;
+
+            // Update each month's event count
+            const months = yearView.querySelectorAll('.gcal-year-month');
+            months.forEach(monthEl => {
+                const visibleEvents = monthEl.querySelectorAll('.gcal-year-event:not(.filtered-out)');
+                const countEl = monthEl.querySelector('.gcal-year-month-count');
+
+                if (countEl) {
+                    const count = visibleEvents.length;
+                    countEl.textContent = `${count} ${count === 1 ? 'événement' : 'événements'}`;
+                }
+            });
         },
 
         /**
