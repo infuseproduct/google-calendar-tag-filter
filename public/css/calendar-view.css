@@ -4,11 +4,21 @@
  * Mobile-first responsive styles for calendar view.
  */
 
+/* Reset box-sizing for all calendar elements */
+.gcal-calendar-wrapper,
+.gcal-calendar-wrapper *,
+.gcal-calendar-wrapper *::before,
+.gcal-calendar-wrapper *::after {
+    box-sizing: border-box;
+}
+
 /* Calendar Wrapper */
 .gcal-calendar-wrapper {
     max-width: 100%;
     margin: 20px auto;
+    padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 /* Calendar Header */
@@ -111,6 +121,8 @@
     font-size: 0.875rem;
     color: #495057;
     text-transform: uppercase;
+    min-width: 0; /* Allow grid items to shrink */
+    overflow: hidden; /* Prevent text overflow */
 }
 
 /* Days Grid */
@@ -129,9 +141,11 @@
     background: #fff;
     padding: 6px;
     min-height: 100px;
+    min-width: 0; /* Allow grid items to shrink below content width */
     position: relative;
     transition: background 0.2s;
     width: 100%;
+    overflow: hidden; /* Prevent content from expanding cell */
 }
 
 .gcal-day:hover {
@@ -348,6 +362,26 @@
 
 /* Responsive - Mobile (Portrait) */
 @media (max-width: 640px) {
+    /* Remove horizontal margins on mobile to prevent cropping */
+    .gcal-calendar-wrapper {
+        margin: 20px 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    /* Ensure month view uses full width */
+    .gcal-month-view {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    /* Ensure grid containers use full width */
+    .gcal-weekday-headers,
+    .gcal-days-grid {
+        width: 100%;
+        max-width: 100%;
+    }
+
     /* Stack calendar header on mobile */
     .gcal-calendar-header {
         flex-direction: column;
@@ -393,12 +427,23 @@
     }
 
     .gcal-event-item {
-        font-size: 0.45rem;
-        padding: 2px 3px;
+        font-size: 0.55rem;
+        padding: 2px 4px;
+        min-width: 0; /* Allow text to wrap/break */
+        max-width: 100%; /* Constrain to cell width */
+        word-break: break-word; /* Force long words to break */
+        line-height: 1.3;
     }
 
     .gcal-event-time {
-        display: none; /* Hide time on very small screens */
+        display: block; /* Show time on mobile */
+        font-size: 0.55rem !important;
+        font-weight: 600;
+    }
+
+    .gcal-event-title {
+        font-size: 0.55rem !important;
+        word-break: break-word; /* Force long words to break */
     }
 
     /* Switch to single column week view on mobile */

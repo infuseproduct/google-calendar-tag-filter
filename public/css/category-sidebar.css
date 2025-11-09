@@ -9,6 +9,8 @@
     display: flex;
     gap: 20px;
     align-items: stretch;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .gcal-wrapper-with-sidebar.has-sidebar {
@@ -183,6 +185,10 @@
 
 /* Responsive - Mobile */
 @media (max-width: 768px) {
+    .gcal-wrapper-with-sidebar {
+        gap: 16px;
+    }
+
     .gcal-wrapper-with-sidebar.has-sidebar {
         flex-direction: column;
     }
@@ -196,6 +202,7 @@
     .gcal-calendar-wrapper,
     .gcal-list-wrapper {
         order: 2;
+        overflow: visible; /* Ensure calendar can use full width */
     }
 
     /* Hide category title on mobile */
