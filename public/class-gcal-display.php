@@ -608,15 +608,6 @@ class GCal_Display {
                 ?>
                 <div class="gcal-event-month"><?php echo esc_html( $french_months_short[ $month_index ] ); ?></div>
                 <div class="gcal-event-day"><?php echo esc_html( $start_date->format( 'd' ) ); ?></div>
-            </div>
-
-            <div class="gcal-event-details">
-                <h3 class="gcal-event-title"><?php echo esc_html( $title ); ?></h3>
-
-                <?php if ( $category_name ) : ?>
-                    <div class="gcal-event-category"><?php echo esc_html( $category_name ); ?></div>
-                <?php endif; ?>
-
                 <div class="gcal-event-time">
                     <?php if ( $event['is_all_day'] ) : ?>
                         <?php esc_html_e( 'Toute la journée', 'gcal-tag-filter' ); ?>
@@ -627,6 +618,10 @@ class GCal_Display {
                         <span class="gcal-event-start"><?php echo esc_html( $this->format_time( $start_date ) . ' - ' . $this->format_time( $end_date ) ); ?></span>
                     <?php endif; ?>
                 </div>
+            </div>
+
+            <div class="gcal-event-details">
+                <h3 class="gcal-event-title"><?php echo esc_html( $title ); ?></h3>
 
                 <?php if ( ! empty( $event['description'] ) ) : ?>
                     <div class="gcal-event-description">
