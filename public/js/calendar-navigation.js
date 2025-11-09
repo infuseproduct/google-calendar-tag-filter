@@ -81,10 +81,31 @@
          */
         navigatePeriod: function(wrapper, direction) {
             const period = wrapper.dataset.period;
+            const currentDate = this.getCurrentDate(wrapper);
 
-            // For now, just reload the page - server will fetch appropriate events
-            // Future enhancement: AJAX to fetch events without page reload
-            window.location.reload();
+            let newDate = new Date(currentDate);
+
+            if (period === 'week') {
+                // Move by 7 days
+                newDate.setDate(newDate.getDate() + (7 * direction));
+            } else if (period === 'month') {
+                // Move by 1 month
+                newDate.setMonth(newDate.getMonth() + direction);
+            } else if (period === 'future') {
+                // Move by 1 year
+                newDate.setFullYear(newDate.getFullYear() + direction);
+            } else {
+                return;
+            }
+
+            // Store new date
+            wrapper.dataset.currentDate = newDate.toISOString();
+
+            // Update title
+            this.updateTitle(wrapper, newDate);
+
+            // Re-render the calendar grid
+            this.renderCalendarGrid(wrapper, newDate);
         },
 
         /**
@@ -190,6 +211,241 @@
             }
 
             titleElement.textContent = title;
+        },
+
+        /**
+         * Re-render calendar grid with new date
+         *
+         * @param {HTMLElement} wrapper - Calendar wrapper
+         * @param {Date} date - Date to render
+         */
+        renderCalendarGrid: function(wrapper, date) {
+            const period = wrapper.dataset.period;
+            const gridContainer = wrapper.querySelector('.gcal-calendar-grid');
+
+            if (!gridContainer) return;
+
+            // Get events data
+            const eventsJson = wrapper.dataset.events;
+            let events = [];
+
+            try {
+                events = JSON.parse(eventsJson);
+                // Convert object to array if needed
+                if (!Array.isArray(events) && typeof events === 'object' && events !== null) {
+                    events = Object.values(events);
+                }
+            } catch (e) {
+                console.error('Failed to parse events:', e);
+                return;
+            }
+
+            // Re-render based on period type
+            if (period === 'month') {
+                this.renderMonthGrid(gridContainer, date, events);
+            } else if (period === 'week') {
+                this.renderWeekGrid(gridContainer, date, events);
+            } else if (period === 'future') {
+                this.renderYearGrid(gridContainer, date, events);
+            }
+
+            // Apply contrast colors to newly rendered events
+            if (window.GCalContrastHandler) {
+                window.GCalContrastHandler.applyContrastColors();
+            }
+        },
+
+        /**
+         * Render month view grid
+         */
+        renderMonthGrid: function(container, date, events) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            // Get first and last day of month
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+
+            // Get day of week for first day (0 = Sunday, need to convert to Monday = 0)
+            let firstDayOfWeek = firstDay.getDay();
+            firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1; // Convert to Monday = 0
+
+            const daysInMonth = lastDay.getDate();
+
+            // Group events by date
+            const eventsByDate = {};
+            events.forEach(event => {
+                const eventDate = new Date(event.start);
+                const dateKey = `${eventDate.getFullYear()}-${String(eventDate.getMonth() + 1).padStart(2, '0')}-${String(eventDate.getDate()).padStart(2, '0')}`;
+                if (!eventsByDate[dateKey]) {
+                    eventsByDate[dateKey] = [];
+                }
+                eventsByDate[dateKey].push(event);
+            });
+
+            // Build calendar HTML
+            let html = '<div class="gcal-month-view"><div class="gcal-weekday-headers">';
+            const weekdays = ['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM'];
+            weekdays.forEach(day => {
+                html += `<div class="gcal-weekday-header">${day}</div>`;
+            });
+            html += '</div><div class="gcal-month-grid">';
+
+            // Add empty cells for days before month starts
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                html += '<div class="gcal-day gcal-day-other-month"></div>';
+            }
+
+            // Add days of month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayEvents = eventsByDate[dateKey] || [];
+                const isToday = this.isToday(new Date(year, month, day));
+
+                html += `<div class="gcal-day ${isToday ? 'gcal-day-today' : ''} ${dayEvents.length > 0 ? 'gcal-day-has-events' : ''}" data-date="${dateKey}">`;
+                html += `<div class="gcal-day-number">${day}</div>`;
+                html += '<div class="gcal-day-events">';
+
+                // Render events for this day
+                dayEvents.forEach(event => {
+                    html += this.renderEventHTML(event);
+                });
+
+                html += '</div></div>';
+            }
+
+            html += '</div></div>';
+            container.innerHTML = html;
+        },
+
+        /**
+         * Render week view grid
+         */
+        renderWeekGrid: function(container, date, events) {
+            // Get Monday of the week
+            const dayOfWeek = date.getDay();
+            const monday = new Date(date);
+            const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Adjust for Monday start
+            monday.setDate(date.getDate() + diff);
+
+            const frenchDays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+
+            // Group events by date
+            const eventsByDate = {};
+            events.forEach(event => {
+                const eventDate = new Date(event.start);
+                const dateKey = `${eventDate.getFullYear()}-${String(eventDate.getMonth() + 1).padStart(2, '0')}-${String(eventDate.getDate()).padStart(2, '0')}`;
+                if (!eventsByDate[dateKey]) {
+                    eventsByDate[dateKey] = [];
+                }
+                eventsByDate[dateKey].push(event);
+            });
+
+            let html = '<div class="gcal-week-view">';
+
+            for (let i = 0; i < 7; i++) {
+                const currentDay = new Date(monday);
+                currentDay.setDate(monday.getDate() + i);
+                const dateKey = `${currentDay.getFullYear()}-${String(currentDay.getMonth() + 1).padStart(2, '0')}-${String(currentDay.getDate()).padStart(2, '0')}`;
+                const dayEvents = eventsByDate[dateKey] || [];
+                const isToday = this.isToday(currentDay);
+
+                html += `<div class="gcal-week-day ${isToday ? 'gcal-day-today' : ''}" data-date="${dateKey}">`;
+                html += '<div class="gcal-week-day-header">';
+                html += `<div class="gcal-week-day-name">${frenchDays[i]}</div>`;
+                html += `<div class="gcal-week-day-number">${currentDay.getDate()}</div>`;
+                html += '</div><div class="gcal-week-day-events">';
+
+                if (dayEvents.length > 0) {
+                    dayEvents.forEach(event => {
+                        html += this.renderEventHTML(event);
+                    });
+                } else {
+                    html += '<div class="gcal-no-events">Aucun événement</div>';
+                }
+
+                html += '</div></div>';
+            }
+
+            html += '</div>';
+            container.innerHTML = html;
+        },
+
+        /**
+         * Render year view grid
+         */
+        renderYearGrid: function(container, date, events) {
+            // Year view shows 12 months - implementation similar to PHP version
+            // For simplicity, just reload the page for year view
+            window.location.reload();
+        },
+
+        /**
+         * Render event HTML
+         */
+        renderEventHTML: function(event) {
+            let categoryColor = '#2271b1';
+            if (event.tags && event.tags.length > 0) {
+                // You might need to fetch category colors - for now use default
+                categoryColor = this.getCategoryColor(event.tags[0]);
+            }
+
+            const eventStart = new Date(event.start);
+            const eventEnd = new Date(event.end);
+
+            let timeDisplay = '';
+            if (!event.isAllDay) {
+                const startHours = eventStart.getHours();
+                const startMins = eventStart.getMinutes();
+                const endHours = eventEnd.getHours();
+                const endMins = eventEnd.getMinutes();
+
+                const formatTime = (hours, mins) => {
+                    if (mins === 0) {
+                        return `${hours}h`;
+                    }
+                    return `${hours}h${String(mins).padStart(2, '0')}`;
+                };
+
+                timeDisplay = `${formatTime(startHours, startMins)} - ${formatTime(endHours, endMins)}`;
+            }
+
+            return `<div class="gcal-event-item" data-event-id="${event.id}" style="background-color: ${categoryColor};" role="button" tabindex="0">
+                ${timeDisplay ? `<span class="gcal-event-time">${timeDisplay}</span>` : ''}
+                <span class="gcal-event-title">${this.escapeHtml(event.title)}</span>
+            </div>`;
+        },
+
+        /**
+         * Get category color (simplified - would need actual category data)
+         */
+        getCategoryColor: function(tagId) {
+            // Default colors - in a full implementation, fetch from server
+            const colors = {
+                'MESSE-DALTON-SCHOOL': '#81D742',
+                'MESSE-MUI-WO': '#DD9933',
+                'EDC-GROUPE-1': '#4285F4'
+            };
+            return colors[tagId] || '#2271b1';
+        },
+
+        /**
+         * Check if date is today
+         */
+        isToday: function(date) {
+            const today = new Date();
+            return date.getDate() === today.getDate() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getFullYear() === today.getFullYear();
+        },
+
+        /**
+         * Escape HTML
+         */
+        escapeHtml: function(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         },
 
         /**
