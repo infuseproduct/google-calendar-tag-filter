@@ -124,7 +124,8 @@ class GCal_Cache {
             implode( '_', $tags ),
         );
 
-        return md5( implode( '|', $key_parts ) );
+        // Use SHA-256 instead of MD5 for better security practices
+        return hash( 'sha256', implode( '|', $key_parts ) );
     }
 
     /**
