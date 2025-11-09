@@ -347,6 +347,17 @@ class GCal_Display {
             return $this->render_empty_state();
         }
 
+        // Filter out past events in list view
+        $now = new DateTime( 'now', new DateTimeZone( 'Asia/Hong_Kong' ) );
+        $events = array_filter( $events, function( $event ) use ( $now ) {
+            $event_end = new DateTime( $event['end'] );
+            return $event_end >= $now;
+        } );
+
+        if ( empty( $events ) ) {
+            return $this->render_empty_state();
+        }
+
         // Generate unique ID for this list instance
         $instance_id = 'gcal-list-' . uniqid();
 
