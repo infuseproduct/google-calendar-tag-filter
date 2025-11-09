@@ -124,6 +124,13 @@ class GCal_Shortcode {
         // Fetch events
         $events = $this->calendar->get_events( $period, $tags, $url_year, $url_month, $url_week );
 
+        // Debug events count
+        error_log( 'GCal Shortcode - Fetched ' . ( is_array( $events ) ? count( $events ) : '0' ) . ' events' );
+        add_action( 'wp_footer', function() use ( $events ) {
+            $count = is_array( $events ) ? count( $events ) : ( is_wp_error( $events ) ? 'ERROR: ' . $events->get_error_message() : '0' );
+            echo '<script>console.log("PHP Shortcode fetched events: ' . esc_js( $count ) . '");</script>';
+        } );
+
         // Handle errors
         if ( is_wp_error( $events ) ) {
             return $this->display->render_error( $events->get_error_message() );

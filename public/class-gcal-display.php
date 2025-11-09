@@ -249,6 +249,8 @@ class GCal_Display {
             $first_of_month->setDate( $url_year, $url_month, 1 );
             $first_day_weekday = (int) $first_of_month->format( 'N' ); // 1=Monday, 7=Sunday
 
+            error_log( 'GCal Display - Week render: year=' . $url_year . ', month=' . $url_month . ', week=' . $url_week . ', first_day_weekday=' . $first_day_weekday );
+
             // Calculate when the first Monday occurs
             if ( $first_day_weekday === 1 ) {
                 // First day is already Monday
@@ -268,6 +270,7 @@ class GCal_Display {
                 $monday = clone $first_of_month;
                 $days_back = $first_day_weekday - 1;
                 $monday->modify( '-' . $days_back . ' days' );
+                error_log( 'GCal Display - Week 1 special case: going back ' . $days_back . ' days to ' . $monday->format('Y-m-d') );
             } else {
                 // Calculate from first Monday
                 $weeks_to_add = $url_week - 1;
@@ -275,11 +278,13 @@ class GCal_Display {
                     // If month starts on Monday, week 1 starts on that Monday
                     $monday = clone $first_monday;
                     $monday->modify( '+' . ( $weeks_to_add * 7 ) . ' days' );
+                    error_log( 'GCal Display - Month starts on Monday, week ' . $url_week . ' = ' . $monday->format('Y-m-d') );
                 } else {
                     // If month doesn't start on Monday, week 1 starts on the Monday BEFORE the 1st
                     $monday = clone $first_of_month;
                     $monday->modify( '-' . ( $first_day_weekday - 1 ) . ' days' );
                     $monday->modify( '+' . ( $weeks_to_add * 7 ) . ' days' );
+                    error_log( 'GCal Display - Normal week calculation: week ' . $url_week . ' = ' . $monday->format('Y-m-d') );
                 }
             }
         } else {

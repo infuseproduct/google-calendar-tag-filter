@@ -233,22 +233,27 @@ class GCal_Calendar {
                     $first_of_month->setDate( $target_year, $target_month, 1 );
                     $first_day_weekday = (int) $first_of_month->format( 'N' );
 
+                    error_log( 'GCal Calendar - Week calculation: year=' . $target_year . ', month=' . $target_month . ', week=' . $week . ', first_day_weekday=' . $first_day_weekday );
+
                     if ( $week === 1 && $first_day_weekday > 1 ) {
                         // Week 1 includes days before the first Monday
                         $start_of_week = clone $first_of_month;
                         $days_back = $first_day_weekday - 1;
                         $start_of_week->modify( '-' . $days_back . ' days' );
+                        error_log( 'GCal Calendar - Week 1 special case: going back ' . $days_back . ' days' );
                     } else {
                         // Calculate from first of month
                         $start_of_week = clone $first_of_month;
                         $start_of_week->modify( '-' . ( $first_day_weekday - 1 ) . ' days' );
                         $start_of_week->modify( '+' . ( ( $week - 1 ) * 7 ) . ' days' );
+                        error_log( 'GCal Calendar - Normal week calculation: week ' . $week );
                     }
                 } else {
                     // Get current week (Monday)
                     $start_of_week = clone $now;
                     $day_of_week = (int) $start_of_week->format( 'N' );
                     $start_of_week->modify( '-' . ( $day_of_week - 1 ) . ' days' );
+                    error_log( 'GCal Calendar - Using current week (no params provided)' );
                 }
 
                 $start_of_week->setTime( 0, 0, 0 );
@@ -258,6 +263,8 @@ class GCal_Calendar {
                 $end_of_week->modify( '+6 days' ); // Changed from +7 to +6 to get Sun 23:59:59
                 $end_of_week->setTime( 23, 59, 59 );
                 $time_max = $end_of_week->format( DateTime::RFC3339 );
+
+                error_log( 'GCal Calendar - Week range: ' . $start_of_week->format('Y-m-d') . ' to ' . $end_of_week->format('Y-m-d') );
                 break;
 
             case 'month':
