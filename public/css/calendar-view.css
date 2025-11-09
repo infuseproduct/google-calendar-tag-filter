@@ -169,32 +169,34 @@
 }
 
 .gcal-event-item {
-    background: #fff;
-    border-left: 3px solid #2271b1;
-    padding: 4px 6px;
+    background: #2271b1;
+    color: #fff;
+    padding: 6px 8px;
     margin-bottom: 4px;
-    border-radius: 3px;
+    border-radius: 4px;
     font-size: 0.75rem;
     cursor: pointer;
     transition: all 0.2s;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .gcal-event-item:hover {
-    background: #f0f0f0;
-    transform: translateX(2px);
+    transform: translateX(2px) scale(1.02);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    filter: brightness(1.1);
 }
 
 .gcal-event-time {
     font-weight: 600;
     margin-right: 4px;
-    color: #495057;
+    color: inherit;
 }
 
 .gcal-event-title {
-    color: #212529;
+    color: inherit;
 }
 
 /* Week View */

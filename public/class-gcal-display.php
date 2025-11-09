@@ -384,7 +384,7 @@ class GCal_Display {
         ?>
         <div class="gcal-event-item"
              data-event-id="<?php echo esc_attr( $event['id'] ); ?>"
-             style="border-left-color: <?php echo esc_attr( $category_color ); ?>">
+             style="background-color: <?php echo esc_attr( $category_color ); ?>">
             <?php if ( $time ) : ?>
                 <span class="gcal-event-time"><?php echo esc_html( $time ); ?></span>
             <?php endif; ?>
@@ -417,7 +417,11 @@ class GCal_Display {
              style="border-left-color: <?php echo esc_attr( $category_color ); ?>">
 
             <div class="gcal-event-date">
-                <div class="gcal-event-month"><?php echo esc_html( $start_date->format( 'M' ) ); ?></div>
+                <?php
+                $french_months_short = array( 'jan', 'fév', 'mar', 'avr', 'mai', 'juin', 'juil', 'aoû', 'sep', 'oct', 'nov', 'déc' );
+                $month_index = (int) $start_date->format( 'n' ) - 1;
+                ?>
+                <div class="gcal-event-month"><?php echo esc_html( $french_months_short[ $month_index ] ); ?></div>
                 <div class="gcal-event-day"><?php echo esc_html( $start_date->format( 'd' ) ); ?></div>
             </div>
 
@@ -456,7 +460,7 @@ class GCal_Display {
                 <?php endif; ?>
 
                 <button class="gcal-event-read-more" data-event-id="<?php echo esc_attr( $event['id'] ); ?>">
-                    <?php esc_html_e( 'Read more', 'gcal-tag-filter' ); ?> →
+                    <?php esc_html_e( 'En savoir plus', 'gcal-tag-filter' ); ?> →
                 </button>
             </div>
         </div>
