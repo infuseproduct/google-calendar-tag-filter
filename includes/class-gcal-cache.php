@@ -31,6 +31,11 @@ class GCal_Cache {
      * @return mixed|false Cached data or false if not found/expired.
      */
     public function get( $key ) {
+        // Don't return cache if caching is disabled
+        if ( $this->get_cache_duration() === 0 ) {
+            return false;
+        }
+
         $cache_key = $this->get_cache_key( $key );
         return get_transient( $cache_key );
     }
@@ -43,9 +48,14 @@ class GCal_Cache {
      * @return bool True on success, false on failure.
      */
     public function set( $key, $data ) {
-        $cache_key = $this->get_cache_key( $key );
-        $duration  = $this->get_cache_duration();
+        $duration = $this->get_cache_duration();
 
+        // Don't cache if duration is 0
+        if ( $duration === 0 ) {
+            return false;
+        }
+
+        $cache_key = $this->get_cache_key( $key );
         return set_transient( $cache_key, $data, $duration );
     }
 
