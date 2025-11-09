@@ -56,10 +56,6 @@ class GCal_Display {
      * @return string HTML output.
      */
     public function render_calendar_view( $events, $period, $tags, $show_categories = false, $selected_category = '', $show_display_style = false, $current_view = 'calendar', $url_year = null, $url_month = null, $url_week = null ) {
-        if ( empty( $events ) ) {
-            return $this->render_empty_state();
-        }
-
         // Generate unique ID for this calendar instance
         $instance_id = 'gcal-' . uniqid();
 
@@ -430,23 +426,17 @@ class GCal_Display {
      * @return string HTML output.
      */
     public function render_list_view( $events, $period, $tags, $show_categories = false, $selected_category = '', $show_display_style = false, $current_view = 'list', $url_year = null, $url_month = null, $url_week = null ) {
-        if ( empty( $events ) ) {
-            return $this->render_empty_state();
-        }
-
-        // Filter out past events in list view
-        $now = new DateTime( 'now', new DateTimeZone( 'Asia/Hong_Kong' ) );
-        $events = array_filter( $events, function( $event ) use ( $now ) {
-            $event_end = new DateTime( $event['end'] );
-            return $event_end >= $now;
-        } );
-
-        if ( empty( $events ) ) {
-            return $this->render_empty_state();
-        }
-
         // Generate unique ID for this list instance
         $instance_id = 'gcal-list-' . uniqid();
+
+        // Filter out past events in list view (only if there are events)
+        if ( ! empty( $events ) ) {
+            $now = new DateTime( 'now', new DateTimeZone( 'Asia/Hong_Kong' ) );
+            $events = array_filter( $events, function( $event ) use ( $now ) {
+                $event_end = new DateTime( $event['end'] );
+                return $event_end >= $now;
+            } );
+        }
 
         // Prepare events data for JavaScript
         $prepared_events = $this->prepare_events_for_js( $events );
@@ -500,9 +490,13 @@ class GCal_Display {
             </div>
 
             <div class="gcal-list">
-                <?php foreach ( $events as $event ) : ?>
-                    <?php echo $this->render_list_event_card( $event ); ?>
-                <?php endforeach; ?>
+                <?php if ( empty( $events ) ) : ?>
+                    <?php echo $this->render_empty_state(); ?>
+                <?php else : ?>
+                    <?php foreach ( $events as $event ) : ?>
+                        <?php echo $this->render_list_event_card( $event ); ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
             </div><!-- .gcal-list-wrapper -->
 
