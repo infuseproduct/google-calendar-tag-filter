@@ -349,12 +349,25 @@
 
 /* Responsive - Mobile (Portrait) */
 @media (max-width: 640px) {
+    /* Stack calendar header on mobile */
     .gcal-calendar-header {
-        padding: 10px;
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .gcal-header-left {
+        width: 100%;
+        justify-content: space-between;
     }
 
     .gcal-calendar-title {
-        font-size: 1.25rem;
+        font-size: 1.125rem;
+    }
+
+    .gcal-view-toggle {
+        width: 100%;
+        justify-content: center;
     }
 
     .gcal-nav-prev,
