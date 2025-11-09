@@ -273,7 +273,8 @@
 }
 
 /* Empty State */
-.gcal-empty-state {
+.gcal-empty-state,
+.gcal-filter-empty {
     text-align: center;
     padding: 60px 20px;
     color: #6c757d;
@@ -281,7 +282,8 @@
     border-radius: 8px;
 }
 
-.gcal-empty-state p {
+.gcal-empty-state p,
+.gcal-filter-empty p {
     margin: 0;
     font-size: 1.125rem;
 }

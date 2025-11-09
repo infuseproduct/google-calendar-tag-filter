@@ -327,8 +327,14 @@
          */
         updateEmptyState: function(wrapper, isEmpty) {
             let emptyState = wrapper.querySelector('.gcal-filter-empty');
+            const originalEmptyState = wrapper.querySelector('.gcal-empty-state');
 
             if (isEmpty) {
+                // Hide the original PHP empty state
+                if (originalEmptyState) {
+                    originalEmptyState.style.display = 'none';
+                }
+
                 if (!emptyState) {
                     emptyState = document.createElement('div');
                     emptyState.className = 'gcal-filter-empty';
@@ -341,6 +347,11 @@
                 }
                 emptyState.style.display = 'block';
             } else {
+                // Show the original PHP empty state
+                if (originalEmptyState) {
+                    originalEmptyState.style.display = '';
+                }
+
                 if (emptyState) {
                     emptyState.style.display = 'none';
                 }
