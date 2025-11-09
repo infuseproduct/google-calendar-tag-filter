@@ -131,9 +131,9 @@ class GCal_Shortcode {
 
         // Render appropriate view
         if ( $view === 'calendar' ) {
-            return $this->display->render_calendar_view( $events, $period, $tags, $show_categories, $selected_category, $show_display_style, $view );
+            return $this->display->render_calendar_view( $events, $period, $tags, $show_categories, $selected_category, $show_display_style, $view, $url_year, $url_month, $url_week );
         } else {
-            return $this->display->render_list_view( $events, $period, $tags, $show_categories, $selected_category, $show_display_style, $view );
+            return $this->display->render_list_view( $events, $period, $tags, $show_categories, $selected_category, $show_display_style, $view, $url_year, $url_month, $url_week );
         }
     }
 

@@ -50,9 +50,12 @@ class GCal_Display {
      * @param string $selected_category Currently selected category.
      * @param bool   $show_display_style Whether to show display style toggle.
      * @param string $current_view Current view type.
+     * @param int    $url_year Optional year parameter.
+     * @param int    $url_month Optional month parameter.
+     * @param int    $url_week Optional week parameter.
      * @return string HTML output.
      */
-    public function render_calendar_view( $events, $period, $tags, $show_categories = false, $selected_category = '', $show_display_style = false, $current_view = 'calendar' ) {
+    public function render_calendar_view( $events, $period, $tags, $show_categories = false, $selected_category = '', $show_display_style = false, $current_view = 'calendar', $url_year = null, $url_month = null, $url_week = null ) {
         if ( empty( $events ) ) {
             return $this->render_empty_state();
         }
@@ -113,11 +116,11 @@ class GCal_Display {
 
             <div class="gcal-calendar-grid" data-current-view="<?php echo esc_attr( $period ); ?>">
                 <?php if ( $period === 'week' ) : ?>
-                    <?php echo $this->render_week_view( $events ); ?>
+                    <?php echo $this->render_week_view( $events, $url_year, $url_month, $url_week ); ?>
                 <?php elseif ( $period === 'year' ) : ?>
-                    <?php echo $this->render_year_view( $events ); ?>
+                    <?php echo $this->render_year_view( $events, $url_year ); ?>
                 <?php else : ?>
-                    <?php echo $this->render_month_view( $events ); ?>
+                    <?php echo $this->render_month_view( $events, $url_year, $url_month ); ?>
                 <?php endif; ?>
             </div>
             </div><!-- .gcal-calendar-wrapper -->
@@ -139,14 +142,21 @@ class GCal_Display {
      * Render month view grid.
      *
      * @param array $events Array of events.
+     * @param int   $url_year Optional year parameter from URL.
+     * @param int   $url_month Optional month parameter from URL.
      * @return string HTML output.
      */
-    private function render_month_view( $events ) {
+    private function render_month_view( $events, $url_year = null, $url_month = null ) {
         // Group events by date
         $events_by_date = $this->group_events_by_date( $events );
 
-        // Get current month
-        $now = new DateTime();
+        // Use URL date if provided, otherwise current month
+        if ( $url_year && $url_month ) {
+            $now = new DateTime();
+            $now->setDate( $url_year, $url_month, 1 );
+        } else {
+            $now = new DateTime();
+        }
         $month_start = new DateTime( $now->format( 'Y-m-01' ) );
         $month_end = new DateTime( $now->format( 'Y-m-t' ) );
 
@@ -221,17 +231,32 @@ class GCal_Display {
      * Render week view.
      *
      * @param array $events Array of events.
+     * @param int   $url_year Optional year parameter from URL.
+     * @param int   $url_month Optional month parameter from URL.
+     * @param int   $url_week Optional week parameter from URL.
      * @return string HTML output.
      */
-    private function render_week_view( $events ) {
+    private function render_week_view( $events, $url_year = null, $url_month = null, $url_week = null ) {
         // Group events by date
         $events_by_date = $this->group_events_by_date( $events );
 
-        // Get current week starting from Monday
-        $now = new DateTime();
-        $day_of_week = $now->format( 'N' ); // 1 (Monday) through 7 (Sunday)
-        $monday = clone $now;
-        $monday->modify( '-' . ( $day_of_week - 1 ) . ' days' ); // Go back to Monday
+        // Use URL date if provided, otherwise current week
+        if ( $url_year && $url_month && $url_week ) {
+            // Calculate the Monday of the specified week
+            $now = new DateTime();
+            $now->setDate( $url_year, $url_month, 1 );
+            $first_day = (int) $now->format( 'N' );
+            $days_to_first_monday = $first_day === 1 ? 0 : 8 - $first_day;
+            $now->modify( '+' . $days_to_first_monday . ' days' );
+            $now->modify( '+' . ( ( $url_week - 1 ) * 7 ) . ' days' );
+            $monday = $now;
+        } else {
+            // Get current week starting from Monday
+            $now = new DateTime();
+            $day_of_week = $now->format( 'N' ); // 1 (Monday) through 7 (Sunday)
+            $monday = clone $now;
+            $monday->modify( '-' . ( $day_of_week - 1 ) . ' days' ); // Go back to Monday
+        }
 
         // French day names
         $french_days = array( 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim' );
@@ -272,9 +297,10 @@ class GCal_Display {
      * Render year view (12 months grid).
      *
      * @param array $events Array of events.
+     * @param int   $url_year Optional year parameter from URL.
      * @return string HTML output.
      */
-    private function render_year_view( $events ) {
+    private function render_year_view( $events, $url_year = null ) {
         // Group events by month
         $events_by_month = array();
         foreach ( $events as $event ) {
@@ -286,9 +312,13 @@ class GCal_Display {
             $events_by_month[ $month_key ][] = $event;
         }
 
-        // Get current year
-        $now = new DateTime();
-        $year = $now->format( 'Y' );
+        // Use URL year if provided, otherwise current year
+        if ( $url_year ) {
+            $year = $url_year;
+        } else {
+            $now = new DateTime();
+            $year = $now->format( 'Y' );
+        }
 
         ob_start();
         ?>
@@ -353,9 +383,14 @@ class GCal_Display {
      * @param array  $tags   Filter tags.
      * @param bool   $show_categories Whether to show category sidebar.
      * @param string $selected_category Currently selected category.
+     * @param bool   $show_display_style Whether to show display style toggle.
+     * @param string $current_view Current view type.
+     * @param int    $url_year Optional year parameter.
+     * @param int    $url_month Optional month parameter.
+     * @param int    $url_week Optional week parameter.
      * @return string HTML output.
      */
-    public function render_list_view( $events, $period, $tags, $show_categories = false, $selected_category = '', $show_display_style = false, $current_view = 'list' ) {
+    public function render_list_view( $events, $period, $tags, $show_categories = false, $selected_category = '', $show_display_style = false, $current_view = 'list', $url_year = null, $url_month = null, $url_week = null ) {
         if ( empty( $events ) ) {
             return $this->render_empty_state();
         }
