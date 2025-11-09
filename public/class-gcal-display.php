@@ -725,16 +725,16 @@ class GCal_Display {
     }
 
     /**
-     * Format time without :00 minutes.
+     * Format time in 24-hour format without :00 minutes.
      *
      * @param DateTime $datetime DateTime object.
-     * @return string Formatted time (e.g., "6 PM" instead of "6:00 PM").
+     * @return string Formatted time (e.g., "18h" instead of "18:00" or "18h30").
      */
     private function format_time( $datetime ) {
         $minutes = $datetime->format( 'i' );
         if ( $minutes === '00' ) {
-            return $datetime->format( 'g A' );
+            return $datetime->format( 'G' ) . 'h';
         }
-        return $datetime->format( 'g:i A' );
+        return $datetime->format( 'G' ) . 'h' . $minutes;
     }
 }
