@@ -112,6 +112,15 @@ class GCal_Shortcode {
         $url_month = isset( $_GET['gcal_month'] ) ? intval( $_GET['gcal_month'] ) : null;
         $url_week  = isset( $_GET['gcal_week'] ) ? intval( $_GET['gcal_week'] ) : null;
 
+        // Debug logging
+        error_log( 'GCal Shortcode - URL params: year=' . ( $url_year ? $url_year : 'NULL' ) . ', month=' . ( $url_month ? $url_month : 'NULL' ) . ', week=' . ( $url_week ? $url_week : 'NULL' ) );
+        error_log( 'GCal Shortcode - Period: ' . $period );
+
+        // Output to browser console
+        add_action( 'wp_footer', function() use ( $url_year, $url_month, $url_week, $period ) {
+            echo '<script>console.log("PHP Shortcode params: year=' . ( $url_year ? $url_year : 'NULL' ) . ', month=' . ( $url_month ? $url_month : 'NULL' ) . ', week=' . ( $url_week ? $url_week : 'NULL' ) . ', period=' . esc_js( $period ) . '");</script>';
+        } );
+
         // Fetch events
         $events = $this->calendar->get_events( $period, $tags, $url_year, $url_month, $url_week );
 
