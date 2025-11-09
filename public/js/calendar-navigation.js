@@ -189,15 +189,34 @@
                 url.searchParams.set('gcal_month', date.getMonth() + 1); // 1-indexed for URL
                 url.searchParams.delete('gcal_week');
             } else if (period === 'week') {
-                // For week, store the date of the Monday
-                const dayOfWeek = date.getDay();
-                const monday = new Date(date);
-                const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-                monday.setDate(date.getDate() + diff);
+                // For week, we need to find which week of the month this date belongs to
+                // Use the date itself (not the Monday) to determine year/month
+                const year = date.getFullYear();
+                const month = date.getMonth(); // 0-indexed
 
-                url.searchParams.set('gcal_year', monday.getFullYear());
-                url.searchParams.set('gcal_month', monday.getMonth() + 1);
-                url.searchParams.set('gcal_week', Math.ceil(monday.getDate() / 7));
+                // Calculate which week of the month this date is in
+                // Week 1 starts on the first Monday of the month
+                const firstDayOfMonth = new Date(year, month, 1);
+                const firstMonday = new Date(year, month, 1);
+                const firstDayWeekday = firstDayOfMonth.getDay(); // 0=Sunday, 1=Monday, etc.
+                const daysToFirstMonday = firstDayWeekday === 0 ? 1 : (firstDayWeekday === 1 ? 0 : 8 - firstDayWeekday);
+                firstMonday.setDate(1 + daysToFirstMonday);
+
+                // Calculate week number based on the date
+                const dayOfMonth = date.getDate();
+                let weekNumber;
+                if (dayOfMonth < firstMonday.getDate()) {
+                    // Before first Monday, it's "week 0" but we'll call it week 1
+                    weekNumber = 1;
+                } else {
+                    // Calculate how many weeks since first Monday
+                    const daysSinceFirstMonday = dayOfMonth - firstMonday.getDate();
+                    weekNumber = Math.floor(daysSinceFirstMonday / 7) + 1;
+                }
+
+                url.searchParams.set('gcal_year', year);
+                url.searchParams.set('gcal_month', month + 1); // 1-indexed for URL
+                url.searchParams.set('gcal_week', weekNumber);
             }
 
             // Update URL without reload
