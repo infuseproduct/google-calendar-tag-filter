@@ -124,10 +124,11 @@ Use the `[gcal_embed]` shortcode to display events on any page or post.
 **Parameters:**
 
 - `view` (optional): `calendar` or `list` (default: `list`)
-- `period` (optional): `week`, `month`, or `year` (default: `year`)
-- `tags` (optional): Comma-separated category IDs
+- `period` (optional): `week`, `month`, `year`, or `future` (default: `year`)
+- `tags` (optional): Comma-separated category IDs (wildcards supported with `*`)
 - `show_categories` (optional): `true` or `false` - Show category filter sidebar (default: `false`)
 - `show_display_style` (optional): `true` or `false` - Show calendar/list toggle (default: `false`)
+- `hide_past` (optional): `true` or `false` - Hide past events in list view (default: `false`)
 
 **Examples:**
 
@@ -146,7 +147,25 @@ Use the `[gcal_embed]` shortcode to display events on any page or post.
 
 <!-- Show events with display style toggle (calendar/list) -->
 [gcal_embed view="list" period="month" show_display_style="true"]
+
+<!-- Show all upcoming events (future period) -->
+[gcal_embed view="list" tags="MESSE-MUI-WO" period="future"]
+
+<!-- Show events matching wildcard pattern -->
+[gcal_embed view="list" tags="MESSE*" period="future"]
+
+<!-- Show current year's upcoming events only -->
+[gcal_embed view="list" period="year" hide_past="true"]
 ```
+
+**New Features:**
+
+- **Future Period (`period="future"`)**: Shows all upcoming events from today through the next 3 years (up to 100 events). Period navigation is hidden for this view.
+- **Wildcard Tags (`tags="MESSE*"`)**: Use asterisk (*) to match tag patterns. Examples:
+  - `MESSE*` matches all tags starting with MESSE
+  - `*-WO` matches all tags ending with -WO
+  - `MESSE*,REUNION*` matches multiple patterns (OR logic)
+- **Hide Past Events (`hide_past="true"`)**: Filters out past events in list view, useful with year/month/week periods.
 
 **URL Parameters:**
 

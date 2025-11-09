@@ -186,10 +186,11 @@ Every shortcode needs these parameters:
 | Parameter | Required | Options | Description |
 |-----------|----------|---------|-------------|
 | `view` | ❌ No | `calendar` or `list` (default: `list`) | How to display events |
-| `period` | ❌ No | `week`, `month`, or `year` (default: `year`) | Time range |
-| `tags` | ❌ No | Category IDs (comma-separated) | Filter by categories |
+| `period` | ❌ No | `week`, `month`, `year`, or `future` (default: `year`) | Time range to display |
+| `tags` | ❌ No | Category IDs (comma-separated, wildcards supported) | Filter by categories |
 | `show_categories` | ❌ No | `true` or `false` (default: `false`) | Show category filter sidebar |
 | `show_display_style` | ❌ No | `true` or `false` (default: `false`) | Show view toggle (calendar/list) |
+| `hide_past` | ❌ No | `true` or `false` (default: `false`) | Hide past events (list view only) |
 
 ### Common Use Cases
 
@@ -280,6 +281,58 @@ This is the most interactive display option, perfect for main calendar pages.
 ```
 
 **Result:** Calendar pre-filtered to workshops, but visitors can switch to other categories using the sidebar.
+
+---
+
+#### Show All Upcoming Events (Future Period)
+
+```
+[gcal_embed view="list" tags="MESSE-MUI-WO" period="future"]
+```
+
+**Result:** List of all upcoming events for the MESSE-MUI-WO tag, spanning from today through the next 3 years (up to 100 events from Google Calendar API limit). **No period navigation controls are shown** since this view shows all future events.
+
+---
+
+#### Show All Future Events with Past Events Hidden
+
+```
+[gcal_embed view="list" tags="COMMUNITY" period="future" hide_past="true"]
+```
+
+**Result:** Same as above with explicit past event filtering. The `hide_past` parameter is particularly useful when combined with regular periods (year, month, week) to exclude events that have already occurred.
+
+---
+
+#### Show Events Matching Tag Pattern (Wildcard)
+
+```
+[gcal_embed view="list" tags="MESSE*" period="future"]
+```
+
+**Result:** Shows all upcoming events with tags starting with "MESSE" (e.g., MESSE-MUI-WO, MESSE-AUTRE, MESSE-SPECIAL). The asterisk (*) acts as a wildcard matching zero or more characters.
+
+**Additional wildcard examples:**
+
+- `tags="MESSE*"` - Matches all tags starting with MESSE
+- `tags="*-WO"` - Matches all tags ending with -WO
+- `tags="MESSE*,REUNION*"` - Matches tags starting with MESSE or REUNION (OR logic)
+
+**Wildcard Rules:**
+
+- Only alphanumeric characters, hyphens, underscores, and asterisk allowed
+- Wildcards bypass the category whitelist (no need to pre-define them)
+- Case-insensitive matching (automatically converted to uppercase)
+
+---
+
+#### Show Current Year with Hidden Past Events
+
+```
+[gcal_embed view="list" period="year" hide_past="true"]
+```
+
+**Result:** Shows only upcoming events from today through December 31 of the current year. Past events are filtered out.
 
 ---
 
