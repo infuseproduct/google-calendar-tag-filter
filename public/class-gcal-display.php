@@ -96,10 +96,22 @@ class GCal_Display {
 
         <script type="text/javascript">
             var gcalEvents_<?php echo esc_js( $instance_id ); ?> = <?php echo $events_json; ?>;
-            // Register events with modal handler
-            if (window.GCalEventModal) {
-                window.GCalEventModal.registerEvents('<?php echo esc_js( $instance_id ); ?>', gcalEvents_<?php echo esc_js( $instance_id ); ?>);
-            }
+            // Register events with modal handler when available
+            (function() {
+                function registerEvents() {
+                    if (window.GCalEventModal) {
+                        window.GCalEventModal.registerEvents('<?php echo esc_js( $instance_id ); ?>', gcalEvents_<?php echo esc_js( $instance_id ); ?>);
+                    } else {
+                        // Retry after a short delay if not loaded yet
+                        setTimeout(registerEvents, 100);
+                    }
+                }
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', registerEvents);
+                } else {
+                    registerEvents();
+                }
+            })();
         </script>
         <?php
         return ob_get_clean();
@@ -274,10 +286,22 @@ class GCal_Display {
 
         <script type="text/javascript">
             var gcalEvents_<?php echo esc_js( $instance_id ); ?> = <?php echo $events_json; ?>;
-            // Register events with modal handler
-            if (window.GCalEventModal) {
-                window.GCalEventModal.registerEvents('<?php echo esc_js( $instance_id ); ?>', gcalEvents_<?php echo esc_js( $instance_id ); ?>);
-            }
+            // Register events with modal handler when available
+            (function() {
+                function registerEvents() {
+                    if (window.GCalEventModal) {
+                        window.GCalEventModal.registerEvents('<?php echo esc_js( $instance_id ); ?>', gcalEvents_<?php echo esc_js( $instance_id ); ?>);
+                    } else {
+                        // Retry after a short delay if not loaded yet
+                        setTimeout(registerEvents, 100);
+                    }
+                }
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', registerEvents);
+                } else {
+                    registerEvents();
+                }
+            })();
         </script>
         <?php
         return ob_get_clean();

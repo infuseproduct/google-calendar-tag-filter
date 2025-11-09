@@ -83,7 +83,7 @@ class GCal_Calendar {
         // Output event count to browser console for debugging
         $count = count( $processed_events );
         add_action( 'wp_footer', function() use ( $count, $period ) {
-            echo '<script>console.log("GCal: Fetched ' . $count . ' events for period: ' . esc_js( $period ) . '");</script>';
+            echo '<script>console.log("GCal: Fetched ' . intval( $count ) . ' events for period: ' . esc_js( $period ) . '");</script>';
         } );
 
         // Filter by tags if specified
