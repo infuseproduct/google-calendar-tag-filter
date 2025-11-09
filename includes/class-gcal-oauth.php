@@ -239,8 +239,24 @@ class GCal_OAuth {
      * @return bool
      */
     public function save_credentials( $client_id, $client_secret ) {
-        update_option( self::OPTION_CLIENT_ID, sanitize_text_field( $client_id ) );
-        update_option( self::OPTION_CLIENT_SECRET, sanitize_text_field( $client_secret ) );
+        $sanitized_id = sanitize_text_field( $client_id );
+        $sanitized_secret = sanitize_text_field( $client_secret );
+
+        error_log( '=== GCal Saving Credentials ===' );
+        error_log( 'Client ID length: ' . strlen( $sanitized_id ) );
+        error_log( 'Client Secret length: ' . strlen( $sanitized_secret ) );
+
+        $id_saved = update_option( self::OPTION_CLIENT_ID, $sanitized_id );
+        $secret_saved = update_option( self::OPTION_CLIENT_SECRET, $sanitized_secret );
+
+        error_log( 'Client ID saved: ' . ( $id_saved ? 'YES' : 'NO' ) );
+        error_log( 'Client Secret saved: ' . ( $secret_saved ? 'YES' : 'NO' ) );
+
+        // Verify they were actually saved
+        $verify_id = get_option( self::OPTION_CLIENT_ID );
+        $verify_secret = get_option( self::OPTION_CLIENT_SECRET );
+        error_log( 'Client ID verified: ' . ( ! empty( $verify_id ) ? 'YES' : 'NO' ) );
+        error_log( 'Client Secret verified: ' . ( ! empty( $verify_secret ) ? 'YES' : 'NO' ) );
 
         $this->init_client();
 
