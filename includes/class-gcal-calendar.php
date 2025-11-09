@@ -153,6 +153,11 @@ class GCal_Calendar {
             list( $time_min, $time_max ) = $this->get_time_range( $period, $year, $month, $week );
             error_log( 'Time range: ' . $time_min . ' to ' . ( $time_max ? $time_max : 'FUTURE' ) );
 
+            // Output time range to browser console for debugging
+            add_action( 'wp_footer', function() use ( $time_min, $time_max, $period, $year ) {
+                echo '<script>console.log("PHP API call - period=' . esc_js( $period ) . ', year=' . ( $year ? $year : 'NULL' ) . ', timeMin=' . esc_js( $time_min ) . ', timeMax=' . esc_js( $time_max ? $time_max : 'NONE' ) . '");</script>';
+            } );
+
             $params = array(
                 'timeMin'      => $time_min,
                 'maxResults'   => 100,
