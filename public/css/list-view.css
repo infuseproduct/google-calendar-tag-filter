@@ -59,7 +59,7 @@
 .gcal-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
 }
 
 /* Event Card */
@@ -82,9 +82,9 @@
 /* Event Date Badge */
 .gcal-event-date {
     background: #f8f9fa;
-    padding: 16px;
+    padding: 12px;
     text-align: center;
-    min-width: 80px;
+    min-width: 70px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -101,7 +101,7 @@
 }
 
 .gcal-event-day {
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 700;
     color: #212529;
     line-height: 1;
@@ -111,15 +111,15 @@
 /* Event Details */
 .gcal-event-details {
     flex: 1;
-    padding: 16px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 /* Scope to list view only - calendar view needs color: inherit for contrast */
 .gcal-list-event-card .gcal-event-title {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: #212529;
     margin: 0;
@@ -346,25 +346,25 @@
 /* Responsive - Tablet */
 @media (min-width: 768px) {
     .gcal-list {
-        gap: 20px;
+        gap: 12px;
     }
 
     .gcal-event-date {
-        min-width: 100px;
-        padding: 20px;
+        min-width: 85px;
+        padding: 14px;
     }
 
     .gcal-event-day {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
 
     .gcal-event-details {
-        padding: 20px;
-        gap: 10px;
+        padding: 12px;
+        gap: 6px;
     }
 
     .gcal-event-title {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
     }
 
     .gcal-event-description {
@@ -379,7 +379,8 @@
     }
 
     .gcal-event-date {
-        min-width: 120px;
+        min-width: 100px;
+        padding: 14px;
     }
 }
 
@@ -424,7 +425,7 @@
     }
 
     .gcal-event-day {
-        font-size: 1.5rem;
+        font-size: 1.375rem;
     }
 
     .gcal-event-details {
@@ -433,7 +434,7 @@
     }
 
     .gcal-event-title {
-        font-size: 1.125rem;
+        font-size: 1rem;
     }
 
     .gcal-event-category {
