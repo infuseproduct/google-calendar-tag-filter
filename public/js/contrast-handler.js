@@ -123,7 +123,7 @@
                 if (this.shouldUseWhiteText(bgColor)) {
                     item.style.color = '#ffffff';
                 } else {
-                    item.style.color = '#212529';
+                    item.style.color = '#000000';
                 }
             });
 
@@ -134,7 +134,7 @@
                 if (this.shouldUseWhiteText(bgColor)) {
                     badge.style.color = '#ffffff';
                 } else {
-                    badge.style.color = '#212529';
+                    badge.style.color = '#000000';
                 }
             });
         }
