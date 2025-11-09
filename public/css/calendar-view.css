@@ -207,7 +207,7 @@
 }
 
 .gcal-event-title {
-    color: inherit;
+    color: inherit !important;
     font-size: 13.6px !important;
     font-weight: 500;
 }

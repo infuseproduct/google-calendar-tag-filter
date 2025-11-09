@@ -89,7 +89,8 @@
     gap: 8px;
 }
 
-.gcal-event-title {
+/* Scope to list view only - calendar view needs color: inherit for contrast */
+.gcal-list-event-card .gcal-event-title {
     font-size: 1.25rem;
     font-weight: 600;
     color: #212529;

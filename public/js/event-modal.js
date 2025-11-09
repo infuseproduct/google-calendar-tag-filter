@@ -48,7 +48,12 @@
                 }
 
                 try {
-                    const events = JSON.parse(eventsJson);
+                    let events = JSON.parse(eventsJson);
+
+                    // Convert object with numeric keys to array (backward compatibility)
+                    if (!Array.isArray(events) && typeof events === 'object' && events !== null) {
+                        events = Object.values(events);
+                    }
 
                     if (Array.isArray(events) && events.length > 0) {
                         self.registerEvents(instanceId, events);

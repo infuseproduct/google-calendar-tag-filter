@@ -171,6 +171,11 @@
                 return;
             }
 
+            // Convert object with numeric keys to array (backward compatibility)
+            if (!Array.isArray(events) && typeof events === 'object' && events !== null) {
+                events = Object.values(events);
+            }
+
             // Ensure events is an array
             if (!Array.isArray(events)) {
                 console.error('Events data is not an array:', events);
