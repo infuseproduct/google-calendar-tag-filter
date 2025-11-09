@@ -247,7 +247,7 @@
             this.updateURL(newView, currentDate);
 
             // Reload with new view parameter
-            window.location.href = window.location.href;
+            window.location.reload();
         },
 
         /**
