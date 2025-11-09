@@ -188,9 +188,8 @@
             html += '<h2 class="gcal-modal-title">' + this.escapeHtml(event.title) + '</h2>';
 
             // Category badge (if tags exist)
-            if (event.tags && event.tags.length > 0) {
-                const categoryName = this.getCategoryDisplayName(event.tags[0]);
-                html += '<div class="gcal-modal-category">' + this.escapeHtml(categoryName) + '</div>';
+            if (event.categoryNames && event.categoryNames.length > 0) {
+                html += '<div class="gcal-modal-category">' + this.escapeHtml(event.categoryNames[0]) + '</div>';
             }
 
             // Meta information
@@ -302,17 +301,6 @@
                     }
                 }
             });
-        },
-
-        /**
-         * Get category display name
-         *
-         * @param {string} categoryId - Category ID
-         * @returns {string} Display name
-         */
-        getCategoryDisplayName: function(categoryId) {
-            // This would ideally come from PHP, but we can use the ID as fallback
-            return categoryId.charAt(0).toUpperCase() + categoryId.slice(1).toLowerCase().replace(/_/g, ' ');
         },
 
         /**

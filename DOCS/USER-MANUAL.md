@@ -23,12 +23,14 @@ The Google Calendar Tag Filter plugin allows you to display Google Calendar even
 
 ### Key Features
 
-- 📅 **Multiple Views:** Calendar (month/week) and list views
-- 🏷️ **Tag-Based Filtering:** Filter events by custom categories
+- 📅 **Multiple Views:** Calendar (month/week) and list views with toggle switching
+- 🏷️ **Tag-Based Filtering:** Filter events by custom categories with interactive sidebar
 - 📱 **Mobile-First:** Responsive design that works on all devices
-- 🌍 **Timezone Smart:** Automatically displays times in visitor's timezone
+- 🌍 **Timezone Smart:** Automatically displays times in visitor's timezone (French localization)
 - ⚡ **Fast:** Smart caching for optimal performance
-- 🎨 **Customizable:** Color-coded categories with custom names
+- 🎨 **Customizable:** Color-coded categories with custom display names
+- 🔄 **Interactive Filtering:** Real-time category filtering without page reload
+- 📆 **Smart Date Ranges:** Shows past and future events within displayed period
 
 ---
 
@@ -185,6 +187,8 @@ Every shortcode needs these parameters:
 | `view` | ✅ Yes | `calendar` or `list` | How to display events |
 | `period` | ✅ Yes | `week`, `month`, or `future` | Time range |
 | `tags` | ❌ No | Category IDs (comma-separated) | Filter by categories |
+| `show_categories` | ❌ No | `true` or `false` (default: `false`) | Show category filter sidebar |
+| `show_display_style` | ❌ No | `true` or `false` (default: `false`) | Show view toggle (calendar/list) |
 
 ### Common Use Cases
 
@@ -225,6 +229,40 @@ Every shortcode needs these parameters:
 ```
 
 **Result:** List of workshops, training, or meetings this month
+
+---
+
+#### Show Calendar with Category Sidebar
+
+```
+[gcal_embed view="calendar" period="month" show_categories="true"]
+```
+
+**Result:** Calendar with sidebar showing all categories. Visitors can click categories to filter events in real-time.
+
+---
+
+#### Show Calendar with View Toggle and Categories
+
+```
+[gcal_embed view="calendar" period="month" show_categories="true" show_display_style="true"]
+```
+
+**Result:** Calendar with sidebar containing:
+- View toggle buttons (switch between calendar and list)
+- Category filter buttons
+
+This is the most interactive display option, perfect for main calendar pages.
+
+---
+
+#### Pre-filter with Interactive Categories
+
+```
+[gcal_embed tags="WORKSHOP" view="calendar" period="week" show_categories="true"]
+```
+
+**Result:** Calendar pre-filtered to workshops, but visitors can switch to other categories using the sidebar.
 
 ---
 
@@ -274,13 +312,15 @@ Events are tagged by adding special codes to the event **description**.
 #### Tag Format
 
 ```
-[[[TAG:CATEGORY_ID]]]
+[[[CATEGORY_ID]]]
 ```
 
 **Example:**
 ```
-[[[TAG:COMMUNITY]]]
+[[[COMMUNITY]]]
 ```
+
+**Note:** The simplified format no longer requires "TAG:" prefix.
 
 ### Single Tag Example
 
@@ -292,7 +332,7 @@ Events are tagged by adding special codes to the event **description**.
 2. Click **Edit** (pencil icon)
 3. In the **Description** field, add:
    ```
-   [[[TAG:COMMUNITY]]]
+   [[[COMMUNITY]]]
 
    Join us for our monthly potluck dinner! Bring your favorite dish to share.
 
@@ -315,7 +355,7 @@ Events are tagged by adding special codes to the event **description**.
 1. Edit the event
 2. Add multiple tags to the description:
    ```
-   [[[TAG:VOLUNTEER]]][[[TAG:WORKSHOP]]][[[TAG:TRAINING]]]
+   [[[VOLUNTEER]]][[[WORKSHOP]]][[[TRAINING]]]
 
    Learn how to become a volunteer at our organization. This workshop covers:
    - Volunteer roles and responsibilities
@@ -342,10 +382,11 @@ Events are tagged by adding special codes to the event **description**.
 
 #### ❌ DON'T:
 
-- Don't use lowercase: `[[[tag:community]]]` ❌ (won't work)
-- Don't add spaces: `[[[TAG: COMMUNITY]]]` ❌ (won't work)
-- Don't misspell: `[[[TAG:COMUNITY]]]` ❌ (won't be recognized)
+- Don't use lowercase: `[[[community]]]` ❌ (won't work)
+- Don't add spaces: `[[[COMMUNITY ]]]` ❌ (won't work)
+- Don't misspell: `[[[COMUNITY]]]` ❌ (won't be recognized)
 - Don't use non-whitelisted tags (they'll be ignored)
+- Don't use old format: `[[[TAG:COMMUNITY]]]` ❌ (outdated format)
 
 ### What Happens to Tags
 
@@ -359,28 +400,28 @@ Events are tagged by adding special codes to the event **description**.
 
 #### Community Events
 ```
-[[[TAG:COMMUNITY]]]
+[[[COMMUNITY]]]
 
 Monthly neighborhood meetup. Light refreshments provided.
 ```
 
 #### Workshops
 ```
-[[[TAG:WORKSHOP]]]
+[[[WORKSHOP]]]
 
 Hands-on coding workshop. Bring your laptop. All skill levels welcome.
 ```
 
 #### Board Meetings
 ```
-[[[TAG:MEETING]]]
+[[[MEETING]]]
 
 Monthly board meeting. Members only. Agenda will be sent via email.
 ```
 
 #### Fundraisers
 ```
-[[[TAG:FUNDRAISER]]][[[TAG:COMMUNITY]]]
+[[[FUNDRAISER]]][[[COMMUNITY]]]
 
 Annual gala dinner to support our programs. Tickets: $50/person
 ```
@@ -409,9 +450,10 @@ After tagging events:
    - Try viewing without tags: `[gcal_embed view="list" period="month"]`
 
 2. **Tags aren't recognized**
-   - Verify tag format: `[[[TAG:CATEGORYID]]]`
+   - Verify tag format: `[[[CATEGORYID]]]`
    - Check category is in whitelist (WordPress admin)
    - Ensure UPPERCASE
+   - Don't use old format with "TAG:" prefix
 
 3. **Cache is stale**
    - Clear cache in plugin settings
@@ -424,15 +466,16 @@ After tagging events:
 
 ### Tags Visible to Users
 
-**Problem:** Tags like `[[[TAG:COMMUNITY]]]` appear in event descriptions
+**Problem:** Tags like `[[[COMMUNITY]]]` appear in event descriptions
 
 **Cause:** Tag format is incorrect
 
 **Solution:**
-- Must be exactly: `[[[TAG:CATEGORYID]]]`
+- Must be exactly: `[[[CATEGORYID]]]`
 - Three opening brackets, three closing brackets
 - All UPPERCASE
 - No spaces
+- No "TAG:" prefix (simplified format)
 
 ### Connection Errors
 
@@ -458,11 +501,12 @@ After tagging events:
 
 **Problem:** Event times showing in wrong timezone
 
-**This is normal!** The plugin displays times in each visitor's browser timezone automatically.
+**This is normal!** The plugin displays times in each visitor's browser timezone automatically, formatted in French (24-hour format).
 
-- Event stored in Google Calendar: 2:00 PM PST
-- Visitor in EST sees: 5:00 PM EST
-- Visitor in PST sees: 2:00 PM PST
+- Event stored in Google Calendar: 2:00 PM PST (14:00)
+- Visitor in EST sees: 17:00 (5:00 PM EST)
+- Visitor in PST sees: 14:00 (2:00 PM PST)
+- Dates show in French: "9 novembre 2025 à 17:00"
 
 ### Performance Issues
 
@@ -527,7 +571,7 @@ A: The plugin provides default responsive layouts. Advanced users can add custom
 A: Yes! The plugin is translation-ready. Use the text domain `gcal-tag-filter`.
 
 **Q: Can I change date/time formats?**
-A: The plugin uses your site's WordPress locale settings and visitors' browser settings for dates and times.
+A: The plugin formats dates in French (fr-FR) with 24-hour time format. Times are automatically adjusted to each visitor's timezone.
 
 ### Technical Questions
 

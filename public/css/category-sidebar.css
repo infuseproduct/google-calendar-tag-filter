@@ -1,0 +1,208 @@
+/**
+ * Category Sidebar Styles
+ *
+ * Styles for the category filter sidebar.
+ */
+
+/* Wrapper with sidebar layout */
+.gcal-wrapper-with-sidebar {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.gcal-wrapper-with-sidebar.has-sidebar {
+    flex-direction: row;
+}
+
+/* Sidebar Container */
+.gcal-sidebar {
+    flex-shrink: 0;
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Display Style Toggle */
+.gcal-display-style-toggle {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 8px;
+}
+
+.gcal-display-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 12px;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gcal-display-btn:hover {
+    background: #e9ecef;
+    border-color: #cbd0d5;
+}
+
+.gcal-display-btn.active {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+}
+
+.gcal-display-btn .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Category Sidebar */
+.gcal-category-sidebar {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.gcal-category-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #212529;
+    margin: 0 0 12px 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.gcal-category-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.gcal-category-list li {
+    margin: 0;
+    padding: 0;
+}
+
+.gcal-category-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    color: #495057;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.gcal-category-btn:hover {
+    background: #f8f9fa;
+    color: #212529;
+}
+
+.gcal-category-btn.active {
+    background: #2271b1;
+    color: #fff;
+    font-weight: 600;
+}
+
+.gcal-category-btn:focus {
+    outline: 2px solid #2271b1;
+    outline-offset: 2px;
+}
+
+/* Calendar/List wrapper when sidebar is present */
+.gcal-wrapper-with-sidebar .gcal-calendar-wrapper,
+.gcal-wrapper-with-sidebar .gcal-list-wrapper {
+    flex: 1;
+    min-width: 0; /* Prevent overflow */
+    overflow: hidden; /* Prevent content from breaking layout */
+    margin-top: 0; /* Remove top margin when sidebar is present */
+}
+
+/* Ensure month view stays within bounds */
+.gcal-wrapper-with-sidebar .gcal-month-view {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Ensure grid columns stay consistent */
+.gcal-wrapper-with-sidebar .gcal-weekday-headers,
+.gcal-wrapper-with-sidebar .gcal-days-grid {
+    width: 100%;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 992px) {
+    .gcal-sidebar {
+        width: 180px;
+    }
+
+    .gcal-wrapper-with-sidebar {
+        gap: 16px;
+    }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+    .gcal-wrapper-with-sidebar.has-sidebar {
+        flex-direction: column;
+    }
+
+    .gcal-sidebar {
+        width: 100%;
+        order: 1;
+        margin-bottom: 16px;
+    }
+
+    .gcal-calendar-wrapper,
+    .gcal-list-wrapper {
+        order: 2;
+    }
+
+    .gcal-category-title {
+        font-size: 0.9rem;
+    }
+
+    .gcal-category-btn {
+        font-size: 0.8rem;
+        padding: 8px 10px;
+    }
+
+    .gcal-display-btn {
+        font-size: 0.75rem;
+        padding: 8px 10px;
+    }
+}
+
+/* Category filter active state for events */
+.gcal-event-item.filtered-out,
+.gcal-list-event-card.filtered-out,
+.gcal-day.filtered-out {
+    display: none !important;
+}
+
+/* Loading state */
+.gcal-wrapper-with-sidebar.filtering {
+    opacity: 0.6;
+    pointer-events: none;
+}

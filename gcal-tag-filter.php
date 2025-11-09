@@ -141,6 +141,13 @@ function gcal_tag_filter_enqueue_scripts() {
             GCAL_TAG_FILTER_VERSION
         );
 
+        wp_enqueue_style(
+            'gcal-category-sidebar',
+            GCAL_TAG_FILTER_URL . 'public/css/category-sidebar.css',
+            array(),
+            GCAL_TAG_FILTER_VERSION
+        );
+
         // Scripts
         wp_enqueue_script(
             'gcal-timezone-handler',
@@ -162,6 +169,22 @@ function gcal_tag_filter_enqueue_scripts() {
             'gcal-calendar-navigation',
             GCAL_TAG_FILTER_URL . 'public/js/calendar-navigation.js',
             array( 'gcal-timezone-handler' ),
+            GCAL_TAG_FILTER_VERSION,
+            true
+        );
+
+        wp_enqueue_script(
+            'gcal-category-filter',
+            GCAL_TAG_FILTER_URL . 'public/js/category-filter.js',
+            array(),
+            GCAL_TAG_FILTER_VERSION,
+            true
+        );
+
+        wp_enqueue_script(
+            'gcal-contrast-handler',
+            GCAL_TAG_FILTER_URL . 'public/js/contrast-handler.js',
+            array(),
             GCAL_TAG_FILTER_VERSION,
             true
         );

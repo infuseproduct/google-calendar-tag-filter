@@ -46,9 +46,13 @@ class GCal_Display {
      * @param array  $events Array of events.
      * @param string $period Period type.
      * @param array  $tags   Filter tags.
+     * @param bool   $show_categories Whether to show category sidebar.
+     * @param string $selected_category Currently selected category.
+     * @param bool   $show_display_style Whether to show display style toggle.
+     * @param string $current_view Current view type.
      * @return string HTML output.
      */
-    public function render_calendar_view( $events, $period, $tags ) {
+    public function render_calendar_view( $events, $period, $tags, $show_categories = false, $selected_category = '', $show_display_style = false, $current_view = 'calendar' ) {
         if ( empty( $events ) ) {
             return $this->render_empty_state();
         }
@@ -61,11 +65,16 @@ class GCal_Display {
 
         ob_start();
         ?>
-        <div class="gcal-calendar-wrapper"
-             id="<?php echo esc_attr( $instance_id ); ?>"
-             data-period="<?php echo esc_attr( $period ); ?>"
-             data-tags="<?php echo esc_attr( implode( ',', $tags ) ); ?>"
-             data-events="<?php echo esc_attr( $events_json ); ?>">
+        <div class="gcal-wrapper-with-sidebar <?php echo ( $show_categories || $show_display_style ) ? 'has-sidebar' : ''; ?>">
+            <?php if ( $show_categories || $show_display_style ) : ?>
+                <?php echo $this->render_sidebar( $events, $selected_category, $instance_id, $show_categories, $show_display_style, $current_view ); ?>
+            <?php endif; ?>
+
+            <div class="gcal-calendar-wrapper"
+                 id="<?php echo esc_attr( $instance_id ); ?>"
+                 data-period="<?php echo esc_attr( $period ); ?>"
+                 data-tags="<?php echo esc_attr( implode( ',', $tags ) ); ?>"
+                 data-events="<?php echo esc_attr( $events_json ); ?>">
             <div class="gcal-calendar-header">
                 <div class="gcal-header-left">
                     <button class="gcal-nav-prev" aria-label="<?php esc_attr_e( 'Précédent', 'gcal-tag-filter' ); ?>">
@@ -102,16 +111,17 @@ class GCal_Display {
                     <?php echo $this->render_month_view( $events ); ?>
                 <?php endif; ?>
             </div>
-        </div>
+            </div><!-- .gcal-calendar-wrapper -->
 
-        <!-- Event Modal -->
-        <div class="gcal-modal" id="<?php echo esc_attr( $instance_id ); ?>-modal" style="display: none;">
-            <div class="gcal-modal-overlay"></div>
-            <div class="gcal-modal-content">
-                <button class="gcal-modal-close" aria-label="<?php esc_attr_e( 'Close', 'gcal-tag-filter' ); ?>">×</button>
-                <div class="gcal-modal-body"></div>
+            <!-- Event Modal -->
+            <div class="gcal-modal" id="<?php echo esc_attr( $instance_id ); ?>-modal" style="display: none;">
+                <div class="gcal-modal-overlay"></div>
+                <div class="gcal-modal-content">
+                    <button class="gcal-modal-close" aria-label="<?php esc_attr_e( 'Close', 'gcal-tag-filter' ); ?>">×</button>
+                    <div class="gcal-modal-body"></div>
+                </div>
             </div>
-        </div>
+        </div><!-- .gcal-wrapper-with-sidebar -->
         <?php
         return ob_get_clean();
     }
@@ -319,9 +329,11 @@ class GCal_Display {
      * @param array  $events Array of events.
      * @param string $period Period type.
      * @param array  $tags   Filter tags.
+     * @param bool   $show_categories Whether to show category sidebar.
+     * @param string $selected_category Currently selected category.
      * @return string HTML output.
      */
-    public function render_list_view( $events, $period, $tags ) {
+    public function render_list_view( $events, $period, $tags, $show_categories = false, $selected_category = '', $show_display_style = false, $current_view = 'list' ) {
         if ( empty( $events ) ) {
             return $this->render_empty_state();
         }
@@ -334,11 +346,16 @@ class GCal_Display {
 
         ob_start();
         ?>
-        <div class="gcal-list-wrapper"
-             id="<?php echo esc_attr( $instance_id ); ?>"
-             data-period="<?php echo esc_attr( $period ); ?>"
-             data-tags="<?php echo esc_attr( implode( ',', $tags ) ); ?>"
-             data-events="<?php echo esc_attr( $events_json ); ?>">
+        <div class="gcal-wrapper-with-sidebar <?php echo ( $show_categories || $show_display_style ) ? 'has-sidebar' : ''; ?>">
+            <?php if ( $show_categories || $show_display_style ) : ?>
+                <?php echo $this->render_sidebar( $events, $selected_category, $instance_id, $show_categories, $show_display_style, $current_view ); ?>
+            <?php endif; ?>
+
+            <div class="gcal-list-wrapper"
+                 id="<?php echo esc_attr( $instance_id ); ?>"
+                 data-period="<?php echo esc_attr( $period ); ?>"
+                 data-tags="<?php echo esc_attr( implode( ',', $tags ) ); ?>"
+                 data-events="<?php echo esc_attr( $events_json ); ?>">
             <div class="gcal-list-loading">
                 <div class="gcal-spinner"></div>
             </div>
@@ -348,16 +365,17 @@ class GCal_Display {
                     <?php echo $this->render_list_event_card( $event ); ?>
                 <?php endforeach; ?>
             </div>
-        </div>
+            </div><!-- .gcal-list-wrapper -->
 
-        <!-- Event Modal -->
-        <div class="gcal-modal" id="<?php echo esc_attr( $instance_id ); ?>-modal" style="display: none;">
-            <div class="gcal-modal-overlay"></div>
-            <div class="gcal-modal-content">
-                <button class="gcal-modal-close" aria-label="<?php esc_attr_e( 'Close', 'gcal-tag-filter' ); ?>">×</button>
-                <div class="gcal-modal-body"></div>
+            <!-- Event Modal -->
+            <div class="gcal-modal" id="<?php echo esc_attr( $instance_id ); ?>-modal" style="display: none;">
+                <div class="gcal-modal-overlay"></div>
+                <div class="gcal-modal-content">
+                    <button class="gcal-modal-close" aria-label="<?php esc_attr_e( 'Close', 'gcal-tag-filter' ); ?>">×</button>
+                    <div class="gcal-modal-body"></div>
+                </div>
             </div>
-        </div>
+        </div><!-- .gcal-wrapper-with-sidebar -->
         <?php
         return ob_get_clean();
     }
@@ -377,7 +395,8 @@ class GCal_Display {
         $time = '';
         if ( ! $event['is_all_day'] ) {
             $start_time = new DateTime( $event['start'] );
-            $time = $start_time->format( 'g:i A' );
+            $end_time = new DateTime( $event['end'] );
+            $time = $start_time->format( 'g:i A' ) . ' - ' . $end_time->format( 'g:i A' );
         }
 
         ob_start();
@@ -436,7 +455,10 @@ class GCal_Display {
                     <?php if ( $event['is_all_day'] ) : ?>
                         <?php esc_html_e( 'Toute la journée', 'gcal-tag-filter' ); ?>
                     <?php else : ?>
-                        <span class="gcal-event-start"><?php echo esc_html( $start_date->format( 'g:i A' ) ); ?></span>
+                        <?php
+                        $end_date = new DateTime( $event['end'] );
+                        ?>
+                        <span class="gcal-event-start"><?php echo esc_html( $start_date->format( 'g:i A' ) . ' - ' . $end_date->format( 'g:i A' ) ); ?></span>
                     <?php endif; ?>
                 </div>
 
@@ -500,20 +522,123 @@ class GCal_Display {
     private function prepare_events_for_js( $events ) {
         return array_map(
             function( $event ) {
+                // Get category display names
+                $category_names = array();
+                if ( ! empty( $event['tags'] ) ) {
+                    foreach ( $event['tags'] as $tag ) {
+                        $category_names[] = GCal_Categories::get_category_display_name( $tag );
+                    }
+                }
+
                 return array(
-                    'id'          => $event['id'],
-                    'title'       => $event['title'],
-                    'description' => $event['description'],
-                    'location'    => $event['location'],
-                    'start'       => $event['start'],
-                    'end'         => $event['end'],
-                    'isAllDay'    => $event['is_all_day'],
-                    'tags'        => $event['tags'],
-                    'mapLink'     => $event['map_link'],
-                    'htmlLink'    => $event['html_link'],
+                    'id'             => $event['id'],
+                    'title'          => $event['title'],
+                    'description'    => $event['description'],
+                    'location'       => $event['location'],
+                    'start'          => $event['start'],
+                    'end'            => $event['end'],
+                    'isAllDay'       => $event['is_all_day'],
+                    'tags'           => $event['tags'],
+                    'categoryNames'  => $category_names,
+                    'mapLink'        => $event['map_link'],
+                    'htmlLink'       => $event['html_link'],
                 );
             },
             $events
         );
+    }
+
+    /**
+     * Render sidebar with display style toggle and/or categories.
+     *
+     * @param array  $events Array of events.
+     * @param string $selected_category Currently selected category.
+     * @param string $instance_id Instance ID.
+     * @param bool   $show_categories Whether to show category list.
+     * @param bool   $show_display_style Whether to show display style toggle.
+     * @param string $current_view Current view type.
+     * @return string HTML output.
+     */
+    private function render_sidebar( $events, $selected_category, $instance_id, $show_categories, $show_display_style, $current_view ) {
+        ob_start();
+        ?>
+        <div class="gcal-sidebar">
+            <?php if ( $show_display_style ) : ?>
+                <div class="gcal-display-style-toggle">
+                    <button class="gcal-display-btn <?php echo $current_view === 'list' ? 'active' : ''; ?>" data-display="list">
+                        <span class="dashicons dashicons-list-view"></span>
+                        <?php esc_html_e( 'Liste', 'gcal-tag-filter' ); ?>
+                    </button>
+                    <button class="gcal-display-btn <?php echo $current_view === 'calendar' ? 'active' : ''; ?>" data-display="calendar">
+                        <span class="dashicons dashicons-calendar-alt"></span>
+                        <?php esc_html_e( 'Calendrier', 'gcal-tag-filter' ); ?>
+                    </button>
+                </div>
+            <?php endif; ?>
+
+            <?php if ( $show_categories ) : ?>
+                <?php echo $this->render_category_sidebar( $events, $selected_category, $instance_id ); ?>
+            <?php endif; ?>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Render category sidebar for filtering.
+     *
+     * @param array  $events Array of events.
+     * @param string $selected_category Currently selected category.
+     * @param string $instance_id Instance ID.
+     * @return string HTML output.
+     */
+    private function render_category_sidebar( $events, $selected_category, $instance_id ) {
+        // Collect all unique categories from events
+        $all_categories = array();
+        foreach ( $events as $event ) {
+            if ( ! empty( $event['tags'] ) ) {
+                foreach ( $event['tags'] as $tag ) {
+                    $all_categories[] = strtoupper( $tag );
+                }
+            }
+        }
+
+        // Remove duplicates and sort alphabetically
+        $all_categories = array_unique( $all_categories );
+        sort( $all_categories );
+
+        ob_start();
+        ?>
+        <div class="gcal-category-sidebar" data-instance="<?php echo esc_attr( $instance_id ); ?>">
+            <h3 class="gcal-category-title"><?php esc_html_e( 'Catégories', 'gcal-tag-filter' ); ?></h3>
+            <ul class="gcal-category-list">
+                <li>
+                    <button class="gcal-category-btn <?php echo empty( $selected_category ) ? 'active' : ''; ?>"
+                            data-category="">
+                        <?php esc_html_e( 'Toutes les catégories', 'gcal-tag-filter' ); ?>
+                    </button>
+                </li>
+                <?php foreach ( $all_categories as $category ) : ?>
+                    <li>
+                        <button class="gcal-category-btn <?php echo $category === strtoupper( $selected_category ) ? 'active' : ''; ?>"
+                                data-category="<?php echo esc_attr( $category ); ?>">
+                            <?php echo esc_html( $this->get_category_display_name( $category ) ); ?>
+                        </button>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Get display name for category.
+     *
+     * @param string $category Category ID.
+     * @return string Display name.
+     */
+    private function get_category_display_name( $category ) {
+        return GCal_Categories::get_category_display_name( $category );
     }
 }

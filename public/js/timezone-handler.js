@@ -65,10 +65,10 @@
             const formatOptions = Object.assign({}, defaultOptions, options);
 
             try {
-                return new Intl.DateTimeFormat(navigator.language, formatOptions).format(date);
+                return new Intl.DateTimeFormat('fr-FR', formatOptions).format(date);
             } catch (e) {
                 console.warn('Error formatting date', e);
-                return date.toLocaleDateString();
+                return date.toLocaleDateString('fr-FR');
             }
         },
 
@@ -84,16 +84,16 @@
                 timeZone: this.userTimezone,
                 hour: 'numeric',
                 minute: '2-digit',
-                hour12: true
+                hour12: false // Use 24-hour format for French
             };
 
             const formatOptions = Object.assign({}, defaultOptions, options);
 
             try {
-                return new Intl.DateTimeFormat(navigator.language, formatOptions).format(date);
+                return new Intl.DateTimeFormat('fr-FR', formatOptions).format(date);
             } catch (e) {
                 console.warn('Error formatting time', e);
-                return date.toLocaleTimeString();
+                return date.toLocaleTimeString('fr-FR');
             }
         },
 
@@ -104,7 +104,7 @@
          * @returns {string} Formatted datetime string
          */
         formatDateTime: function(date) {
-            return this.formatDate(date) + ' at ' + this.formatTime(date);
+            return this.formatDate(date) + ' à ' + this.formatTime(date);
         },
 
         /**
@@ -188,7 +188,7 @@
          */
         getTimezoneAbbr: function(date) {
             try {
-                const formatted = new Intl.DateTimeFormat(navigator.language, {
+                const formatted = new Intl.DateTimeFormat('fr-FR', {
                     timeZone: this.userTimezone,
                     timeZoneName: 'short'
                 }).format(date);

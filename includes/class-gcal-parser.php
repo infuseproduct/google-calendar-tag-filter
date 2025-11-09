@@ -10,9 +10,9 @@
 class GCal_Parser {
 
     /**
-     * Regex pattern for matching tags in format [[[TAG:CATEGORY]]]
+     * Regex pattern for matching tags in format [[[CATEGORY]]]
      */
-    const TAG_PATTERN = '/\[\[\[TAG:([A-Z0-9_-]+)\]\]\]/i';
+    const TAG_PATTERN = '/\[\[\[([A-Z0-9_-]+)\]\]\]/i';
 
     /**
      * Extract tags from description.

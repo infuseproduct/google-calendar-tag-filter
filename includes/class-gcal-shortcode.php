@@ -44,18 +44,22 @@ class GCal_Shortcode {
         // Parse attributes with defaults
         $atts = shortcode_atts(
             array(
-                'view'   => 'list',     // Default to list view
-                'period' => 'future',   // Default to future events
-                'tags'   => '',         // Optional tags filter
+                'view'               => 'list',     // Default to list view
+                'period'             => 'future',   // Default to future events
+                'tags'               => '',         // Optional tags filter
+                'show_categories'    => 'false',    // Show category sidebar
+                'show_display_style' => 'false',    // Show display style toggle
             ),
             $atts,
             'gcal_embed'
         );
 
         // Validate and sanitize attributes
-        $view   = $this->validate_view( $atts['view'] );
-        $period = $this->validate_period( $atts['period'] );
-        $tags   = $this->parse_tags( $atts['tags'] );
+        $view               = $this->validate_view( $atts['view'] );
+        $period             = $this->validate_period( $atts['period'] );
+        $tags               = $this->parse_tags( $atts['tags'] );
+        $show_categories    = filter_var( $atts['show_categories'], FILTER_VALIDATE_BOOLEAN );
+        $show_display_style = filter_var( $atts['show_display_style'], FILTER_VALIDATE_BOOLEAN );
 
         // Check for URL parameter override (from view toggle)
         if ( isset( $_GET['gcal_view'] ) && $view === 'calendar' ) {
@@ -64,6 +68,24 @@ class GCal_Shortcode {
             if ( $validated_url_period ) {
                 $period = $validated_url_period;
             }
+        }
+
+        // Check for URL parameter for display style toggle
+        if ( isset( $_GET['gcal_display'] ) && $show_display_style ) {
+            $url_view = sanitize_text_field( $_GET['gcal_display'] );
+            $validated_url_view = $this->validate_view( $url_view );
+            if ( $validated_url_view ) {
+                $view = $validated_url_view;
+            }
+        }
+
+        // Check for URL parameter for category filter
+        $selected_category = '';
+        if ( isset( $_GET['gcal_category'] ) ) {
+            $selected_category = sanitize_text_field( $_GET['gcal_category'] );
+        } elseif ( ! empty( $tags ) ) {
+            // Pre-select the first tag if specified in shortcode
+            $selected_category = $tags[0];
         }
 
         // Check if OAuth is configured
@@ -95,9 +117,9 @@ class GCal_Shortcode {
 
         // Render appropriate view
         if ( $view === 'calendar' ) {
-            return $this->display->render_calendar_view( $events, $period, $tags );
+            return $this->display->render_calendar_view( $events, $period, $tags, $show_categories, $selected_category, $show_display_style, $view );
         } else {
-            return $this->display->render_list_view( $events, $period, $tags );
+            return $this->display->render_list_view( $events, $period, $tags, $show_categories, $selected_category, $show_display_style, $view );
         }
     }
 
