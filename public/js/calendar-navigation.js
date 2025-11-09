@@ -116,32 +116,15 @@
 
             if (currentView === newView) return;
 
-            // Update dataset
-            wrapper.dataset.period = newView;
-
-            // Update active button
-            const viewButtons = wrapper.querySelectorAll('.gcal-view-btn');
-            viewButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.view === newView);
-            });
-
-            // Update grid data attribute
-            const grid = wrapper.querySelector('.gcal-calendar-grid');
-            if (grid) {
-                grid.dataset.currentView = newView;
-            }
-
-            // Update title
-            this.updateTitle(wrapper);
-
-            // Show loading and reload page to get correct view
+            // Show loading
             wrapper.classList.add('loading');
 
-            // Reload the page to render the correct view
-            // We could implement AJAX loading later
-            setTimeout(() => {
-                location.reload();
-            }, 200);
+            // Update URL parameter and reload
+            const url = new URL(window.location);
+            url.searchParams.set('gcal_view', newView);
+
+            // Reload with new view parameter
+            window.location.href = url.toString();
         },
 
         /**
