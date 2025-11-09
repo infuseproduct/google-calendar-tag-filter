@@ -39,8 +39,21 @@
                 },
                 success: function(response) {
                     if (response.success && response.data.auth_url) {
-                        // Redirect to Google OAuth
-                        window.location.href = response.data.auth_url;
+                        // Validate that the URL is a Google OAuth URL before redirecting
+                        const authUrl = response.data.auth_url;
+                        try {
+                            const url = new URL(authUrl);
+                            // Only allow redirect to Google OAuth endpoints
+                            if (url.hostname === 'accounts.google.com' && url.pathname.startsWith('/o/oauth2/')) {
+                                window.location.href = authUrl;
+                            } else {
+                                alert('Invalid OAuth URL received. Please contact support.');
+                                $button.prop('disabled', false).text('Save and Connect with Google');
+                            }
+                        } catch (e) {
+                            alert('Invalid URL format. Please contact support.');
+                            $button.prop('disabled', false).text('Save and Connect with Google');
+                        }
                     } else {
                         alert(response.data.message || 'Failed to save credentials');
                         $button.prop('disabled', false).text('Save and Connect with Google');
