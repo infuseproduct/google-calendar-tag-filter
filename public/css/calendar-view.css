@@ -517,6 +517,15 @@
     flex-shrink: 0;
 }
 
+.gcal-year-event-date {
+    font-size: 0.875rem;
+    color: #666;
+    font-weight: 700;
+    margin-right: 8px;
+    flex-shrink: 0;
+    min-width: 20px;
+}
+
 .gcal-year-event-title {
     font-size: 0.875rem;
     color: #333;
@@ -526,12 +535,29 @@
     white-space: nowrap;
 }
 
+.gcal-year-event-hidden {
+    display: none;
+}
+
+.gcal-year-month-events.expanded .gcal-year-event-hidden {
+    display: flex;
+}
+
 .gcal-year-more {
     text-align: center;
     padding: 10px;
     color: #2271b1;
     font-size: 0.875rem;
     font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.gcal-year-more:hover {
+    color: #135e96;
+    text-decoration: underline;
 }
 
 /* Print Styles */

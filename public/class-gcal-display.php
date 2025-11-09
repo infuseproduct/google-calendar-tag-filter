@@ -305,21 +305,28 @@ class GCal_Display {
                     </div>
                     <div class="gcal-year-month-events">
                         <?php if ( ! empty( $month_events ) ) : ?>
-                            <?php foreach ( array_slice( $month_events, 0, 5 ) as $event ) : ?>
-                                <div class="gcal-year-event gcal-event-item" data-event-id="<?php echo esc_attr( $event['id'] ); ?>" role="button" tabindex="0">
+                            <?php foreach ( $month_events as $index => $event ) : ?>
+                                <?php
+                                $event_start = new DateTime( $event['start'] );
+                                $event_date = $event_start->format( 'j' ); // Day of month without leading zeros
+                                $is_hidden = $index >= 5;
+                                ?>
+                                <div class="gcal-year-event gcal-event-item <?php echo $is_hidden ? 'gcal-year-event-hidden' : ''; ?>" data-event-id="<?php echo esc_attr( $event['id'] ); ?>" role="button" tabindex="0">
                                     <?php if ( ! empty( $event['tags'] ) ) : ?>
                                         <?php
                                         $category_color = GCal_Categories::get_category_color( $event['tags'][0] );
                                         ?>
                                         <span class="gcal-year-event-dot" style="background-color: <?php echo esc_attr( $category_color ); ?>"></span>
                                     <?php endif; ?>
+                                    <span class="gcal-year-event-date"><?php echo esc_html( $event_date ); ?></span>
                                     <span class="gcal-year-event-title"><?php echo esc_html( $event['title'] ); ?></span>
                                 </div>
                             <?php endforeach; ?>
                             <?php if ( count( $month_events ) > 5 ) : ?>
-                                <div class="gcal-year-more">
-                                    +<?php echo count( $month_events ) - 5; ?> <?php esc_html_e( 'de plus', 'gcal-tag-filter' ); ?>
-                                </div>
+                                <button class="gcal-year-more" data-month="<?php echo esc_attr( $month_key ); ?>">
+                                    <span class="gcal-year-more-text">+<?php echo count( $month_events ) - 5; ?> <?php esc_html_e( 'de plus', 'gcal-tag-filter' ); ?></span>
+                                    <span class="gcal-year-less-text" style="display: none;"><?php esc_html_e( 'Voir moins', 'gcal-tag-filter' ); ?></span>
+                                </button>
                             <?php endif; ?>
                         <?php else : ?>
                             <div class="gcal-no-events"><?php esc_html_e( 'Aucun événement', 'gcal-tag-filter' ); ?></div>

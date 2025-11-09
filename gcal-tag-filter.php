@@ -189,6 +189,14 @@ function gcal_tag_filter_enqueue_scripts() {
             true
         );
 
+        wp_enqueue_script(
+            'gcal-year-view',
+            GCAL_TAG_FILTER_URL . 'public/js/year-view.js',
+            array(),
+            GCAL_TAG_FILTER_VERSION,
+            true
+        );
+
         // Localize script with necessary data
         wp_localize_script(
             'gcal-calendar-navigation',
