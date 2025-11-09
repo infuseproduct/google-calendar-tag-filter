@@ -66,20 +66,14 @@
 
 /* Category Sidebar */
 .gcal-category-sidebar {
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
 }
 
 .gcal-category-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #212529;
-    margin: 0 0 12px 0;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #e9ecef;
+    display: none;
 }
 
 /* Mobile Dropdown - Hidden by default on desktop */
