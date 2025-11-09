@@ -87,7 +87,12 @@ class GCal_Shortcode {
             $selected_category = sanitize_text_field( $_GET['gcal_category'] );
         } elseif ( ! empty( $tags ) ) {
             // Pre-select the first tag if specified in shortcode
-            $selected_category = $tags[0];
+            // UNLESS it's a wildcard pattern - wildcards should show "All categories" as active
+            $first_tag = $tags[0];
+            if ( strpos( $first_tag, '*' ) === false ) {
+                $selected_category = $first_tag;
+            }
+            // If wildcard, leave $selected_category empty so "All categories" is highlighted
         }
 
         // Check if OAuth is configured

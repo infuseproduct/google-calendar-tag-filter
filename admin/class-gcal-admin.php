@@ -360,6 +360,132 @@ class GCal_Admin {
 
                     <?php require_once GCAL_TAG_FILTER_PATH . 'admin/partials/cache-settings.php'; ?>
                 </div>
+
+                <!-- Shortcode Documentation Section -->
+                <div class="gcal-admin-section">
+                    <h2><?php esc_html_e( 'Shortcode Usage', 'gcal-tag-filter' ); ?></h2>
+                    <p><?php esc_html_e( 'Use the [gcal_embed] shortcode to display events on any page or post.', 'gcal-tag-filter' ); ?></p>
+
+                    <h3><?php esc_html_e( 'Parameters', 'gcal-tag-filter' ); ?></h3>
+                    <table class="widefat striped">
+                        <thead>
+                            <tr>
+                                <th><?php esc_html_e( 'Parameter', 'gcal-tag-filter' ); ?></th>
+                                <th><?php esc_html_e( 'Options', 'gcal-tag-filter' ); ?></th>
+                                <th><?php esc_html_e( 'Default', 'gcal-tag-filter' ); ?></th>
+                                <th><?php esc_html_e( 'Description', 'gcal-tag-filter' ); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>view</code></td>
+                                <td><code>calendar</code>, <code>list</code></td>
+                                <td><code>list</code></td>
+                                <td><?php esc_html_e( 'Display format: calendar grid or vertical list', 'gcal-tag-filter' ); ?></td>
+                            </tr>
+                            <tr>
+                                <td><code>period</code></td>
+                                <td><code>week</code>, <code>month</code>, <code>year</code>, <code>future</code></td>
+                                <td><code>year</code></td>
+                                <td><?php esc_html_e( 'Time range to display. "future" shows all upcoming events (up to 100) and hides period navigation.', 'gcal-tag-filter' ); ?></td>
+                            </tr>
+                            <tr>
+                                <td><code>tags</code></td>
+                                <td><?php esc_html_e( 'Category IDs (comma-separated)', 'gcal-tag-filter' ); ?></td>
+                                <td><?php esc_html_e( 'Empty (all events)', 'gcal-tag-filter' ); ?></td>
+                                <td><?php esc_html_e( 'Filter by categories. Supports wildcards (e.g., "MESSE*" matches all tags starting with MESSE).', 'gcal-tag-filter' ); ?></td>
+                            </tr>
+                            <tr>
+                                <td><code>show_categories</code></td>
+                                <td><code>true</code>, <code>false</code></td>
+                                <td><code>false</code></td>
+                                <td><?php esc_html_e( 'Show category filter sidebar with interactive buttons', 'gcal-tag-filter' ); ?></td>
+                            </tr>
+                            <tr>
+                                <td><code>show_display_style</code></td>
+                                <td><code>true</code>, <code>false</code></td>
+                                <td><code>false</code></td>
+                                <td><?php esc_html_e( 'Show calendar/list view toggle in sidebar', 'gcal-tag-filter' ); ?></td>
+                            </tr>
+                            <tr>
+                                <td><code>hide_past</code></td>
+                                <td><code>true</code>, <code>false</code></td>
+                                <td><code>false</code></td>
+                                <td><?php esc_html_e( 'Hide past events in list view (useful with year/month/week periods)', 'gcal-tag-filter' ); ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="margin-top: 24px;"><?php esc_html_e( 'Examples', 'gcal-tag-filter' ); ?></h3>
+
+                    <div style="background: #f5f5f5; padding: 16px; border-radius: 4px; margin-bottom: 12px;">
+                        <strong><?php esc_html_e( 'Basic Calendar View (Current Month)', 'gcal-tag-filter' ); ?></strong>
+                        <pre style="background: white; padding: 12px; margin-top: 8px; overflow-x: auto;"><code>[gcal_embed view="calendar" period="month"]</code></pre>
+                    </div>
+
+                    <div style="background: #f5f5f5; padding: 16px; border-radius: 4px; margin-bottom: 12px;">
+                        <strong><?php esc_html_e( 'List of All Upcoming Events', 'gcal-tag-filter' ); ?></strong>
+                        <pre style="background: white; padding: 12px; margin-top: 8px; overflow-x: auto;"><code>[gcal_embed view="list" period="future"]</code></pre>
+                        <p style="margin: 8px 0 0 0; font-size: 13px; color: #666;">
+                            <?php esc_html_e( 'Shows all future events (up to 100 from Google API). Period navigation is automatically hidden.', 'gcal-tag-filter' ); ?>
+                        </p>
+                    </div>
+
+                    <div style="background: #f5f5f5; padding: 16px; border-radius: 4px; margin-bottom: 12px;">
+                        <strong><?php esc_html_e( 'Filter by Specific Category', 'gcal-tag-filter' ); ?></strong>
+                        <pre style="background: white; padding: 12px; margin-top: 8px; overflow-x: auto;"><code>[gcal_embed tags="WORKSHOP" view="list" period="year"]</code></pre>
+                    </div>
+
+                    <div style="background: #f5f5f5; padding: 16px; border-radius: 4px; margin-bottom: 12px;">
+                        <strong><?php esc_html_e( 'Filter by Wildcard Pattern', 'gcal-tag-filter' ); ?></strong>
+                        <pre style="background: white; padding: 12px; margin-top: 8px; overflow-x: auto;"><code>[gcal_embed tags="MESSE*" view="list" period="future"]</code></pre>
+                        <p style="margin: 8px 0 0 0; font-size: 13px; color: #666;">
+                            <?php esc_html_e( 'Matches all tags starting with "MESSE" (e.g., MESSE-MUI-WO, MESSE-AUTRE). Wildcards use asterisk (*) to match patterns.', 'gcal-tag-filter' ); ?>
+                        </p>
+                    </div>
+
+                    <div style="background: #f5f5f5; padding: 16px; border-radius: 4px; margin-bottom: 12px;">
+                        <strong><?php esc_html_e( 'Interactive Calendar with Sidebar', 'gcal-tag-filter' ); ?></strong>
+                        <pre style="background: white; padding: 12px; margin-top: 8px; overflow-x: auto;"><code>[gcal_embed view="calendar" period="month" show_categories="true" show_display_style="true"]</code></pre>
+                        <p style="margin: 8px 0 0 0; font-size: 13px; color: #666;">
+                            <?php esc_html_e( 'Includes category filter buttons and view toggle (calendar/list) in the sidebar.', 'gcal-tag-filter' ); ?>
+                        </p>
+                    </div>
+
+                    <div style="background: #f5f5f5; padding: 16px; border-radius: 4px; margin-bottom: 12px;">
+                        <strong><?php esc_html_e( 'Hide Past Events (List View)', 'gcal-tag-filter' ); ?></strong>
+                        <pre style="background: white; padding: 12px; margin-top: 8px; overflow-x: auto;"><code>[gcal_embed view="list" period="year" hide_past="true"]</code></pre>
+                        <p style="margin: 8px 0 0 0; font-size: 13px; color: #666;">
+                            <?php esc_html_e( 'Shows only upcoming events from today through the end of the year.', 'gcal-tag-filter' ); ?>
+                        </p>
+                    </div>
+
+                    <h3 style="margin-top: 24px;"><?php esc_html_e( 'Wildcard Pattern Rules', 'gcal-tag-filter' ); ?></h3>
+                    <ul style="margin-left: 20px;">
+                        <li><?php esc_html_e( 'Use asterisk (*) to match zero or more characters', 'gcal-tag-filter' ); ?></li>
+                        <li><code>MESSE*</code> - <?php esc_html_e( 'Matches all tags starting with MESSE', 'gcal-tag-filter' ); ?></li>
+                        <li><code>*-WO</code> - <?php esc_html_e( 'Matches all tags ending with -WO', 'gcal-tag-filter' ); ?></li>
+                        <li><code>MESSE*,REUNION*</code> - <?php esc_html_e( 'Matches tags starting with MESSE or REUNION (OR logic)', 'gcal-tag-filter' ); ?></li>
+                        <li><?php esc_html_e( 'Wildcards bypass the category whitelist (no need to pre-define patterns)', 'gcal-tag-filter' ); ?></li>
+                        <li><?php esc_html_e( 'Only alphanumeric characters, hyphens (-), underscores (_), and asterisk (*) allowed', 'gcal-tag-filter' ); ?></li>
+                    </ul>
+
+                    <h3 style="margin-top: 24px;"><?php esc_html_e( 'URL Parameters', 'gcal-tag-filter' ); ?></h3>
+                    <p><?php esc_html_e( 'Users can override shortcode settings using URL parameters:', 'gcal-tag-filter' ); ?></p>
+                    <ul style="margin-left: 20px;">
+                        <li><code>?gcal_view=week</code> - <?php esc_html_e( 'Switch to week view', 'gcal-tag-filter' ); ?></li>
+                        <li><code>?gcal_view=month</code> - <?php esc_html_e( 'Switch to month view', 'gcal-tag-filter' ); ?></li>
+                        <li><code>?gcal_view=year</code> - <?php esc_html_e( 'Switch to year view', 'gcal-tag-filter' ); ?></li>
+                        <li><code>?gcal_display=calendar</code> - <?php esc_html_e( 'Switch to calendar display', 'gcal-tag-filter' ); ?></li>
+                        <li><code>?gcal_display=list</code> - <?php esc_html_e( 'Switch to list display', 'gcal-tag-filter' ); ?></li>
+                        <li><code>?gcal_category=WORKSHOP</code> - <?php esc_html_e( 'Filter by specific category', 'gcal-tag-filter' ); ?></li>
+                    </ul>
+
+                    <p style="margin-top: 16px;">
+                        <strong><?php esc_html_e( 'For complete documentation, see:', 'gcal-tag-filter' ); ?></strong>
+                        <code>/DOCS/SHORTCODE-REFERENCE.md</code>
+                    </p>
+                </div>
             </div>
         </div>
         <?php
