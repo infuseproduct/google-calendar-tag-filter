@@ -904,30 +904,85 @@ class GCal_Display {
      * @return string Text with URLs converted to clickable links.
      */
     private function make_links_clickable( $text ) {
-        // Escape HTML first to prevent XSS
-        $text = esc_html( $text );
+        // Check if text contains HTML tags (especially links)
+        $has_html = strip_tags( $text ) !== $text;
 
-        // Pattern to match URLs (http, https, www)
-        $pattern = '#\b((https?://|www\.)[^\s<]+)#i';
+        if ( $has_html ) {
+            // Text contains HTML - sanitize it but preserve safe tags
+            return $this->sanitize_html_description( $text );
+        } else {
+            // Plain text - escape and convert URLs to links
+            $text = esc_html( $text );
 
-        // Replace URLs with clickable links
-        $text = preg_replace_callback(
-            $pattern,
-            function( $matches ) {
-                $url = $matches[1];
+            // Pattern to match URLs (http, https, www)
+            $pattern = '#\b((https?://|www\.)[^\s<]+)#i';
 
-                // Add http:// if URL starts with www.
-                $href = ( strpos( $url, 'www.' ) === 0 ) ? 'http://' . $url : $url;
+            // Replace URLs with clickable links
+            $text = preg_replace_callback(
+                $pattern,
+                function( $matches ) {
+                    $url = $matches[1];
 
-                return sprintf(
-                    '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
-                    esc_url( $href ),
-                    esc_html( $url )
-                );
-            },
-            $text
+                    // Add http:// if URL starts with www.
+                    $href = ( strpos( $url, 'www.' ) === 0 ) ? 'http://' . $url : $url;
+
+                    return sprintf(
+                        '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+                        esc_url( $href ),
+                        esc_html( $url )
+                    );
+                },
+                $text
+            );
+
+            return $text;
+        }
+    }
+
+    /**
+     * Sanitize HTML description - preserve safe tags like links and br.
+     *
+     * @param string $html HTML content.
+     * @return string Sanitized HTML.
+     */
+    private function sanitize_html_description( $html ) {
+        // Use wp_kses to allow only safe HTML tags
+        $allowed_tags = array(
+            'a'      => array(
+                'href'   => array(),
+                'title'  => array(),
+                'target' => array(),
+                'rel'    => array(),
+            ),
+            'br'     => array(),
+            'p'      => array(),
+            'strong' => array(),
+            'em'     => array(),
+            'b'      => array(),
+            'i'      => array(),
         );
 
-        return $text;
+        $sanitized = wp_kses( $html, $allowed_tags );
+
+        // Ensure all links have target="_blank" and rel="noopener noreferrer"
+        $sanitized = preg_replace_callback(
+            '/<a\s+([^>]*)>/i',
+            function( $matches ) {
+                $attrs = $matches[1];
+
+                // Add target and rel if not present
+                if ( strpos( $attrs, 'target=' ) === false ) {
+                    $attrs .= ' target="_blank"';
+                }
+                if ( strpos( $attrs, 'rel=' ) === false ) {
+                    $attrs .= ' rel="noopener noreferrer"';
+                }
+
+                return '<a ' . $attrs . '>';
+            },
+            $sanitized
+        );
+
+        return $sanitized;
     }
 }
