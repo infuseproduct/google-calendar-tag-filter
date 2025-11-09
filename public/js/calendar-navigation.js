@@ -218,12 +218,14 @@
             // Show loading
             wrapper.classList.add('loading');
 
-            // Update URL parameter and reload
-            const url = new URL(window.location);
-            url.searchParams.set('gcal_view', newView);
+            // Get current date to preserve when switching views
+            const currentDate = this.getCurrentDate(wrapper);
+
+            // Update URL with new view and preserve date
+            this.updateURL(newView, currentDate);
 
             // Reload with new view parameter
-            window.location.href = url.toString();
+            window.location.href = window.location.href;
         },
 
         /**
