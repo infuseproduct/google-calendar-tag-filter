@@ -8,8 +8,6 @@
     'use strict';
 
     $(document).ready(function() {
-        console.log('GCal Admin JS Loaded');
-
         // Initialize color pickers
         if ($.fn.wpColorPicker) {
             $('.gcal-color-picker').wpColorPicker();
@@ -167,6 +165,7 @@
         // Add category
         $('#gcal-add-category-form').on('submit', function(e) {
             e.preventDefault();
+            e.stopPropagation();
 
             const $form = $(this);
             const $button = $form.find('button[type="submit"]');

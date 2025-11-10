@@ -1,10 +1,8 @@
-# Copyright (C) 2025 infuseproduct
-# This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
 "Project-Id-Version: GCal Tag Filter for Google Calendar 1.0.1\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-10T02:41:57+00:00\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/gcal-tag-filter\n"
+"POT-Creation-Date: 2025-11-10T03:44:14+00:00\n"
 "PO-Revision-Date: 2025-11-10 08:41+0000\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
@@ -13,696 +11,942 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: google-calendar-tag-filter\n"
+"X-Domain: gcal-tag-filter\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#~ msgid ""
-#~ "Embeds Google Calendar events with tag-based filtering capabilities using "
-#~ "OAuth 2.0 authentication"
-#~ msgstr ""
-#~ "Intègre les événements Google Calendar avec des capacités de filtrage par "
-#~ "tag en utilisant l'authentification OAuth 2.0"
+#. Plugin Name of the plugin
+#: gcal-tag-filter.php
+msgid "GCal Tag Filter for Google Calendar"
+msgstr ""
 
+#. Plugin URI of the plugin
+#: gcal-tag-filter.php
+msgid "https://github.com/infuseproduct/gcal-tag-filter"
+msgstr ""
+
+#. Description of the plugin
+#: gcal-tag-filter.php
+msgid ""
+"Embeds Google Calendar events with tag-based filtering capabilities using "
+"OAuth 2.0 authentication"
+msgstr ""
+"Intègre les événements Google Calendar avec des capacités de filtrage par "
+"tag en utilisant l'authentification OAuth 2.0"
+
+#. Author of the plugin
+#: gcal-tag-filter.php
+msgid "infuseproduct"
+msgstr ""
+
+#. Author URI of the plugin
+#: gcal-tag-filter.php
+msgid "https://infuse.hk"
+msgstr ""
+
+#: admin/class-gcal-admin.php:68
 #, fuzzy
-#~ msgid "GCal Tag Filter"
-#~ msgstr "Filtre de calendrier"
+msgid "GCal Tag Filter"
+msgstr "Filtre de calendrier"
 
-#~ msgid "Calendar Filter"
-#~ msgstr "Filtre de calendrier"
+#: admin/class-gcal-admin.php:69
+msgid "Calendar Filter"
+msgstr "Filtre de calendrier"
 
-#~ msgid "Are you sure you want to delete this category?"
-#~ msgstr "Êtes-vous sûr de vouloir supprimer cette catégorie ?"
+#: admin/class-gcal-admin.php:176
+msgid "Are you sure you want to delete this category?"
+msgstr "Êtes-vous sûr de vouloir supprimer cette catégorie ?"
 
-#~ msgid "Are you sure you want to disconnect your Google Calendar?"
-#~ msgstr "Êtes-vous sûr de vouloir déconnecter votre Google Calendar ?"
+#: admin/class-gcal-admin.php:177
+msgid "Are you sure you want to disconnect your Google Calendar?"
+msgstr "Êtes-vous sûr de vouloir déconnecter votre Google Calendar ?"
 
-#~ msgid "Are you sure you want to clear the cache?"
-#~ msgstr "Êtes-vous sûr de vouloir vider le cache ?"
+#: admin/class-gcal-admin.php:178
+msgid "Are you sure you want to clear the cache?"
+msgstr "Êtes-vous sûr de vouloir vider le cache ?"
 
-#~ msgid "You do not have permission to perform this action."
-#~ msgstr "Vous n'avez pas la permission d'effectuer cette action."
+#: admin/class-gcal-admin.php:194
+msgid "You do not have permission to perform this action."
+msgstr "Vous n'avez pas la permission d'effectuer cette action."
 
-#~ msgid "Successfully connected to Google Calendar!"
-#~ msgstr "Connecté avec succès à Google Calendar !"
+#: admin/class-gcal-admin.php:204
+msgid "Successfully connected to Google Calendar!"
+msgstr "Connecté avec succès à Google Calendar !"
 
-#~ msgid "Failed to connect to Google Calendar. Please try again."
-#~ msgstr "Échec de connexion à Google Calendar. Veuillez réessayer."
+#: admin/class-gcal-admin.php:211
+msgid "Failed to connect to Google Calendar. Please try again."
+msgstr "Échec de connexion à Google Calendar. Veuillez réessayer."
 
-#~ msgid "Google Calendar Connection"
-#~ msgstr "Connexion Google Calendar"
+#: admin/class-gcal-admin.php:285
+msgid "Google Calendar Connection"
+msgstr "Connexion Google Calendar"
 
-#~ msgid "Connected"
-#~ msgstr "Connecté"
+#: admin/class-gcal-admin.php:290
+msgid "Connected"
+msgstr "Connecté"
 
+#. translators: %s: Calendar name
+#: admin/class-gcal-admin.php:297
 #, php-format
-#~ msgid "Selected Calendar: <strong>%s</strong>"
-#~ msgstr "Calendrier sélectionné : <strong>%s</strong>"
+msgid "Selected Calendar: <strong>%s</strong>"
+msgstr "Calendrier sélectionné : <strong>%s</strong>"
 
-#~ msgid "Refresh Calendar List"
-#~ msgstr "Actualiser la liste des calendriers"
+#: admin/class-gcal-admin.php:304
+msgid "Refresh Calendar List"
+msgstr "Actualiser la liste des calendriers"
 
-#~ msgid "Test Connection"
-#~ msgstr "Tester la connexion"
+#: admin/class-gcal-admin.php:307
+msgid "Test Connection"
+msgstr "Tester la connexion"
 
-#~ msgid "Disconnect"
-#~ msgstr "Déconnecter"
+#: admin/class-gcal-admin.php:310
+msgid "Disconnect"
+msgstr "Déconnecter"
 
-#~ msgid "Select Calendar"
-#~ msgstr "Sélectionner un calendrier"
+#: admin/class-gcal-admin.php:324
+msgid "Select Calendar"
+msgstr "Sélectionner un calendrier"
 
-#~ msgid "-- Select a calendar --"
-#~ msgstr "-- Sélectionner un calendrier --"
+#: admin/class-gcal-admin.php:328
+msgid "-- Select a calendar --"
+msgstr "-- Sélectionner un calendrier --"
 
-#~ msgid "Primary"
-#~ msgstr "Principal"
+#: admin/class-gcal-admin.php:333
+msgid "Primary"
+msgstr "Principal"
 
-#~ msgid "Choose which calendar to display events from."
-#~ msgstr "Choisir le calendrier à afficher."
+#: admin/class-gcal-admin.php:338
+msgid "Choose which calendar to display events from."
+msgstr "Choisir le calendrier à afficher."
 
-#~ msgid "Save Calendar Selection"
-#~ msgstr "Enregistrer la sélection"
+#: admin/class-gcal-admin.php:344
+msgid "Save Calendar Selection"
+msgstr "Enregistrer la sélection"
 
-#~ msgid ""
-#~ "Unable to retrieve calendar list. Click \"Test Connection\" to diagnose "
-#~ "the issue."
-#~ msgstr ""
-#~ "Impossible de récupérer la liste des calendriers. Cliquez sur \"Tester la "
-#~ "connexion\" pour diagnostiquer le problème."
+#: admin/class-gcal-admin.php:348
+msgid ""
+"Unable to retrieve calendar list. Click \"Test Connection\" to diagnose the "
+"issue."
+msgstr ""
+"Impossible de récupérer la liste des calendriers. Cliquez sur \"Tester la "
+"connexion\" pour diagnostiquer le problème."
 
-#~ msgid "Not Connected"
-#~ msgstr "Non connecté"
+#: admin/class-gcal-admin.php:355
+msgid "Not Connected"
+msgstr "Non connecté"
 
-#~ msgid "Enter your Google OAuth credentials to connect to Google Calendar."
-#~ msgstr ""
-#~ "Entrez vos identifiants OAuth Google pour vous connecter à Google "
-#~ "Calendar."
+#: admin/class-gcal-admin.php:358
+msgid "Enter your Google OAuth credentials to connect to Google Calendar."
+msgstr ""
+"Entrez vos identifiants OAuth Google pour vous connecter à Google Calendar."
 
-#~ msgid "Client ID"
-#~ msgstr "ID client"
+#: admin/class-gcal-admin.php:364
+msgid "Client ID"
+msgstr "ID client"
 
+#. translators: %s: link to Google Cloud Console
+#: admin/class-gcal-admin.php:372
 #, php-format
-#~ msgid "Get this from your %s."
-#~ msgstr "Obtenez ceci depuis votre %s."
+msgid "Get this from your %s."
+msgstr "Obtenez ceci depuis votre %s."
 
-#~ msgid "Google Cloud Console"
-#~ msgstr "Console Google Cloud"
+#: admin/class-gcal-admin.php:373
+msgid "Google Cloud Console"
+msgstr "Console Google Cloud"
 
-#~ msgid "Client Secret"
-#~ msgstr "Secret client"
+#: admin/class-gcal-admin.php:381
+msgid "Client Secret"
+msgstr "Secret client"
 
-#~ msgid "Redirect URI"
-#~ msgstr "URI de redirection"
+#: admin/class-gcal-admin.php:389
+msgid "Redirect URI"
+msgstr "URI de redirection"
 
-#~ msgid ""
-#~ "Use this as the authorized redirect URI in your Google Cloud Console "
-#~ "OAuth credentials."
-#~ msgstr ""
-#~ "Utilisez ceci comme URI de redirection autorisée dans vos identifiants "
-#~ "OAuth de la Console Google Cloud."
+#: admin/class-gcal-admin.php:394
+msgid ""
+"Use this as the authorized redirect URI in your Google Cloud Console OAuth "
+"credentials."
+msgstr ""
+"Utilisez ceci comme URI de redirection autorisée dans vos identifiants OAuth "
+"de la Console Google Cloud."
 
-#~ msgid "Save and Connect with Google"
-#~ msgstr "Enregistrer et se connecter à Google"
+#: admin/class-gcal-admin.php:401
+msgid "Save and Connect with Google"
+msgstr "Enregistrer et se connecter à Google"
 
-#~ msgid "Category Whitelist"
-#~ msgstr "Liste blanche des catégories"
+#: admin/class-gcal-admin.php:409
+msgid "Category Whitelist"
+msgstr "Liste blanche des catégories"
 
-#~ msgid ""
-#~ "Manage the categories that can be used to tag events. Only whitelisted "
-#~ "categories will be recognized."
-#~ msgstr ""
-#~ "Gérez les catégories qui peuvent être utilisées pour taguer les "
-#~ "événements. Seules les catégories autorisées seront reconnues."
+#: admin/class-gcal-admin.php:410
+msgid ""
+"Manage the categories that can be used to tag events. Only whitelisted "
+"categories will be recognized."
+msgstr ""
+"Gérez les catégories qui peuvent être utilisées pour taguer les événements. "
+"Seules les catégories autorisées seront reconnues."
 
-#~ msgid "Cache Settings"
-#~ msgstr "Paramètres de cache"
+#: admin/class-gcal-admin.php:417
+msgid "Cache Settings"
+msgstr "Paramètres de cache"
 
-#~ msgid "Shortcode Usage"
-#~ msgstr "Utilisation du shortcode"
+#: admin/class-gcal-admin.php:424
+msgid "Shortcode Usage"
+msgstr "Utilisation du shortcode"
 
-#~ msgid ""
-#~ "Use the [gcal_embed] shortcode to display events on any page or post."
-#~ msgstr ""
-#~ "Utilisez le shortcode [gcal_embed] pour afficher les événements sur "
-#~ "n'importe quelle page ou article."
+#: admin/class-gcal-admin.php:425
+msgid "Use the [gcal_embed] shortcode to display events on any page or post."
+msgstr ""
+"Utilisez le shortcode [gcal_embed] pour afficher les événements sur "
+"n'importe quelle page ou article."
 
-#~ msgid "Parameters"
-#~ msgstr "Paramètres"
+#: admin/class-gcal-admin.php:427
+msgid "Parameters"
+msgstr "Paramètres"
 
-#~ msgid "Parameter"
-#~ msgstr "Paramètre"
+#: admin/class-gcal-admin.php:431
+msgid "Parameter"
+msgstr "Paramètre"
 
-#~ msgid "Options"
-#~ msgstr "Options"
+#: admin/class-gcal-admin.php:432
+msgid "Options"
+msgstr "Options"
 
-#~ msgid "Default"
-#~ msgstr "Par défaut"
+#: admin/class-gcal-admin.php:433
+msgid "Default"
+msgstr "Par défaut"
 
-#~ msgid "Description"
-#~ msgstr "Description"
+#: admin/class-gcal-admin.php:434
+msgid "Description"
+msgstr "Description"
 
-#~ msgid "Display format: calendar grid or vertical list"
-#~ msgstr "Format d'affichage : grille calendrier ou liste verticale"
+#: admin/class-gcal-admin.php:442
+msgid "Display format: calendar grid or vertical list"
+msgstr "Format d'affichage : grille calendrier ou liste verticale"
 
-#~ msgid ""
-#~ "Time range to display. \"future\" shows all upcoming events (up to 100) "
-#~ "and hides period navigation."
-#~ msgstr ""
-#~ "Plage de temps à afficher. \"future\" affiche tous les événements à venir "
-#~ "(jusqu'à 100) et masque la navigation par période."
+#: admin/class-gcal-admin.php:448
+msgid ""
+"Time range to display. \"future\" shows all upcoming events (up to 100) and "
+"hides period navigation."
+msgstr ""
+"Plage de temps à afficher. \"future\" affiche tous les événements à venir "
+"(jusqu'à 100) et masque la navigation par période."
 
-#~ msgid "Category IDs (comma-separated)"
-#~ msgstr "IDs de catégories (séparés par des virgules)"
+#: admin/class-gcal-admin.php:452
+msgid "Category IDs (comma-separated)"
+msgstr "IDs de catégories (séparés par des virgules)"
 
-#~ msgid "Empty (all events)"
-#~ msgstr "Vide (tous les événements)"
+#: admin/class-gcal-admin.php:453
+msgid "Empty (all events)"
+msgstr "Vide (tous les événements)"
 
-#~ msgid ""
-#~ "Filter by categories. Supports wildcards (e.g., \"MESSE*\" matches all "
-#~ "tags starting with MESSE)."
-#~ msgstr ""
-#~ "Filtrer par catégories. Supporte les jokers (ex : \"MESSE*\" correspond à "
-#~ "tous les tags commençant par MESSE)."
+#: admin/class-gcal-admin.php:454
+msgid ""
+"Filter by categories. Supports wildcards (e.g., \"MESSE*\" matches all tags "
+"starting with MESSE)."
+msgstr ""
+"Filtrer par catégories. Supporte les jokers (ex : \"MESSE*\" correspond à "
+"tous les tags commençant par MESSE)."
 
-#~ msgid "Show category filter sidebar with interactive buttons"
-#~ msgstr ""
-#~ "Afficher la barre latérale de filtrage par catégorie avec boutons "
-#~ "interactifs"
+#: admin/class-gcal-admin.php:460
+msgid "Show category filter sidebar with interactive buttons"
+msgstr ""
+"Afficher la barre latérale de filtrage par catégorie avec boutons interactifs"
 
-#~ msgid "Show calendar/list view toggle in sidebar"
-#~ msgstr ""
-#~ "Afficher le bouton de basculement calendrier/liste dans la barre latérale"
+#: admin/class-gcal-admin.php:466
+msgid "Show calendar/list view toggle in sidebar"
+msgstr ""
+"Afficher le bouton de basculement calendrier/liste dans la barre latérale"
 
-#~ msgid "Hide past events in list view (useful with year/month/week periods)"
-#~ msgstr ""
-#~ "Masquer les événements passés en vue liste (utile avec les périodes année/"
-#~ "mois/semaine)"
+#: admin/class-gcal-admin.php:472
+msgid "Hide past events in list view (useful with year/month/week periods)"
+msgstr ""
+"Masquer les événements passés en vue liste (utile avec les périodes année/"
+"mois/semaine)"
 
-#~ msgid "Examples"
-#~ msgstr "Exemples"
+#: admin/class-gcal-admin.php:477
+msgid "Examples"
+msgstr "Exemples"
 
-#~ msgid "Basic Calendar View (Current Month)"
-#~ msgstr "Vue calendrier basique (mois actuel)"
+#: admin/class-gcal-admin.php:480
+msgid "Basic Calendar View (Current Month)"
+msgstr "Vue calendrier basique (mois actuel)"
 
-#~ msgid "List of All Upcoming Events"
-#~ msgstr "Liste de tous les événements à venir"
+#: admin/class-gcal-admin.php:485
+msgid "List of All Upcoming Events"
+msgstr "Liste de tous les événements à venir"
 
-#~ msgid ""
-#~ "Shows all future events (up to 100 from Google API). Period navigation is "
-#~ "automatically hidden."
-#~ msgstr ""
-#~ "Affiche tous les événements futurs (jusqu'à 100 depuis l'API Google). La "
-#~ "navigation par période est automatiquement masquée."
+#: admin/class-gcal-admin.php:488
+msgid ""
+"Shows all future events (up to 100 from Google API). Period navigation is "
+"automatically hidden."
+msgstr ""
+"Affiche tous les événements futurs (jusqu'à 100 depuis l'API Google). La "
+"navigation par période est automatiquement masquée."
 
-#~ msgid "Filter by Specific Category"
-#~ msgstr "Filtrer par catégorie spécifique"
+#: admin/class-gcal-admin.php:493
+msgid "Filter by Specific Category"
+msgstr "Filtrer par catégorie spécifique"
 
-#~ msgid "Filter by Wildcard Pattern"
-#~ msgstr "Filtrer par motif générique"
+#: admin/class-gcal-admin.php:498
+msgid "Filter by Wildcard Pattern"
+msgstr "Filtrer par motif générique"
 
-#~ msgid ""
-#~ "Matches all tags starting with \"MESSE\" (e.g., MESSE-MUI-WO, MESSE-"
-#~ "AUTRE). Wildcards use asterisk (*) to match patterns."
-#~ msgstr ""
-#~ "Correspond à tous les tags commençant par \"MESSE\" (ex : MESSE-MUI-WO, "
-#~ "MESSE-AUTRE). Les jokers utilisent l'astérisque (*) pour correspondre aux "
-#~ "motifs."
+#: admin/class-gcal-admin.php:501
+msgid ""
+"Matches all tags starting with \"MESSE\" (e.g., MESSE-MUI-WO, MESSE-AUTRE). "
+"Wildcards use asterisk (*) to match patterns."
+msgstr ""
+"Correspond à tous les tags commençant par \"MESSE\" (ex : MESSE-MUI-WO, "
+"MESSE-AUTRE). Les jokers utilisent l'astérisque (*) pour correspondre aux "
+"motifs."
 
-#~ msgid "Interactive Calendar with Sidebar"
-#~ msgstr "Calendrier interactif avec barre latérale"
+#: admin/class-gcal-admin.php:506
+msgid "Interactive Calendar with Sidebar"
+msgstr "Calendrier interactif avec barre latérale"
 
-#~ msgid ""
-#~ "Includes category filter buttons and view toggle (calendar/list) in the "
-#~ "sidebar."
-#~ msgstr ""
-#~ "Inclut les boutons de filtre par catégorie et le basculement de vue "
-#~ "(calendrier/liste) dans la barre latérale."
+#: admin/class-gcal-admin.php:509
+msgid ""
+"Includes category filter buttons and view toggle (calendar/list) in the "
+"sidebar."
+msgstr ""
+"Inclut les boutons de filtre par catégorie et le basculement de vue "
+"(calendrier/liste) dans la barre latérale."
 
-#~ msgid "Hide Past Events (List View)"
-#~ msgstr "Masquer les événements passés (vue liste)"
+#: admin/class-gcal-admin.php:514
+msgid "Hide Past Events (List View)"
+msgstr "Masquer les événements passés (vue liste)"
 
-#~ msgid "Shows only upcoming events from today through the end of the year."
-#~ msgstr ""
-#~ "Affiche uniquement les événements à venir d'aujourd'hui jusqu'à la fin de "
-#~ "l'année."
+#: admin/class-gcal-admin.php:517
+msgid "Shows only upcoming events from today through the end of the year."
+msgstr ""
+"Affiche uniquement les événements à venir d'aujourd'hui jusqu'à la fin de "
+"l'année."
 
-#~ msgid "Wildcard Pattern Rules"
-#~ msgstr "Règles des motifs génériques"
+#: admin/class-gcal-admin.php:521
+msgid "Wildcard Pattern Rules"
+msgstr "Règles des motifs génériques"
 
-#~ msgid "Use asterisk (*) to match zero or more characters"
-#~ msgstr ""
-#~ "Utilisez l'astérisque (*) pour correspondre à zéro ou plusieurs caractères"
+#: admin/class-gcal-admin.php:523
+msgid "Use asterisk (*) to match zero or more characters"
+msgstr ""
+"Utilisez l'astérisque (*) pour correspondre à zéro ou plusieurs caractères"
 
-#~ msgid "Matches all tags starting with MESSE"
-#~ msgstr "Correspond à tous les tags commençant par MESSE"
+#: admin/class-gcal-admin.php:524
+msgid "Matches all tags starting with MESSE"
+msgstr "Correspond à tous les tags commençant par MESSE"
 
-#~ msgid "Matches all tags ending with -WO"
-#~ msgstr "Correspond à tous les tags se terminant par -WO"
+#: admin/class-gcal-admin.php:525
+msgid "Matches all tags ending with -WO"
+msgstr "Correspond à tous les tags se terminant par -WO"
 
-#~ msgid "Matches tags starting with MESSE or REUNION (OR logic)"
-#~ msgstr "Correspond aux tags commençant par MESSE ou REUNION (logique OU)"
+#: admin/class-gcal-admin.php:526
+msgid "Matches tags starting with MESSE or REUNION (OR logic)"
+msgstr "Correspond aux tags commençant par MESSE ou REUNION (logique OU)"
 
-#~ msgid ""
-#~ "Wildcards bypass the category whitelist (no need to pre-define patterns)"
-#~ msgstr ""
-#~ "Les jokers contournent la liste blanche des catégories (pas besoin de pré-"
-#~ "définir les motifs)"
+#: admin/class-gcal-admin.php:527
+msgid ""
+"Wildcards bypass the category whitelist (no need to pre-define patterns)"
+msgstr ""
+"Les jokers contournent la liste blanche des catégories (pas besoin de pré-"
+"définir les motifs)"
 
-#~ msgid ""
-#~ "Only alphanumeric characters, hyphens (-), underscores (_), and asterisk "
-#~ "(*) allowed"
-#~ msgstr ""
-#~ "Seuls les caractères alphanumériques, traits d'union (-), tirets bas (_) "
-#~ "et astérisque (*) sont autorisés"
+#: admin/class-gcal-admin.php:528
+msgid ""
+"Only alphanumeric characters, hyphens (-), underscores (_), and asterisk (*) "
+"allowed"
+msgstr ""
+"Seuls les caractères alphanumériques, traits d'union (-), tirets bas (_) et "
+"astérisque (*) sont autorisés"
 
-#~ msgid "URL Parameters"
-#~ msgstr "Paramètres URL"
+#: admin/class-gcal-admin.php:531
+msgid "URL Parameters"
+msgstr "Paramètres URL"
 
-#~ msgid "Users can override shortcode settings using URL parameters:"
-#~ msgstr ""
-#~ "Les utilisateurs peuvent remplacer les paramètres du shortcode en "
-#~ "utilisant des paramètres URL :"
+#: admin/class-gcal-admin.php:532
+msgid "Users can override shortcode settings using URL parameters:"
+msgstr ""
+"Les utilisateurs peuvent remplacer les paramètres du shortcode en utilisant "
+"des paramètres URL :"
 
-#~ msgid "Switch to week view"
-#~ msgstr "Basculer en vue semaine"
+#: admin/class-gcal-admin.php:534
+msgid "Switch to week view"
+msgstr "Basculer en vue semaine"
 
-#~ msgid "Switch to month view"
-#~ msgstr "Basculer en vue mois"
+#: admin/class-gcal-admin.php:535
+msgid "Switch to month view"
+msgstr "Basculer en vue mois"
 
-#~ msgid "Switch to year view"
-#~ msgstr "Basculer en vue année"
+#: admin/class-gcal-admin.php:536
+msgid "Switch to year view"
+msgstr "Basculer en vue année"
 
-#~ msgid "Switch to calendar display"
-#~ msgstr "Basculer en affichage calendrier"
+#: admin/class-gcal-admin.php:537
+msgid "Switch to calendar display"
+msgstr "Basculer en affichage calendrier"
 
-#~ msgid "Switch to list display"
-#~ msgstr "Basculer en affichage liste"
+#: admin/class-gcal-admin.php:538
+msgid "Switch to list display"
+msgstr "Basculer en affichage liste"
 
-#~ msgid "Filter by specific category"
-#~ msgstr "Filtrer par catégorie spécifique"
+#: admin/class-gcal-admin.php:539
+msgid "Filter by specific category"
+msgstr "Filtrer par catégorie spécifique"
 
-#~ msgid "For complete documentation, see:"
-#~ msgstr "Pour la documentation complète, voir :"
+#: admin/class-gcal-admin.php:543
+msgid "For complete documentation, see:"
+msgstr "Pour la documentation complète, voir :"
 
-#~ msgid "Permission denied."
-#~ msgstr "Permission refusée."
+#: admin/class-gcal-admin.php:564 admin/class-gcal-admin.php:604
+#: admin/class-gcal-admin.php:627 admin/class-gcal-admin.php:651
+#: admin/class-gcal-admin.php:677 admin/class-gcal-admin.php:712
+#: admin/class-gcal-admin.php:747
+msgid "Permission denied."
+msgstr "Permission refusée."
 
-#~ msgid "Client ID and Secret are required."
-#~ msgstr "L'ID client et le secret sont requis."
+#: admin/class-gcal-admin.php:571
+msgid "Client ID and Secret are required."
+msgstr "L'ID client et le secret sont requis."
 
-#~ msgid ""
-#~ "Credentials saved but failed to generate Google authorization URL. Please "
-#~ "check your credentials and try again."
-#~ msgstr ""
-#~ "Identifiants enregistrés mais échec de génération de l'URL d'autorisation "
-#~ "Google. Veuillez vérifier vos identifiants et réessayer."
+#: admin/class-gcal-admin.php:579
+msgid ""
+"Credentials saved but failed to generate Google authorization URL. Please "
+"check your credentials and try again."
+msgstr ""
+"Identifiants enregistrés mais échec de génération de l'URL d'autorisation "
+"Google. Veuillez vérifier vos identifiants et réessayer."
 
-#~ msgid "Credentials saved. Redirecting to Google..."
-#~ msgstr "Identifiants enregistrés. Redirection vers Google..."
+#: admin/class-gcal-admin.php:584
+msgid "Credentials saved. Redirecting to Google..."
+msgstr "Identifiants enregistrés. Redirection vers Google..."
 
-#~ msgid "Failed to save credentials. Please check that they are valid."
-#~ msgstr ""
-#~ "Échec de l'enregistrement des identifiants. Veuillez vérifier qu'ils sont "
-#~ "valides."
+#: admin/class-gcal-admin.php:588
+msgid "Failed to save credentials. Please check that they are valid."
+msgstr ""
+"Échec de l'enregistrement des identifiants. Veuillez vérifier qu'ils sont "
+"valides."
 
-#~ msgid "Disconnected successfully."
-#~ msgstr "Déconnecté avec succès."
+#: admin/class-gcal-admin.php:611
+msgid "Disconnected successfully."
+msgstr "Déconnecté avec succès."
 
+#. translators: %d: number of cache entries cleared
+#: admin/class-gcal-admin.php:659
 #, php-format
-#~ msgid "Cache cleared! %d entries removed."
-#~ msgstr "Cache vidé ! %d entrées supprimées."
+msgid "Cache cleared! %d entries removed."
+msgstr "Cache vidé ! %d entrées supprimées."
 
-#~ msgid "Category added successfully."
-#~ msgstr "Catégorie ajoutée avec succès."
+#: admin/class-gcal-admin.php:695
+msgid "Category added successfully."
+msgstr "Catégorie ajoutée avec succès."
 
-#~ msgid "Category updated successfully."
-#~ msgstr "Catégorie mise à jour avec succès."
+#: admin/class-gcal-admin.php:730
+msgid "Category updated successfully."
+msgstr "Catégorie mise à jour avec succès."
 
-#~ msgid "Category deleted successfully."
-#~ msgstr "Catégorie supprimée avec succès."
+#: admin/class-gcal-admin.php:758
+msgid "Category deleted successfully."
+msgstr "Catégorie supprimée avec succès."
 
-#~ msgid "No caching"
-#~ msgstr "Pas de cache"
+#: admin/partials/cache-settings.php:27 admin/partials/cache-settings.php:117
+msgid "No caching"
+msgstr "Pas de cache"
 
+#. translators: %d: number of seconds
+#: admin/partials/cache-settings.php:32
 #, php-format
-#~ msgid "%d second"
-#~ msgid_plural "%d seconds"
-#~ msgstr[0] "%d seconde"
-#~ msgstr[1] "%d secondes"
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d seconde"
+msgstr[1] "%d secondes"
 
+#. translators: %d: number of minutes
+#: admin/partials/cache-settings.php:39
 #, php-format
-#~ msgid "%d minute"
-#~ msgid_plural "%d minutes"
-#~ msgstr[0] "%d minute"
-#~ msgstr[1] "%d minutes"
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minute"
+msgstr[1] "%d minutes"
 
-#~ msgid "Cache Duration"
-#~ msgstr "Durée du cache"
+#: admin/partials/cache-settings.php:57
+msgid "Cache Duration"
+msgstr "Durée du cache"
 
-#~ msgid ""
-#~ "How long to cache calendar events before refreshing from Google Calendar. "
-#~ "Set to 0 for no caching."
-#~ msgstr ""
-#~ "Durée de mise en cache des événements avant actualisation depuis Google "
-#~ "Calendar. Définir à 0 pour désactiver la mise en cache."
+#: admin/partials/cache-settings.php:67
+msgid ""
+"How long to cache calendar events before refreshing from Google Calendar. "
+"Set to 0 for no caching."
+msgstr ""
+"Durée de mise en cache des événements avant actualisation depuis Google "
+"Calendar. Définir à 0 pour désactiver la mise en cache."
 
-#~ msgid "Save Cache Settings"
-#~ msgstr "Enregistrer les paramètres de cache"
+#: admin/partials/cache-settings.php:73
+msgid "Save Cache Settings"
+msgstr "Enregistrer les paramètres de cache"
 
-#~ msgid "Cache Statistics"
-#~ msgstr "Statistiques de cache"
+#: admin/partials/cache-settings.php:78
+msgid "Cache Statistics"
+msgstr "Statistiques de cache"
 
-#~ msgid "Cached Items"
-#~ msgstr "Éléments en cache"
+#: admin/partials/cache-settings.php:82
+msgid "Cached Items"
+msgstr "Éléments en cache"
 
-#~ msgid "items"
-#~ msgstr "éléments"
+#: admin/partials/cache-settings.php:85
+msgid "items"
+msgstr "éléments"
 
-#~ msgid "Last Refresh"
-#~ msgstr "Dernière actualisation"
+#: admin/partials/cache-settings.php:90
+msgid "Last Refresh"
+msgstr "Dernière actualisation"
 
-#~ msgid "Current Duration"
-#~ msgstr "Durée actuelle"
+#: admin/partials/cache-settings.php:95
+msgid "Current Duration"
+msgstr "Durée actuelle"
 
-#~ msgid "Clear Cache Now"
-#~ msgstr "Vider le cache maintenant"
+#: admin/partials/cache-settings.php:101
+msgid "Clear Cache Now"
+msgstr "Vider le cache maintenant"
 
-#~ msgid "seconds"
-#~ msgstr "secondes"
+#: admin/partials/cache-settings.php:120
+msgid "seconds"
+msgstr "secondes"
 
-#~ msgid "minute"
-#~ msgstr "minute"
+#: admin/partials/cache-settings.php:124
+msgid "minute"
+msgstr "minute"
 
-#~ msgid "minutes"
-#~ msgstr "minutes"
+#: admin/partials/cache-settings.php:126
+msgid "minutes"
+msgstr "minutes"
 
-#~ msgid "Add New Category"
-#~ msgstr "Ajouter une catégorie"
+#: admin/partials/category-manager.php:30
+msgid "Add New Category"
+msgstr "Ajouter une catégorie"
 
-#~ msgid "Category ID"
-#~ msgstr "ID de catégorie"
+#: admin/partials/category-manager.php:36
+#: admin/partials/category-manager.php:88
+msgid "Category ID"
+msgstr "ID de catégorie"
 
-#~ msgid "COMMUNITY"
-#~ msgstr "COMMUNAUTÉ"
+#: admin/partials/category-manager.php:41
+msgid "COMMUNITY"
+msgstr "COMMUNAUTÉ"
 
-#~ msgid ""
-#~ "Uppercase alphanumeric with underscores or hyphens only. Used in event "
-#~ "tags and shortcodes."
-#~ msgstr ""
-#~ "Alphanumérique en majuscules avec tirets bas ou traits d'union "
-#~ "uniquement. Utilisé dans les tags d'événements et les shortcodes."
+#: admin/partials/category-manager.php:43
+msgid ""
+"Uppercase alphanumeric with underscores or hyphens only. Used in event tags "
+"and shortcodes."
+msgstr ""
+"Alphanumérique en majuscules avec tirets bas ou traits d'union uniquement. "
+"Utilisé dans les tags d'événements et les shortcodes."
 
-#~ msgid "Display Name"
-#~ msgstr "Nom d'affichage"
+#: admin/partials/category-manager.php:49
+#: admin/partials/category-manager.php:89
+#: admin/partials/category-manager.php:147
+msgid "Display Name"
+msgstr "Nom d'affichage"
 
-#~ msgid "Community Events"
-#~ msgstr "Événements communautaires"
+#: admin/partials/category-manager.php:53
+msgid "Community Events"
+msgstr "Événements communautaires"
 
-#~ msgid "User-friendly name shown to visitors."
-#~ msgstr "Nom convivial affiché aux visiteurs."
+#: admin/partials/category-manager.php:55
+msgid "User-friendly name shown to visitors."
+msgstr "Nom convivial affiché aux visiteurs."
 
-#~ msgid "Color"
-#~ msgstr "Couleur"
+#: admin/partials/category-manager.php:61
+#: admin/partials/category-manager.php:90
+#: admin/partials/category-manager.php:155
+msgid "Color"
+msgstr "Couleur"
 
-#~ msgid "Color used for calendar color-coding."
-#~ msgstr "Couleur utilisée pour le code couleur du calendrier."
+#: admin/partials/category-manager.php:66
+msgid "Color used for calendar color-coding."
+msgstr "Couleur utilisée pour le code couleur du calendrier."
 
-#~ msgid "Add Category"
-#~ msgstr "Ajouter une catégorie"
+#: admin/partials/category-manager.php:73
+msgid "Add Category"
+msgstr "Ajouter une catégorie"
 
-#~ msgid "Existing Categories"
-#~ msgstr "Catégories existantes"
+#: admin/partials/category-manager.php:80
+msgid "Existing Categories"
+msgstr "Catégories existantes"
 
-#~ msgid "No categories defined yet."
-#~ msgstr "Aucune catégorie définie."
+#: admin/partials/category-manager.php:83
+msgid "No categories defined yet."
+msgstr "Aucune catégorie définie."
 
-#~ msgid "Actions"
-#~ msgstr "Actions"
+#: admin/partials/category-manager.php:91
+msgid "Actions"
+msgstr "Actions"
 
-#~ msgid "Edit"
-#~ msgstr "Modifier"
+#: admin/partials/category-manager.php:118
+msgid "Edit"
+msgstr "Modifier"
 
-#~ msgid "Delete"
-#~ msgstr "Supprimer"
+#: admin/partials/category-manager.php:122
+msgid "Delete"
+msgstr "Supprimer"
 
-#~ msgid "Edit Category"
-#~ msgstr "Modifier la catégorie"
+#: admin/partials/category-manager.php:137
+msgid "Edit Category"
+msgstr "Modifier la catégorie"
 
-#~ msgid "Save Changes"
-#~ msgstr "Enregistrer les modifications"
+#: admin/partials/category-manager.php:165
+msgid "Save Changes"
+msgstr "Enregistrer les modifications"
 
-#~ msgid "Cancel"
-#~ msgstr "Annuler"
+#: admin/partials/category-manager.php:168
+msgid "Cancel"
+msgstr "Annuler"
 
-#~ msgid "Mon"
-#~ msgstr "Lun"
+#: gcal-tag-filter.php:231 public/class-gcal-display.php:181
+#: public/class-gcal-display.php:325
+msgid "Mon"
+msgstr "Lun"
 
-#~ msgid "Tue"
-#~ msgstr "Mar"
+#: gcal-tag-filter.php:232 public/class-gcal-display.php:182
+#: public/class-gcal-display.php:326
+msgid "Tue"
+msgstr "Mar"
 
-#~ msgid "Wed"
-#~ msgstr "Mer"
+#: gcal-tag-filter.php:233 public/class-gcal-display.php:183
+#: public/class-gcal-display.php:327
+msgid "Wed"
+msgstr "Mer"
 
-#~ msgid "Thu"
-#~ msgstr "Jeu"
+#: gcal-tag-filter.php:234 public/class-gcal-display.php:184
+#: public/class-gcal-display.php:328
+msgid "Thu"
+msgstr "Jeu"
 
-#~ msgid "Fri"
-#~ msgstr "Ven"
+#: gcal-tag-filter.php:235 public/class-gcal-display.php:185
+#: public/class-gcal-display.php:329
+msgid "Fri"
+msgstr "Ven"
 
-#~ msgid "Sat"
-#~ msgstr "Sam"
+#: gcal-tag-filter.php:236 public/class-gcal-display.php:186
+#: public/class-gcal-display.php:330
+msgid "Sat"
+msgstr "Sam"
 
-#~ msgid "Sun"
-#~ msgstr "Dim"
+#: gcal-tag-filter.php:237 public/class-gcal-display.php:187
+#: public/class-gcal-display.php:331
+msgid "Sun"
+msgstr "Dim"
 
-#~ msgid "January"
-#~ msgstr "janvier"
+#: gcal-tag-filter.php:240 public/class-gcal-display.php:405
+msgid "January"
+msgstr "janvier"
 
-#~ msgid "February"
-#~ msgstr "février"
+#: gcal-tag-filter.php:241 public/class-gcal-display.php:406
+msgid "February"
+msgstr "février"
 
-#~ msgid "March"
-#~ msgstr "mars"
+#: gcal-tag-filter.php:242 public/class-gcal-display.php:407
+msgid "March"
+msgstr "mars"
 
-#~ msgid "April"
-#~ msgstr "avril"
+#: gcal-tag-filter.php:243 public/class-gcal-display.php:408
+msgid "April"
+msgstr "avril"
 
-#~ msgid "May"
-#~ msgstr "mai"
+#: gcal-tag-filter.php:244 public/class-gcal-display.php:409
+#: public/class-gcal-display.php:691
+msgid "May"
+msgstr "mai"
 
-#~ msgid "June"
-#~ msgstr "juin"
+#: gcal-tag-filter.php:245 public/class-gcal-display.php:410
+msgid "June"
+msgstr "juin"
 
-#~ msgid "July"
-#~ msgstr "juillet"
+#: gcal-tag-filter.php:246 public/class-gcal-display.php:411
+msgid "July"
+msgstr "juillet"
 
-#~ msgid "August"
-#~ msgstr "août"
+#: gcal-tag-filter.php:247 public/class-gcal-display.php:412
+msgid "August"
+msgstr "août"
 
-#~ msgid "September"
-#~ msgstr "septembre"
+#: gcal-tag-filter.php:248 public/class-gcal-display.php:413
+msgid "September"
+msgstr "septembre"
 
-#~ msgid "October"
-#~ msgstr "octobre"
+#: gcal-tag-filter.php:249 public/class-gcal-display.php:414
+msgid "October"
+msgstr "octobre"
 
-#~ msgid "November"
-#~ msgstr "novembre"
+#: gcal-tag-filter.php:250 public/class-gcal-display.php:415
+msgid "November"
+msgstr "novembre"
 
-#~ msgid "December"
-#~ msgstr "décembre"
+#: gcal-tag-filter.php:251 public/class-gcal-display.php:416
+msgid "December"
+msgstr "décembre"
 
-#~ msgid "No events"
-#~ msgstr "Aucun événement"
+#: gcal-tag-filter.php:253 public/class-gcal-display.php:359
+#: public/class-gcal-display.php:454
+msgid "No events"
+msgstr "Aucun événement"
 
-#~ msgid "All day"
-#~ msgstr "Toute la journée"
+#: gcal-tag-filter.php:254 public/class-gcal-display.php:717
+msgid "All day"
+msgstr "Toute la journée"
 
-#~ msgid "event"
-#~ msgstr "événement"
+#: gcal-tag-filter.php:255 public/class-gcal-display.php:425
+msgid "event"
+msgstr "événement"
 
-#~ msgid "events"
-#~ msgstr "événements"
+#: gcal-tag-filter.php:256 public/class-gcal-display.php:425
+msgid "events"
+msgstr "événements"
 
-#~ msgid "Learn more"
-#~ msgstr "En savoir plus"
+#: gcal-tag-filter.php:257 public/class-gcal-display.php:778
+msgid "Learn more"
+msgstr "En savoir plus"
 
-#~ msgid "Close"
-#~ msgstr "Fermer"
+#: gcal-tag-filter.php:258 public/class-gcal-display.php:144
+#: public/class-gcal-display.php:586
+msgid "Close"
+msgstr "Fermer"
 
-#~ msgid "Copied!"
-#~ msgstr "Copié !"
+#: gcal-tag-filter.php:259
+msgid "Copied!"
+msgstr "Copié !"
 
-#~ msgid "Error"
-#~ msgstr "Erreur"
+#: gcal-tag-filter.php:260
+msgid "Error"
+msgstr "Erreur"
 
-#~ msgid "No events found for this category."
-#~ msgstr "Aucun événement trouvé pour cette catégorie."
+#: gcal-tag-filter.php:261
+msgid "No events found for this category."
+msgstr "Aucun événement trouvé pour cette catégorie."
 
-#~ msgid ""
-#~ "The shared event is not visible in the current period. Try changing the "
-#~ "view or period."
-#~ msgstr ""
-#~ "L'événement partagé n'est pas visible dans la période actuelle. Essayez "
-#~ "de changer la vue ou la période."
+#: gcal-tag-filter.php:262
+msgid ""
+"The shared event is not visible in the current period. Try changing the view "
+"or period."
+msgstr ""
+"L'événement partagé n'est pas visible dans la période actuelle. Essayez de "
+"changer la vue ou la période."
 
+#: gcal-tag-filter.php:263
+msgid "Date and time"
+msgstr ""
+
+#: gcal-tag-filter.php:264
 #, fuzzy
-#~ msgid "Location"
-#~ msgstr "Actions"
+msgid "Location"
+msgstr "Actions"
 
+#: gcal-tag-filter.php:265
 #, fuzzy
-#~ msgid "View in Google Calendar"
-#~ msgstr "Sélectionner un calendrier"
+msgid "View in Google Calendar"
+msgstr "Sélectionner un calendrier"
 
-#~ msgid "(Untitled)"
-#~ msgstr "(Sans titre)"
+#: gcal-tag-filter.php:266
+msgid "Copy link"
+msgstr ""
 
-#~ msgid ""
-#~ "Not authenticated with Google Calendar. Please connect your account in "
-#~ "the plugin settings."
-#~ msgstr ""
-#~ "Non authentifié avec Google Calendar. Veuillez connecter votre compte "
-#~ "dans les paramètres du plugin."
+#: gcal-tag-filter.php:361 includes/class-gcal-calendar.php:400
+msgid "(Untitled)"
+msgstr "(Sans titre)"
 
-#~ msgid ""
-#~ "No calendar selected. Please select a calendar in the plugin settings."
-#~ msgstr ""
-#~ "Aucun calendrier sélectionné. Veuillez sélectionner un calendrier dans "
-#~ "les paramètres du plugin."
+#: includes/class-gcal-calendar.php:153
+msgid ""
+"Not authenticated with Google Calendar. Please connect your account in the "
+"plugin settings."
+msgstr ""
+"Non authentifié avec Google Calendar. Veuillez connecter votre compte dans "
+"les paramètres du plugin."
 
+#: includes/class-gcal-calendar.php:168
+msgid "No calendar selected. Please select a calendar in the plugin settings."
+msgstr ""
+"Aucun calendrier sélectionné. Veuillez sélectionner un calendrier dans les "
+"paramètres du plugin."
+
+#. translators: %s: error message
+#: includes/class-gcal-calendar.php:231
 #, php-format
-#~ msgid "Failed to retrieve events from Google Calendar: %s"
-#~ msgstr "Échec de récupération des événements depuis Google Calendar : %s"
+msgid "Failed to retrieve events from Google Calendar: %s"
+msgstr "Échec de récupération des événements depuis Google Calendar : %s"
 
-#~ msgid "Authentication failed. Please check your credentials."
-#~ msgstr "Échec de l'authentification. Veuillez vérifier vos identifiants."
+#: includes/class-gcal-calendar.php:498
+msgid "Authentication failed. Please check your credentials."
+msgstr "Échec de l'authentification. Veuillez vérifier vos identifiants."
 
-#~ msgid "No calendar selected."
-#~ msgstr "Aucun calendrier sélectionné."
+#: includes/class-gcal-calendar.php:507
+msgid "No calendar selected."
+msgstr "Aucun calendrier sélectionné."
 
-#~ msgid "Connection successful!"
-#~ msgstr "Connexion réussie !"
+#: includes/class-gcal-calendar.php:527
+msgid "Connection successful!"
+msgstr "Connexion réussie !"
 
+#. translators: %s: error message
+#: includes/class-gcal-calendar.php:536
 #, php-format
-#~ msgid "Connection failed: %s"
-#~ msgstr "Échec de connexion : %s"
+msgid "Connection failed: %s"
+msgstr "Échec de connexion : %s"
 
-#~ msgid ""
-#~ "Category ID must be uppercase alphanumeric with underscores or hyphens "
-#~ "only."
-#~ msgstr ""
-#~ "L'ID de catégorie doit être alphanumérique en majuscules avec uniquement "
-#~ "des tirets bas ou des traits d'union."
+#: includes/class-gcal-categories.php:118
+msgid ""
+"Category ID must be uppercase alphanumeric with underscores or hyphens only."
+msgstr ""
+"L'ID de catégorie doit être alphanumérique en majuscules avec uniquement des "
+"tirets bas ou des traits d'union."
 
-#~ msgid "A category with this ID already exists."
-#~ msgstr "Une catégorie avec cet ID existe déjà."
+#: includes/class-gcal-categories.php:126
+msgid "A category with this ID already exists."
+msgstr "Une catégorie avec cet ID existe déjà."
 
-#~ msgid "Category not found."
-#~ msgstr "Catégorie non trouvée."
+#: includes/class-gcal-categories.php:178
+#: includes/class-gcal-categories.php:217
+msgid "Category not found."
+msgstr "Catégorie non trouvée."
 
-#~ msgid ""
-#~ "Google Calendar not connected. Please contact the site administrator."
-#~ msgstr ""
-#~ "Google Calendar non connecté. Veuillez contacter l'administrateur du site."
+#: includes/class-gcal-shortcode.php:107
+msgid "Google Calendar not connected. Please contact the site administrator."
+msgstr ""
+"Google Calendar non connecté. Veuillez contacter l'administrateur du site."
 
-#~ msgid "No calendar selected. Please contact the site administrator."
-#~ msgstr ""
-#~ "Aucun calendrier sélectionné. Veuillez contacter l'administrateur du site."
+#: includes/class-gcal-shortcode.php:116
+msgid "No calendar selected. Please contact the site administrator."
+msgstr ""
+"Aucun calendrier sélectionné. Veuillez contacter l'administrateur du site."
 
-#~ msgid "No events found."
-#~ msgstr "Aucun événement trouvé."
+#: public/class-gcal-display.php:37
+msgid "No events found."
+msgstr "Aucun événement trouvé."
 
-#~ msgid "Previous"
-#~ msgstr "Précédent"
+#: public/class-gcal-display.php:94 public/class-gcal-display.php:539
+msgid "Previous"
+msgstr "Précédent"
 
-#~ msgid "Next"
-#~ msgstr "Suivant"
+#: public/class-gcal-display.php:98 public/class-gcal-display.php:543
+msgid "Next"
+msgstr "Suivant"
 
-#~ msgid "Week"
-#~ msgstr "Semaine"
+#: public/class-gcal-display.php:104 public/class-gcal-display.php:549
+msgid "Week"
+msgstr "Semaine"
 
-#~ msgid "Month"
-#~ msgstr "Mois"
+#: public/class-gcal-display.php:107 public/class-gcal-display.php:552
+msgid "Month"
+msgstr "Mois"
 
-#~ msgid "Year"
-#~ msgstr "Année"
+#: public/class-gcal-display.php:110 public/class-gcal-display.php:555
+msgid "Year"
+msgstr "Année"
 
-#~ msgid "more"
-#~ msgstr "de plus"
+#: public/class-gcal-display.php:449
+msgid "more"
+msgstr "de plus"
 
-#~ msgid "Show less"
-#~ msgstr "Voir moins"
+#: public/class-gcal-display.php:450
+msgid "Show less"
+msgstr "Voir moins"
 
-#~ msgid "Uncategorized"
-#~ msgstr "Sans catégorie"
+#: public/class-gcal-display.php:660 public/class-gcal-display.php:940
+#: public/class-gcal-display.php:971
+msgid "Uncategorized"
+msgstr "Sans catégorie"
 
+#. translators: %s: invalid tag name
+#: public/class-gcal-display.php:668
 #, php-format
-#~ msgid "Unknown tag: %s"
-#~ msgstr "Tag inconnu : %s"
+msgid "Unknown tag: %s"
+msgstr "Tag inconnu : %s"
 
-#~ msgid "Jan"
-#~ msgstr "jan"
+#: public/class-gcal-display.php:687
+msgid "Jan"
+msgstr "jan"
 
-#~ msgid "Feb"
-#~ msgstr "fév"
+#: public/class-gcal-display.php:688
+msgid "Feb"
+msgstr "fév"
 
-#~ msgid "Mar"
-#~ msgstr "mar"
+#: public/class-gcal-display.php:689
+msgid "Mar"
+msgstr "mar"
 
-#~ msgid "Apr"
-#~ msgstr "avr"
+#: public/class-gcal-display.php:690
+msgid "Apr"
+msgstr "avr"
 
-#~ msgid "Jun"
-#~ msgstr "juin"
+#: public/class-gcal-display.php:692
+msgid "Jun"
+msgstr "juin"
 
-#~ msgid "Jul"
-#~ msgstr "juil"
+#: public/class-gcal-display.php:693
+msgid "Jul"
+msgstr "juil"
 
-#~ msgid "Aug"
-#~ msgstr "aoû"
+#: public/class-gcal-display.php:694
+msgid "Aug"
+msgstr "aoû"
 
-#~ msgid "Sep"
-#~ msgstr "sep"
+#: public/class-gcal-display.php:695
+msgid "Sep"
+msgstr "sep"
 
-#~ msgid "Oct"
-#~ msgstr "oct"
+#: public/class-gcal-display.php:696
+msgid "Oct"
+msgstr "oct"
 
-#~ msgid "Nov"
-#~ msgstr "nov"
+#: public/class-gcal-display.php:697
+msgid "Nov"
+msgstr "nov"
 
-#~ msgid "Dec"
-#~ msgstr "déc"
+#: public/class-gcal-display.php:698
+msgid "Dec"
+msgstr "déc"
 
-#~ msgid "Mon."
-#~ msgstr "Lun."
+#: public/class-gcal-display.php:701
+msgid "Mon."
+msgstr "Lun."
 
-#~ msgid "Tue."
-#~ msgstr "Mar."
+#: public/class-gcal-display.php:702
+msgid "Tue."
+msgstr "Mar."
 
-#~ msgid "Wed."
-#~ msgstr "Mer."
+#: public/class-gcal-display.php:703
+msgid "Wed."
+msgstr "Mer."
 
-#~ msgid "Thu."
-#~ msgstr "Jeu."
+#: public/class-gcal-display.php:704
+msgid "Thu."
+msgstr "Jeu."
 
-#~ msgid "Fri."
-#~ msgstr "Ven."
+#: public/class-gcal-display.php:705
+msgid "Fri."
+msgstr "Ven."
 
-#~ msgid "Sat."
-#~ msgstr "Sam."
+#: public/class-gcal-display.php:706
+msgid "Sat."
+msgstr "Sam."
 
-#~ msgid "Sun."
-#~ msgstr "Dim."
+#: public/class-gcal-display.php:707
+msgid "Sun."
+msgstr "Dim."
 
-#~ msgid "List"
-#~ msgstr "Liste"
+#: public/class-gcal-display.php:867
+msgid "List"
+msgstr "Liste"
 
-#~ msgid "Calendar"
-#~ msgstr "Calendrier"
+#: public/class-gcal-display.php:871
+msgid "Calendar"
+msgstr "Calendrier"
 
-#~ msgid "Categories"
-#~ msgstr "Catégories"
+#: public/class-gcal-display.php:924
+msgid "Categories"
+msgstr "Catégories"
 
-#~ msgid "All categories"
-#~ msgstr "Toutes les catégories"
+#: public/class-gcal-display.php:930 public/class-gcal-display.php:956
+msgid "All categories"
+msgstr "Toutes les catégories"
 
-#~ msgid "Unknown tags"
-#~ msgstr "Tags inconnus"
+#: public/class-gcal-display.php:945 public/class-gcal-display.php:979
+msgid "Unknown tags"
+msgstr "Tags inconnus"

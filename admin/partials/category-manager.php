@@ -17,7 +17,9 @@ $gcal_categories = GCal_Categories::get_categories();
 // Sort categories by display name (A-Z)
 if ( ! empty( $gcal_categories ) ) {
     usort( $gcal_categories, function( $a, $b ) {
-        return strcasecmp( $a['display_name'], $b['display_name'] );
+        $a_name = isset( $a['display_name'] ) ? $a['display_name'] : '';
+        $b_name = isset( $b['display_name'] ) ? $b['display_name'] : '';
+        return strcasecmp( $a_name, $b_name );
     } );
 }
 ?>
@@ -35,7 +37,7 @@ if ( ! empty( $gcal_categories ) ) {
                     </th>
                     <td>
                         <input type="text" name="category_id" id="category_id" class="regular-text" required
-                               pattern="[A-Z0-9_-]+" style="text-transform: uppercase;"
+                               pattern="[A-Z0-9_\-]+" style="text-transform: uppercase;"
                                placeholder="<?php esc_attr_e( 'COMMUNITY', 'gcal-tag-filter' ); ?>" />
                         <p class="description">
                             <?php esc_html_e( 'Uppercase alphanumeric with underscores or hyphens only. Used in event tags and shortcodes.', 'gcal-tag-filter' ); ?>
@@ -91,6 +93,12 @@ if ( ! empty( $gcal_categories ) ) {
                 </thead>
                 <tbody>
                     <?php foreach ( $gcal_categories as $gcal_category ) : ?>
+                        <?php
+                        // Skip malformed categories
+                        if ( ! isset( $gcal_category['id'] ) || ! isset( $gcal_category['display_name'] ) || ! isset( $gcal_category['color'] ) ) {
+                            continue;
+                        }
+                        ?>
                         <tr data-category-id="<?php echo esc_attr( $gcal_category['id'] ); ?>">
                             <td>
                                 <code><?php echo esc_html( $gcal_category['id'] ); ?></code>

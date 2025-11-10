@@ -68,7 +68,7 @@ class GCal_Admin {
             __( 'GCal Tag Filter', 'gcal-tag-filter' ),
             __( 'Calendar Filter', 'gcal-tag-filter' ),
             'manage_options',
-            'google-calendar-tag-filter-settings',
+            'gcal-tag-filter-settings',
             array( $this, 'render_settings_page' )
         );
     }
@@ -121,10 +121,15 @@ class GCal_Admin {
         $sanitized = array();
         foreach ( $categories as $category ) {
             if ( is_array( $category ) ) {
+                // Support both old (slug/name) and new (id/display_name) keys for migration
+                $id = isset( $category['id'] ) ? $category['id'] : ( isset( $category['slug'] ) ? $category['slug'] : '' );
+                $display_name = isset( $category['display_name'] ) ? $category['display_name'] : ( isset( $category['name'] ) ? $category['name'] : '' );
+                $color = isset( $category['color'] ) ? $category['color'] : '';
+
                 $sanitized[] = array(
-                    'slug' => isset( $category['slug'] ) ? sanitize_key( $category['slug'] ) : '',
-                    'name' => isset( $category['name'] ) ? sanitize_text_field( $category['name'] ) : '',
-                    'color' => isset( $category['color'] ) ? sanitize_hex_color( $category['color'] ) : '',
+                    'id'           => strtoupper( sanitize_key( $id ) ),
+                    'display_name' => sanitize_text_field( $display_name ),
+                    'color'        => sanitize_hex_color( $color ) ?: '#4285F4',
                 );
             }
         }
@@ -139,7 +144,7 @@ class GCal_Admin {
      */
     public function enqueue_admin_assets( $hook ) {
         // Only load on our settings page
-        if ( 'settings_page_google-calendar-tag-filter-settings' !== $hook ) {
+        if ( 'settings_page_gcal-tag-filter-settings' !== $hook ) {
             return;
         }
 
@@ -209,7 +214,7 @@ class GCal_Admin {
         }
 
         // Redirect to settings page
-        wp_safe_redirect( admin_url( 'options-general.php?page=google-calendar-tag-filter-settings' ) );
+        wp_safe_redirect( admin_url( 'options-general.php?page=gcal-tag-filter-settings' ) );
         exit;
     }
 
@@ -548,6 +553,11 @@ class GCal_Admin {
      * AJAX: Save OAuth credentials.
      */
     public function ajax_save_credentials() {
+        // Clean output buffer to prevent notices from breaking JSON response
+        if ( ob_get_length() ) {
+            ob_clean();
+        }
+
         check_ajax_referer( 'gcal-admin-nonce', 'nonce' );
 
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -583,6 +593,11 @@ class GCal_Admin {
      * AJAX: Disconnect OAuth.
      */
     public function ajax_disconnect() {
+        // Clean output buffer to prevent notices from breaking JSON response
+        if ( ob_get_length() ) {
+            ob_clean();
+        }
+
         check_ajax_referer( 'gcal-admin-nonce', 'nonce' );
 
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -601,6 +616,11 @@ class GCal_Admin {
      * AJAX: Test connection.
      */
     public function ajax_test_connection() {
+        // Clean output buffer to prevent notices from breaking JSON response
+        if ( ob_get_length() ) {
+            ob_clean();
+        }
+
         check_ajax_referer( 'gcal-admin-nonce', 'nonce' );
 
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -620,6 +640,11 @@ class GCal_Admin {
      * AJAX: Clear cache.
      */
     public function ajax_clear_cache() {
+        // Clean output buffer to prevent notices from breaking JSON response
+        if ( ob_get_length() ) {
+            ob_clean();
+        }
+
         check_ajax_referer( 'gcal-admin-nonce', 'nonce' );
 
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -641,6 +666,11 @@ class GCal_Admin {
      * AJAX: Add category.
      */
     public function ajax_add_category() {
+        // Clean output buffer to prevent notices from breaking JSON response
+        if ( ob_get_length() ) {
+            ob_clean();
+        }
+
         check_ajax_referer( 'gcal-admin-nonce', 'nonce' );
 
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -649,7 +679,12 @@ class GCal_Admin {
 
         $id = isset( $_POST['id'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_POST['id'] ) ) ) : '';
         $display_name = isset( $_POST['display_name'] ) ? sanitize_text_field( wp_unslash( $_POST['display_name'] ) ) : '';
-        $color = isset( $_POST['color'] ) ? sanitize_hex_color( wp_unslash( $_POST['color'] ) ) : '#4285F4';
+        $color = isset( $_POST['color'] ) ? sanitize_hex_color( wp_unslash( $_POST['color'] ) ) : '';
+
+        // If sanitize_hex_color returns null, use default
+        if ( empty( $color ) ) {
+            $color = '#4285F4';
+        }
 
         $result = GCal_Categories::add_category( $id, $display_name, $color );
 
@@ -666,6 +701,11 @@ class GCal_Admin {
      * AJAX: Update category.
      */
     public function ajax_update_category() {
+        // Clean output buffer to prevent notices from breaking JSON response
+        if ( ob_get_length() ) {
+            ob_clean();
+        }
+
         check_ajax_referer( 'gcal-admin-nonce', 'nonce' );
 
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -674,7 +714,12 @@ class GCal_Admin {
 
         $id = isset( $_POST['id'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_POST['id'] ) ) ) : '';
         $display_name = isset( $_POST['display_name'] ) ? sanitize_text_field( wp_unslash( $_POST['display_name'] ) ) : '';
-        $color = isset( $_POST['color'] ) ? sanitize_hex_color( wp_unslash( $_POST['color'] ) ) : '#4285F4';
+        $color = isset( $_POST['color'] ) ? sanitize_hex_color( wp_unslash( $_POST['color'] ) ) : '';
+
+        // If sanitize_hex_color returns null, use default
+        if ( empty( $color ) ) {
+            $color = '#4285F4';
+        }
 
         $result = GCal_Categories::update_category( $id, $display_name, $color );
 
@@ -691,6 +736,11 @@ class GCal_Admin {
      * AJAX: Delete category.
      */
     public function ajax_delete_category() {
+        // Clean output buffer to prevent notices from breaking JSON response
+        if ( ob_get_length() ) {
+            ob_clean();
+        }
+
         check_ajax_referer( 'gcal-admin-nonce', 'nonce' );
 
         if ( ! current_user_can( 'manage_options' ) ) {

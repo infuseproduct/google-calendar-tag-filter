@@ -49,7 +49,34 @@ class GCal_Categories {
             update_option( self::OPTION_CATEGORIES, $categories );
         }
 
+        // Clean up any corrupted categories
+        $cleaned = self::clean_categories( $categories );
+        if ( $cleaned !== $categories ) {
+            update_option( self::OPTION_CATEGORIES, $cleaned );
+            wp_cache_delete( self::OPTION_CATEGORIES, 'options' );
+            $categories = $cleaned;
+        }
+
         return $categories;
+    }
+
+    /**
+     * Clean corrupted categories from array.
+     *
+     * @param array $categories Categories array.
+     * @return array Cleaned categories array.
+     */
+    private static function clean_categories( $categories ) {
+        $cleaned = array();
+
+        foreach ( $categories as $category ) {
+            // Only keep categories with all required fields
+            if ( isset( $category['id'] ) && isset( $category['display_name'] ) && isset( $category['color'] ) ) {
+                $cleaned[] = $category;
+            }
+        }
+
+        return $cleaned;
     }
 
     /**
@@ -62,6 +89,11 @@ class GCal_Categories {
         $categories = self::get_categories();
 
         foreach ( $categories as $category ) {
+            // Skip malformed categories
+            if ( ! isset( $category['id'] ) ) {
+                continue;
+            }
+
             if ( strtoupper( $category['id'] ) === strtoupper( $category_id ) ) {
                 return $category;
             }
@@ -97,13 +129,21 @@ class GCal_Categories {
 
         $categories = self::get_categories();
 
-        $categories[] = array(
+        $new_category = array(
             'id'           => strtoupper( $id ),
             'display_name' => sanitize_text_field( $display_name ),
             'color'        => sanitize_hex_color( $color ),
         );
 
-        return update_option( self::OPTION_CATEGORIES, $categories );
+        $categories[] = $new_category;
+
+        update_option( self::OPTION_CATEGORIES, $categories );
+
+        // Clear object cache to ensure fresh data on next load
+        wp_cache_delete( self::OPTION_CATEGORIES, 'options' );
+
+        // Return true if update succeeded or data was unchanged (both are success cases)
+        return true;
     }
 
     /**
@@ -119,6 +159,11 @@ class GCal_Categories {
         $found      = false;
 
         foreach ( $categories as $key => $category ) {
+            // Skip malformed categories
+            if ( ! isset( $category['id'] ) ) {
+                continue;
+            }
+
             if ( strtoupper( $category['id'] ) === strtoupper( $id ) ) {
                 $categories[ $key ]['display_name'] = sanitize_text_field( $display_name );
                 $categories[ $key ]['color']        = sanitize_hex_color( $color );
@@ -134,7 +179,12 @@ class GCal_Categories {
             );
         }
 
-        return update_option( self::OPTION_CATEGORIES, $categories );
+        update_option( self::OPTION_CATEGORIES, $categories );
+
+        // Clear object cache to ensure fresh data on next load
+        wp_cache_delete( self::OPTION_CATEGORIES, 'options' );
+
+        return true;
     }
 
     /**
@@ -149,6 +199,11 @@ class GCal_Categories {
         $found = false;
 
         foreach ( $categories as $category ) {
+            // Skip malformed categories
+            if ( ! isset( $category['id'] ) ) {
+                continue;
+            }
+
             if ( strtoupper( $category['id'] ) === strtoupper( $id ) ) {
                 $found = true;
                 continue; // Skip this category (delete it)
@@ -163,7 +218,12 @@ class GCal_Categories {
             );
         }
 
-        return update_option( self::OPTION_CATEGORIES, $new_categories );
+        update_option( self::OPTION_CATEGORIES, $new_categories );
+
+        // Clear object cache to ensure fresh data on next load
+        wp_cache_delete( self::OPTION_CATEGORIES, 'options' );
+
+        return true;
     }
 
     /**

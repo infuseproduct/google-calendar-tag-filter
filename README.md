@@ -235,6 +235,30 @@ gcal-tag-filter/
 └── languages/                    # Translations
 ```
 
+### Creating a Distribution Zip
+
+To create a zip file for distribution (e.g., WordPress.org or manual installation):
+
+```bash
+# From the plugin root directory
+zip -r gcal-tag-filter.zip . -x "*.git*" "*.DS_Store" "*composer.lock" "*.claude/*" "*docs/*" "messages.mo"
+```
+
+**What's included:**
+- All plugin PHP, CSS, and JavaScript files
+- `composer.json` (required when vendor folder is present)
+- `vendor/` folder with all dependencies (Google API libraries)
+- Language files (`.pot`, `.po`, `.mo`)
+- `readme.txt` and `license.txt`
+
+**What's excluded:**
+- Git files (`.git/`, `.gitignore`)
+- System files (`.DS_Store`)
+- `composer.lock` (not needed for distribution)
+- Development files (`.claude/`, `docs/`, debug `messages.mo`)
+
+**Note:** The vendor folder is ~16MB uncompressed, ~2.1MB in the zip. This is normal and required for the plugin to function.
+
 ### Localization
 
 The plugin is translation-ready with text domain `gcal-tag-filter`. To translate:
