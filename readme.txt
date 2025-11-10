@@ -12,7 +12,7 @@ Embeds Google Calendar events with tag-based filtering capabilities using OAuth 
 
 == Description ==
 
-Calendar Tag Filter for Google is a powerful WordPress plugin that seamlessly embeds your Google Calendar events with advanced tag-based filtering. Perfect for organizations, communities, and businesses that need to display categorized events with a beautiful, responsive interface.
+GCal Tag Filter for Google Calendar is a powerful WordPress plugin that seamlessly embeds your Google Calendar events with advanced tag-based filtering. Perfect for organizations, communities, and businesses that need to display categorized events with a beautiful, responsive interface.
 
 = Key Features =
 
@@ -74,7 +74,7 @@ Use wildcard matching:
 
 1. Log in to your WordPress dashboard
 2. Navigate to Plugins → Add New
-3. Search for "Google Calendar Tag Filter"
+3. Search for "GCal Tag Filter"
 4. Click "Install Now" and then "Activate"
 
 = Manual Installation =

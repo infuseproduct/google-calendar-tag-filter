@@ -1,4 +1,4 @@
-# Google Calendar Tag Filter - User Manual
+# GCal Tag Filter for Google Calendar - User Manual
 
 **Version:** 1.0.1
 **Last Updated:** November 2025
@@ -19,7 +19,7 @@
 
 ## Introduction
 
-The Google Calendar Tag Filter plugin allows you to display Google Calendar events on your WordPress site with powerful filtering capabilities. Events can be tagged with categories and displayed in different formats (calendar or list view) across multiple pages.
+The GCal Tag Filter for Google Calendar plugin allows you to display Google Calendar events on your WordPress site with powerful filtering capabilities. Events can be tagged with categories and displayed in different formats (calendar or list view) across multiple pages.
 
 ### Key Features
 
@@ -726,6 +726,6 @@ Please provide:
 
 ---
 
-**Thank you for using Google Calendar Tag Filter!**
+**Thank you for using GCal Tag Filter for Google Calendar!**
 
 *Last Updated: January 2025*

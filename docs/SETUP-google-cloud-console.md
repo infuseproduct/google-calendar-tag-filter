@@ -1,6 +1,6 @@
 # Google Cloud Console Setup Guide
 
-This guide walks you through setting up OAuth 2.0 credentials in Google Cloud Console for the Google Calendar Tag Filter plugin.
+This guide walks you through setting up OAuth 2.0 credentials in Google Cloud Console for the GCal Tag Filter for Google Calendar plugin.
 
 ## Prerequisites
 

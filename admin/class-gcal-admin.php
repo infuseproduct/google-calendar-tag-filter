@@ -65,7 +65,7 @@ class GCal_Admin {
      */
     public function add_admin_menu() {
         add_options_page(
-            __( 'Google Calendar Tag Filter', 'google-calendar-tag-filter' ),
+            __( 'GCal Tag Filter', 'google-calendar-tag-filter' ),
             __( 'Calendar Filter', 'google-calendar-tag-filter' ),
             'manage_options',
             'google-calendar-tag-filter-settings',

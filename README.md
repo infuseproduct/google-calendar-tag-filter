@@ -1,4 +1,4 @@
-# Google Calendar Tag Filter Plugin
+# GCal Tag Filter for Google Calendar
 
 A WordPress plugin that embeds Google Calendar events with tag-based filtering capabilities using OAuth 2.0 authentication.
 
@@ -39,7 +39,7 @@ This will install the Google API PHP Client library.
 
 1. Log in to your WordPress admin dashboard
 2. Navigate to **Plugins** → **Installed Plugins**
-3. Find "Google Calendar Tag Filter" and click **Activate**
+3. Find "GCal Tag Filter for Google Calendar" and click **Activate**
 
 ### 3. Configure Google Cloud Console
 
