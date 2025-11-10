@@ -29,7 +29,7 @@ A WordPress plugin that embeds Google Calendar events with tag-based filtering c
 ### 1. Install Dependencies
 
 ```bash
-cd /path/to/wp-content/plugins/google-calendar-tag-filter
+cd /path/to/wp-content/plugins/gcal-tag-filter
 composer install
 ```
 
@@ -58,7 +58,7 @@ Before the plugin can connect to Google Calendar, you need to set up OAuth crede
    - Select **Web application**
    - Add your redirect URI (found in plugin settings):
      ```
-     https://your-site.com/wp-admin/admin.php?page=google-calendar-tag-filter-settings&gcal_oauth_callback=1
+     https://your-site.com/wp-admin/admin.php?page=gcal-tag-filter-settings&gcal_oauth_callback=1
      ```
    - Copy the **Client ID** and **Client Secret**
 
@@ -213,8 +213,8 @@ The plugin caches events to minimize API calls and improve performance:
 ### File Structure
 
 ```
-google-calendar-tag-filter/
-├── google-calendar-tag-filter.php          # Main plugin file
+gcal-tag-filter/
+├── gcal-tag-filter.php          # Main plugin file
 ├── composer.json                 # Dependencies
 ├── includes/                     # Core classes
 │   ├── class-gcal-oauth.php     # OAuth authentication
@@ -237,9 +237,9 @@ google-calendar-tag-filter/
 
 ### Localization
 
-The plugin is translation-ready with text domain `google-calendar-tag-filter`. To translate:
+The plugin is translation-ready with text domain `gcal-tag-filter`. To translate:
 
-1. Generate POT file: `wp i18n make-pot . languages/google-calendar-tag-filter.pot`
+1. Generate POT file: `wp i18n make-pot . languages/gcal-tag-filter.pot`
 2. Create translation files (.po/.mo) for your language
 3. Place in the `languages/` directory
 
@@ -254,7 +254,7 @@ The plugin is translation-ready with text domain `google-calendar-tag-filter`. T
 ## Support
 
 For issues, feature requests, or contributions:
-- **GitHub**: https://github.com/infuseproduct/google-calendar-tag-filter
+- **GitHub**: https://github.com/infuseproduct/gcal-tag-filter
 - **Documentation**: See `/docs` folder
 
 ## License

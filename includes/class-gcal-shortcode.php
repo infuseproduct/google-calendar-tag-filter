@@ -104,7 +104,7 @@ class GCal_Shortcode {
 
         if ( ! $is_auth ) {
             return $this->display->render_error(
-                __( 'Google Calendar not connected. Please contact the site administrator.', 'google-calendar-tag-filter' )
+                __( 'Google Calendar not connected. Please contact the site administrator.', 'gcal-tag-filter' )
             );
         }
 
@@ -113,7 +113,7 @@ class GCal_Shortcode {
 
         if ( ! $calendar_id ) {
             return $this->display->render_error(
-                __( 'No calendar selected. Please contact the site administrator.', 'google-calendar-tag-filter' )
+                __( 'No calendar selected. Please contact the site administrator.', 'gcal-tag-filter' )
             );
         }
 

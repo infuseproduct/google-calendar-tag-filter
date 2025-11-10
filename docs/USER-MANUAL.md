@@ -665,7 +665,7 @@ A: Yes! Each category has a color setting in the admin panel.
 A: The plugin provides default responsive layouts. Advanced users can add custom CSS to their theme.
 
 **Q: Can I translate the plugin?**
-A: Yes! The plugin is translation-ready. Use the text domain `google-calendar-tag-filter`.
+A: Yes! The plugin is translation-ready. Use the text domain `gcal-tag-filter`.
 
 **Q: Can I change date/time formats?**
 A: The plugin formats dates in French (fr-FR) with 24-hour time format. Times are automatically adjusted to each visitor's timezone.
@@ -706,12 +706,12 @@ A: Google Calendar API allows 1 million requests per day. Normal usage won't hit
 
 - **Setup Guide:** [Google Cloud Console Setup](SETUP-google-cloud-console.md)
 - **README:** [Plugin README](../README.md)
-- **PRD:** [Product Requirements](PRD-google-calendar-tag-filter.md)
+- **PRD:** [Product Requirements](PRD-gcal-tag-filter.md)
 
 ### Support Channels
 
 1. **Plugin Settings:** Built-in help text and tooltips
-2. **GitHub Issues:** [Report bugs or request features](https://github.com/infuseproduct/google-calendar-tag-filter/issues)
+2. **GitHub Issues:** [Report bugs or request features](https://github.com/infuseproduct/gcal-tag-filter/issues)
 3. **WordPress Debug:** Enable WP_DEBUG for detailed error messages
 
 ### Before Asking for Help
