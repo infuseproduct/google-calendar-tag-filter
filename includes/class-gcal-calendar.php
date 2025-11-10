@@ -50,10 +50,13 @@ class GCal_Calendar {
      * @return array|WP_Error Array of events or WP_Error on failure.
      */
     public function get_events( $period, $tags = array(), $year = null, $month = null, $week = null ) {
-        error_log( '=== GCal Get Events ===' );
-        error_log( 'Period: ' . $period . ', Tags: ' . ( empty( $tags ) ? 'NONE' : implode( ',', $tags ) ) );
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( '=== GCal Get Events ===' );
+            error_log( 'Period: ' . $period . ', Tags: ' . ( empty( $tags ) ? 'NONE' : implode( ',', $tags ) ) );
+        }
 
         // Allow bypassing cache with query parameter for debugging
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only debug parameter
         $bypass_cache = isset( $_GET['gcal_debug'] ) && $_GET['gcal_debug'] === '1';
 
         // Check cache first
@@ -61,17 +64,23 @@ class GCal_Calendar {
         $cached_events = $this->cache->get( $cache_key );
 
         if ( $cached_events !== false && ! $bypass_cache ) {
-            error_log( 'Returning cached events: ' . count( $cached_events ) );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'Returning cached events: ' . count( $cached_events ) );
+            }
             return $cached_events;
         }
 
-        error_log( $bypass_cache ? 'Cache bypassed via gcal_debug parameter' : 'Cache miss, fetching from API' );
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( $bypass_cache ? 'Cache bypassed via gcal_debug parameter' : 'Cache miss, fetching from API' );
+        }
 
         // Fetch from API
         $events = $this->fetch_events_from_api( $period, $year, $month, $week );
 
         if ( is_wp_error( $events ) ) {
-            error_log( 'API fetch error: ' . $events->get_error_message() );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'API fetch error: ' . $events->get_error_message() );
+            }
             // Output to browser console for debugging
             add_action( 'wp_footer', function() use ( $events ) {
                 echo '<script>console.error("GCal API Error: ' . esc_js( $events->get_error_message() ) . '");</script>';
@@ -81,7 +90,9 @@ class GCal_Calendar {
 
         // Parse and process events
         $processed_events = $this->process_events( $events );
-        error_log( 'Processed events: ' . count( $processed_events ) );
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( 'Processed events: ' . count( $processed_events ) );
+        }
 
         // Output event count to browser console for debugging
         $count = count( $processed_events );
@@ -92,7 +103,9 @@ class GCal_Calendar {
         // Filter by tags if specified
         if ( ! empty( $tags ) ) {
             $processed_events = $this->filter_events_by_tags( $processed_events, $tags );
-            error_log( 'After tag filter: ' . count( $processed_events ) . ' events' );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'After tag filter: ' . count( $processed_events ) . ' events' );
+            }
         } else {
             // When no tags specified, hide untagged and unknown-tag events from non-admins
             if ( ! current_user_can( 'manage_options' ) ) {
@@ -103,7 +116,9 @@ class GCal_Calendar {
                         return ! empty( $event['tags'] );
                     }
                 );
-                error_log( 'After untagged/unknown filter (non-admin): ' . count( $processed_events ) . ' events' );
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( 'After untagged/unknown filter (non-admin): ' . count( $processed_events ) . ' events' );
+                }
             }
         }
 
@@ -123,12 +138,16 @@ class GCal_Calendar {
      * @return array|WP_Error Array of events or WP_Error on failure.
      */
     private function fetch_events_from_api( $period, $year = null, $month = null, $week = null ) {
-        error_log( '=== GCal Fetch Events ===' );
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( '=== GCal Fetch Events ===' );
+        }
 
         $client = $this->oauth->get_authenticated_client();
 
         if ( ! $client ) {
-            error_log( 'Client authentication failed' );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'Client authentication failed' );
+            }
             return new WP_Error(
                 'auth_failed',
                 __( 'Not authenticated with Google Calendar. Please connect your account in the plugin settings.', 'google-calendar-tag-filter' )
@@ -136,10 +155,14 @@ class GCal_Calendar {
         }
 
         $calendar_id = $this->oauth->get_selected_calendar_id();
-        error_log( 'Calendar ID: ' . ( $calendar_id ? $calendar_id : 'NONE' ) );
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( 'Calendar ID: ' . ( $calendar_id ? $calendar_id : 'NONE' ) );
+        }
 
         if ( ! $calendar_id ) {
-            error_log( 'No calendar selected' );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'No calendar selected' );
+            }
             return new WP_Error(
                 'no_calendar',
                 __( 'No calendar selected. Please select a calendar in the plugin settings.', 'google-calendar-tag-filter' )
@@ -151,7 +174,9 @@ class GCal_Calendar {
 
             // Calculate time range based on period
             list( $time_min, $time_max ) = $this->get_time_range( $period, $year, $month, $week );
-            error_log( 'Time range: ' . $time_min . ' to ' . ( $time_max ? $time_max : 'FUTURE' ) );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'Time range: ' . $time_min . ' to ' . ( $time_max ? $time_max : 'FUTURE' ) );
+            }
 
             // Output time range to browser console for debugging
             add_action( 'wp_footer', function() use ( $time_min, $time_max, $period, $year ) {
@@ -170,10 +195,14 @@ class GCal_Calendar {
                 $params['timeMax'] = $time_max;
             }
 
-            error_log( 'Calling Google Calendar API...' );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'Calling Google Calendar API...' );
+            }
             $events = $service->events->listEvents( $calendar_id, $params );
             $items = $events->getItems();
-            error_log( 'API returned ' . count( $items ) . ' events' );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'API returned ' . count( $items ) . ' events' );
+            }
 
             // Debug: Log first 3 event dates to console
             if ( count( $items ) > 0 ) {
@@ -191,7 +220,9 @@ class GCal_Calendar {
 
             return $items;
         } catch ( Exception $e ) {
-            error_log( 'GCal API Error: ' . $e->getMessage() );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'GCal API Error: ' . $e->getMessage() );
+            }
 
             return new WP_Error(
                 'api_error',
@@ -248,27 +279,35 @@ class GCal_Calendar {
                     $first_of_month->setDate( $target_year, $target_month, 1 );
                     $first_day_weekday = (int) $first_of_month->format( 'N' );
 
-                    error_log( 'GCal Calendar - Week calculation: year=' . $target_year . ', month=' . $target_month . ', week=' . $week . ', first_day_weekday=' . $first_day_weekday );
+                    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                        error_log( 'GCal Calendar - Week calculation: year=' . $target_year . ', month=' . $target_month . ', week=' . $week . ', first_day_weekday=' . $first_day_weekday );
+                    }
 
                     if ( $week === 1 && $first_day_weekday > 1 ) {
                         // Week 1 includes days before the first Monday
                         $start_of_week = clone $first_of_month;
                         $days_back = $first_day_weekday - 1;
                         $start_of_week->modify( '-' . $days_back . ' days' );
-                        error_log( 'GCal Calendar - Week 1 special case: going back ' . $days_back . ' days' );
+                        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                            error_log( 'GCal Calendar - Week 1 special case: going back ' . $days_back . ' days' );
+                        }
                     } else {
                         // Calculate from first of month
                         $start_of_week = clone $first_of_month;
                         $start_of_week->modify( '-' . ( $first_day_weekday - 1 ) . ' days' );
                         $start_of_week->modify( '+' . ( ( $week - 1 ) * 7 ) . ' days' );
-                        error_log( 'GCal Calendar - Normal week calculation: week ' . $week );
+                        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                            error_log( 'GCal Calendar - Normal week calculation: week ' . $week );
+                        }
                     }
                 } else {
                     // Get current week (Monday)
                     $start_of_week = clone $now;
                     $day_of_week = (int) $start_of_week->format( 'N' );
                     $start_of_week->modify( '-' . ( $day_of_week - 1 ) . ' days' );
-                    error_log( 'GCal Calendar - Using current week (no params provided)' );
+                    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                        error_log( 'GCal Calendar - Using current week (no params provided)' );
+                    }
                 }
 
                 $start_of_week->setTime( 0, 0, 0 );
@@ -279,7 +318,9 @@ class GCal_Calendar {
                 $end_of_week->setTime( 23, 59, 59 );
                 $time_max = $end_of_week->format( DateTime::RFC3339 );
 
-                error_log( 'GCal Calendar - Week range: ' . $start_of_week->format('Y-m-d') . ' to ' . $end_of_week->format('Y-m-d') );
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( 'GCal Calendar - Week range: ' . $start_of_week->format('Y-m-d') . ' to ' . $end_of_week->format('Y-m-d') );
+                }
                 break;
 
             case 'month':

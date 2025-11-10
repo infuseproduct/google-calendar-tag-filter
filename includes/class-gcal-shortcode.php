@@ -64,6 +64,7 @@ class GCal_Shortcode {
         $hide_past          = filter_var( $atts['hide_past'], FILTER_VALIDATE_BOOLEAN );
 
         // Check for URL parameter override (from view toggle)
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only public parameter for calendar navigation
         if ( isset( $_GET['gcal_view'] ) ) {
             $url_period = sanitize_text_field( wp_unslash( $_GET['gcal_view'] ) );
             $validated_url_period = $this->validate_period( $url_period );
@@ -73,6 +74,7 @@ class GCal_Shortcode {
         }
 
         // Check for URL parameter for display style toggle
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only public parameter for display style
         if ( isset( $_GET['gcal_display'] ) && $show_display_style ) {
             $url_view = sanitize_text_field( wp_unslash( $_GET['gcal_display'] ) );
             $validated_url_view = $this->validate_view( $url_view );
@@ -83,6 +85,7 @@ class GCal_Shortcode {
 
         // Check for URL parameter for category filter
         $selected_category = '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only public parameter for category filtering
         if ( isset( $_GET['gcal_category'] ) ) {
             $selected_category = sanitize_text_field( wp_unslash( $_GET['gcal_category'] ) );
         } elseif ( ! empty( $tags ) ) {
@@ -115,16 +118,21 @@ class GCal_Shortcode {
         }
 
         // Read date parameters from URL
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only public parameters for calendar navigation
         $url_year  = isset( $_GET['gcal_year'] ) ? intval( $_GET['gcal_year'] ) : null;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only public parameters for calendar navigation
         $url_month = isset( $_GET['gcal_month'] ) ? intval( $_GET['gcal_month'] ) : null;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only public parameters for calendar navigation
         $url_week  = isset( $_GET['gcal_week'] ) ? intval( $_GET['gcal_week'] ) : null;
 
         // DEBUG: Add visible output to page
         $debug_output = '<!-- DEBUG: URL params - year=' . ( $url_year ? $url_year : 'NULL' ) . ', month=' . ( $url_month ? $url_month : 'NULL' ) . ', week=' . ( $url_week ? $url_week : 'NULL' ) . ', period=' . $period . ' -->';
 
         // Debug logging
-        error_log( 'GCal Shortcode - URL params: year=' . ( $url_year ? $url_year : 'NULL' ) . ', month=' . ( $url_month ? $url_month : 'NULL' ) . ', week=' . ( $url_week ? $url_week : 'NULL' ) );
-        error_log( 'GCal Shortcode - Period: ' . $period );
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( 'GCal Shortcode - URL params: year=' . ( $url_year ? $url_year : 'NULL' ) . ', month=' . ( $url_month ? $url_month : 'NULL' ) . ', week=' . ( $url_week ? $url_week : 'NULL' ) );
+            error_log( 'GCal Shortcode - Period: ' . $period );
+        }
 
         // Output to browser console
         add_action( 'wp_footer', function() use ( $url_year, $url_month, $url_week, $period ) {
@@ -138,7 +146,9 @@ class GCal_Shortcode {
         // Debug events count
         $event_count = is_array( $events ) ? count( $events ) : 0;
         $is_error = is_wp_error( $events );
-        error_log( 'GCal Shortcode - Fetched ' . $event_count . ' events' . ( $is_error ? ' (ERROR: ' . $events->get_error_message() . ')' : '' ) );
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( 'GCal Shortcode - Fetched ' . $event_count . ' events' . ( $is_error ? ' (ERROR: ' . $events->get_error_message() . ')' : '' ) );
+        }
 
         add_action( 'wp_footer', function() use ( $events, $event_count, $is_error ) {
             if ( $is_error ) {
@@ -155,7 +165,9 @@ class GCal_Shortcode {
 
         // Debug: Show visible warning if no events
         if ( empty( $events ) ) {
-            error_log( 'GCal Shortcode - EMPTY EVENTS for period=' . $period . ', year=' . $url_year . ', month=' . $url_month . ', week=' . $url_week );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'GCal Shortcode - EMPTY EVENTS for period=' . $period . ', year=' . $url_year . ', month=' . $url_month . ', week=' . $url_week );
+            }
             $debug_output .= '<!-- DEBUG: EMPTY EVENTS ARRAY! -->';
         } else {
             $debug_output .= '<!-- DEBUG: Found ' . count( $events ) . ' events -->';
@@ -232,19 +244,23 @@ class GCal_Shortcode {
                 if ( preg_match( '/^[A-Z0-9_\-\*]+$/i', $tag ) ) {
                     $validated[] = strtoupper( $tag );
                 } else {
-                    error_log( sprintf(
-                        'GCal Shortcode: Invalid wildcard pattern "%s". Only alphanumeric, hyphens, underscores, and * allowed.',
-                        $tag
-                    ) );
+                    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                        error_log( sprintf(
+                            'GCal Shortcode: Invalid wildcard pattern "%s". Only alphanumeric, hyphens, underscores, and * allowed.',
+                            $tag
+                        ) );
+                    }
                 }
             } elseif ( $parser->is_valid_tag( $tag ) ) {
                 $validated[] = strtoupper( $tag );
             } else {
                 // Log invalid tag
-                error_log( sprintf(
-                    'GCal Shortcode: Invalid tag "%s" specified. Tag not in whitelist.',
-                    $tag
-                ) );
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( sprintf(
+                        'GCal Shortcode: Invalid tag "%s" specified. Tag not in whitelist.',
+                        $tag
+                    ) );
+                }
             }
         }
 

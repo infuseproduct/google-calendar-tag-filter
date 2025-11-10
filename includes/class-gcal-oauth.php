@@ -57,7 +57,9 @@ class GCal_OAuth {
             $this->client->setAccessType( 'offline' );
             $this->client->setPrompt( 'consent' );
         } catch ( Exception $e ) {
-            error_log( 'GCal OAuth Init Error: ' . $e->getMessage() );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'GCal OAuth Init Error: ' . $e->getMessage() );
+            }
             $this->client = null;
         }
     }
@@ -114,7 +116,9 @@ class GCal_OAuth {
 
             return true;
         } catch ( Exception $e ) {
-            error_log( 'GCal OAuth Error: ' . $e->getMessage() );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'GCal OAuth Error: ' . $e->getMessage() );
+            }
             return false;
         }
     }
@@ -159,7 +163,9 @@ class GCal_OAuth {
 
             return $this->client;
         } catch ( Exception $e ) {
-            error_log( 'GCal OAuth Error: ' . $e->getMessage() );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'GCal OAuth Error: ' . $e->getMessage() );
+            }
             return null;
         }
     }
@@ -188,7 +194,9 @@ class GCal_OAuth {
 
             return false;
         } catch ( Exception $e ) {
-            error_log( 'GCal OAuth Refresh Error: ' . $e->getMessage() );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'GCal OAuth Refresh Error: ' . $e->getMessage() );
+            }
             return false;
         }
     }
@@ -202,7 +210,9 @@ class GCal_OAuth {
                 $this->client->revokeToken();
             }
         } catch ( Exception $e ) {
-            error_log( 'GCal OAuth Revoke Error: ' . $e->getMessage() );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'GCal OAuth Revoke Error: ' . $e->getMessage() );
+            }
         }
 
         // Clear all stored credentials
@@ -257,7 +267,9 @@ class GCal_OAuth {
 
             return $calendars;
         } catch ( Exception $e ) {
-            error_log( 'GCal Calendar List Error: ' . $e->getMessage() );
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'GCal Calendar List Error: ' . $e->getMessage() );
+            }
             return false;
         }
     }

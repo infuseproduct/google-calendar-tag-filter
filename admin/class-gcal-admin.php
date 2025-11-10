@@ -284,7 +284,12 @@ class GCal_Admin {
                         </div>
 
                         <?php if ( $selected_calendar ) : ?>
-                            <p><?php printf( esc_html__( 'Selected Calendar: <strong>%s</strong>', 'google-calendar-tag-filter' ), esc_html( $selected_calendar ) ); ?></p>
+                            <p>
+                                <?php
+                                /* translators: %s: Calendar name */
+                                printf( esc_html__( 'Selected Calendar: <strong>%s</strong>', 'google-calendar-tag-filter' ), esc_html( $selected_calendar ) );
+                                ?>
+                            </p>
                         <?php endif; ?>
 
                         <div class="gcal-actions" style="margin: 20px 0;">

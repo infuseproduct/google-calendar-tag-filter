@@ -97,10 +97,12 @@ class GCal_Parser {
             } else {
                 $invalid[] = $tag_upper;
                 // Log invalid tag for admin awareness
-                error_log( sprintf(
-                    'GCal Tag Filter: Invalid tag "%s" found in event. Not in whitelist.',
-                    $tag
-                ) );
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( sprintf(
+                        'GCal Tag Filter: Invalid tag "%s" found in event. Not in whitelist.',
+                        $tag
+                    ) );
+                }
             }
         }
 
