@@ -241,7 +241,7 @@ To create a zip file for distribution (e.g., WordPress.org or manual installatio
 
 ```bash
 # From the plugin root directory
-zip -r gcal-tag-filter.zip . -x "*.git*" "*.DS_Store" "*composer.lock" "*.claude/*" "*docs/*" "messages.mo"
+zip -r gcal-tag-filter.zip . -x "*.git*" "*.DS_Store" "*composer.lock" "*.claude/*" "*docs/*" "messages.mo" "*.sh"
 ```
 
 **What's included:**
@@ -256,6 +256,7 @@ zip -r gcal-tag-filter.zip . -x "*.git*" "*.DS_Store" "*composer.lock" "*.claude
 - System files (`.DS_Store`)
 - `composer.lock` (not needed for distribution)
 - Development files (`.claude/`, `docs/`, debug `messages.mo`)
+- Shell scripts (`*.sh` - not permitted by WordPress.org)
 
 **Note:** The vendor folder is ~16MB uncompressed, ~2.1MB in the zip. This is normal and required for the plugin to function.
 

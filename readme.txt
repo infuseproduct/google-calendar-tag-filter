@@ -1,10 +1,10 @@
-=== GCal Tag Filter for Google Calendar ===
+=== GCal Tag Filter ===
 Contributors: infuseproduct
 Tags: google calendar, events, calendar, oauth, tag filter
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.15
+Stable tag: 1.0.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Embeds Google Calendar events with tag-based filtering capabilities using OAuth 
 
 == Description ==
 
-GCal Tag Filter for Google Calendar is a powerful WordPress plugin that seamlessly embeds your Google Calendar events with advanced tag-based filtering. Perfect for organizations, communities, and businesses that need to display categorized events with a beautiful, responsive interface.
+GCal Tag Filter is a powerful WordPress plugin that seamlessly embeds your Google Calendar events with advanced tag-based filtering. Perfect for organizations, communities, and businesses that need to display categorized events with a beautiful, responsive interface.
 
 = Key Features =
 
@@ -175,8 +175,16 @@ Yes! The plugin is fully internationalized with text domain `gcal-tag-filter`. P
 
 == Changelog ==
 
+= 1.0.16 =
+* Removed load_plugin_textdomain() for WordPress.org compliance
+* WordPress now automatically loads translations for hosted plugins
+
 = 1.0.15 =
-* Initial release
+* Fixed French translations for event modal
+* Fixed week view date calculation
+* Fixed calendar weekday headers to respect WordPress week start setting
+* Integrated WordPress settings (week start, time format, date format)
+* Initial WordPress.org release
 
 == Privacy Policy ==
 
