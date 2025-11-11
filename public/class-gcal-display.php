@@ -955,6 +955,10 @@ class GCal_Display {
                     <li>
                         <button class="gcal-category-btn <?php echo $category === strtoupper( $selected_category ) ? 'active' : ''; ?>"
                                 data-category="<?php echo esc_attr( $category ); ?>">
+                            <?php
+                            $category_color = GCal_Categories::get_category_color( $category );
+                            ?>
+                            <span class="gcal-category-color-dot" style="background-color: <?php echo esc_attr( $category_color ); ?>"></span>
                             <?php echo esc_html( $this->get_category_display_name( $category ) ); ?>
                         </button>
                     </li>

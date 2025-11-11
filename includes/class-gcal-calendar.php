@@ -186,7 +186,7 @@ class GCal_Calendar {
 
             $params = array(
                 'timeMin'      => $time_min,
-                'maxResults'   => 100,
+                'maxResults'   => 2500, // Google Calendar API maximum per page
                 'singleEvents' => true, // Expand recurring events
                 'orderBy'      => 'startTime',
             );
@@ -198,10 +198,34 @@ class GCal_Calendar {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 error_log( 'Calling Google Calendar API...' );
             }
-            $events = $service->events->listEvents( $calendar_id, $params );
-            $items = $events->getItems();
+
+            // Fetch all pages of events
+            $all_items = array();
+            $page_token = null;
+            $page_count = 0;
+
+            do {
+                if ( $page_token ) {
+                    $params['pageToken'] = $page_token;
+                }
+
+                $events = $service->events->listEvents( $calendar_id, $params );
+                $items = $events->getItems();
+                $page_count++;
+
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( 'API page ' . $page_count . ' returned ' . count( $items ) . ' events' );
+                }
+
+                $all_items = array_merge( $all_items, $items );
+                $page_token = $events->getNextPageToken();
+
+            } while ( $page_token && $page_count < 10 ); // Limit to 10 pages (2500 events max) for safety
+
+            $items = $all_items;
+
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                error_log( 'API returned ' . count( $items ) . ' events' );
+                error_log( 'Total events fetched: ' . count( $items ) . ' across ' . $page_count . ' page(s)' );
             }
 
             // Debug: Log first 3 event dates to console

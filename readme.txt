@@ -4,7 +4,7 @@ Tags: google calendar, events, calendar, oauth, tag filter
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.16
+Stable tag: 1.0.18
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -174,6 +174,15 @@ Yes! The plugin is fully internationalized with text domain `gcal-tag-filter`. P
 7. Mobile responsive design
 
 == Changelog ==
+
+= 1.0.18 =
+* Fixed year view not displaying all events (added pagination support)
+* Increased API maxResults to 2500 (Google Calendar API maximum)
+* Year view now fetches all events across multiple pages if needed
+
+= 1.0.17 =
+* Added color indicators to category sidebar buttons
+* Category colors now displayed as small circles matching year view design
 
 = 1.0.16 =
 * Removed load_plugin_textdomain() for WordPress.org compliance
