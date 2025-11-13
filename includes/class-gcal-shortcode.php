@@ -140,8 +140,21 @@ class GCal_Shortcode {
             echo '<script>console.log("PHP Shortcode params: year=' . ( $url_year ? esc_js( $url_year ) : 'NULL' ) . ', month=' . ( $url_month ? esc_js( $url_month ) : 'NULL' ) . ', week=' . ( $url_week ? esc_js( $url_week ) : 'NULL' ) . ', period=' . esc_js( $period ) . '");</script>';
         } );
 
-        // Fetch events
-        $events = $this->calendar->get_events( $period, $tags, $url_year, $url_month, $url_week );
+        // Check if tags were specified but all were invalid
+        $original_tags_specified = ! empty( $atts['tags'] );
+        $all_tags_invalid = $original_tags_specified && empty( $tags );
+
+        if ( $all_tags_invalid ) {
+            // All specified tags were invalid - show error or empty result
+            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                error_log( 'GCal Shortcode: All specified tags were invalid: ' . $atts['tags'] );
+            }
+            // Return empty array - no events should be shown
+            $events = array();
+        } else {
+            // Fetch events
+            $events = $this->calendar->get_events( $period, $tags, $url_year, $url_month, $url_week );
+        }
 
         // Debug events count
         $event_count = is_array( $events ) ? count( $events ) : 0;

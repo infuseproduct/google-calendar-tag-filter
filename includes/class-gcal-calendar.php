@@ -450,24 +450,38 @@ class GCal_Calendar {
         // Normalize tags to uppercase for comparison
         $tags = array_map( 'strtoupper', $tags );
 
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( 'Filtering by tags: ' . implode( ', ', $tags ) );
+        }
+
         // Check if current user can view untagged events
         $is_admin = GCal_Capabilities::can_view_untagged();
 
         return array_filter(
             $events,
             function ( $event ) use ( $tags, $is_admin ) {
-                // For events with unknown tags only (no valid tags): show to admins, hide from non-admins
+                // For events with unknown tags only (no valid tags): hide from everyone when filtering by tags
                 if ( ! empty( $event['has_unknown_tags'] ) ) {
-                    return $is_admin;
+                    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                        error_log( 'Event "' . $event['title'] . '" has unknown tags only - HIDING (filtered view)' );
+                    }
+                    return false;
                 }
 
-                // For untagged events: show to admins, hide from non-admins
+                // For untagged events: hide from everyone when filtering by tags
                 if ( empty( $event['tags'] ) ) {
-                    return $is_admin;
+                    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                        error_log( 'Event "' . $event['title'] . '" has no tags - HIDING (filtered view)' );
+                    }
+                    return false;
                 }
 
                 // Check if event has ANY of the specified tags (OR logic)
                 $event_tags = array_map( 'strtoupper', $event['tags'] );
+
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( 'Event "' . $event['title'] . '" has tags: ' . implode( ', ', $event_tags ) );
+                }
 
                 foreach ( $tags as $tag ) {
                     // Check for wildcard pattern (e.g., "MESSE*")
@@ -478,17 +492,26 @@ class GCal_Calendar {
                         // Check if any event tag matches the wildcard pattern
                         foreach ( $event_tags as $event_tag ) {
                             if ( preg_match( $pattern, $event_tag ) ) {
+                                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                    error_log( '  -> MATCH! Wildcard "' . $tag . '" matches "' . $event_tag . '"' );
+                                }
                                 return true;
                             }
                         }
                     } else {
                         // Exact match
                         if ( in_array( $tag, $event_tags, true ) ) {
+                            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                error_log( '  -> MATCH! Tag "' . $tag . '" found in event tags' );
+                            }
                             return true;
                         }
                     }
                 }
 
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    error_log( '  -> NO MATCH - event filtered out' );
+                }
                 return false;
             }
         );

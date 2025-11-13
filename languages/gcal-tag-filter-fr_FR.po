@@ -569,26 +569,34 @@ msgid "Add Category"
 msgstr "Ajouter une catégorie"
 
 #: admin/partials/category-manager.php:80
+msgid "Export Categories"
+msgstr "Exporter les catégories"
+
+#: admin/partials/category-manager.php:83
+msgid "Import Categories"
+msgstr "Importer les catégories"
+
+#: admin/partials/category-manager.php:91
 msgid "Existing Categories"
 msgstr "Catégories existantes"
 
-#: admin/partials/category-manager.php:83
+#: admin/partials/category-manager.php:94
 msgid "No categories defined yet."
 msgstr "Aucune catégorie définie."
 
-#: admin/partials/category-manager.php:91
+#: admin/partials/category-manager.php:102
 msgid "Actions"
 msgstr "Actions"
 
-#: admin/partials/category-manager.php:118
+#: admin/partials/category-manager.php:129
 msgid "Edit"
 msgstr "Modifier"
 
-#: admin/partials/category-manager.php:122
+#: admin/partials/category-manager.php:133
 msgid "Delete"
 msgstr "Supprimer"
 
-#: admin/partials/category-manager.php:137
+#: admin/partials/category-manager.php:148
 msgid "Edit Category"
 msgstr "Modifier la catégorie"
 
@@ -599,6 +607,80 @@ msgstr "Enregistrer les modifications"
 #: admin/partials/category-manager.php:168
 msgid "Cancel"
 msgstr "Annuler"
+
+#: admin/partials/category-manager.php:184
+msgid "Upload a JSON file exported from this plugin. You can choose to merge with existing categories or replace all categories."
+msgstr "Téléchargez un fichier JSON exporté depuis ce plugin. Vous pouvez choisir de fusionner avec les catégories existantes ou de remplacer toutes les catégories."
+
+#: admin/partials/category-manager.php:187
+msgid "Import Preview:"
+msgstr "Aperçu de l'import :"
+
+#: admin/partials/category-manager.php:194
+msgid "Merge with existing categories (skip duplicates)"
+msgstr "Fusionner avec les catégories existantes (ignorer les doublons)"
+
+#: admin/partials/category-manager.php:198
+msgid "Replace all categories (delete existing)"
+msgstr "Remplacer toutes les catégories (supprimer les existantes)"
+
+#: admin/partials/category-manager.php:204
+msgid "Import"
+msgstr "Importer"
+
+#: admin/class-gcal-admin.php:775
+msgid "No categories to export."
+msgstr "Aucune catégorie à exporter."
+
+#: admin/class-gcal-admin.php:816
+msgid "No import data provided."
+msgstr "Aucune donnée d'import fournie."
+
+#: admin/class-gcal-admin.php:823
+msgid "Invalid JSON format."
+msgstr "Format JSON invalide."
+
+#: admin/class-gcal-admin.php:828
+msgid "Invalid import file structure."
+msgstr "Structure de fichier d'import invalide."
+
+#: admin/class-gcal-admin.php:834
+msgid "No categories found in import file."
+msgstr "Aucune catégorie trouvée dans le fichier d'import."
+
+#: admin/class-gcal-admin.php:858
+msgid "Skipped invalid category entry."
+msgstr "Entrée de catégorie invalide ignorée."
+
+#: admin/class-gcal-admin.php:878
+#, php-format
+msgid "Failed to import %1$s: %2$s"
+msgstr "Échec de l'import de %1$s : %2$s"
+
+#: admin/class-gcal-admin.php:895
+#, php-format
+msgid "%d category imported successfully."
+msgid_plural "%d categories imported successfully."
+msgstr[0] "%d catégorie importée avec succès."
+msgstr[1] "%d catégories importées avec succès."
+
+#: admin/class-gcal-admin.php:904
+#, php-format
+msgid "%d existing category skipped."
+msgid_plural "%d existing categories skipped."
+msgstr[0] "%d catégorie existante ignorée."
+msgstr[1] "%d catégories existantes ignorées."
+
+#: admin/class-gcal-admin.php:910
+#, php-format
+msgid "%d category skipped due to errors."
+msgid_plural "%d categories skipped due to errors."
+msgstr[0] "%d catégorie ignorée en raison d'erreurs."
+msgstr[1] "%d catégories ignorées en raison d'erreurs."
+
+#: admin/class-gcal-admin.php:921
+msgid "No new categories to import."
+msgstr "Aucune nouvelle catégorie à importer."
 
 #: gcal-tag-filter.php:231 public/class-gcal-display.php:181
 #: public/class-gcal-display.php:325
