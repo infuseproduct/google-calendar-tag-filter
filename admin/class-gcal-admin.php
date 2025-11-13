@@ -76,7 +76,7 @@ class GCal_Admin {
     /**
      * Register settings.
      *
-     * NOTE: Client ID and Secret are NOT registered here because they are saved via AJAX.
+     * NOTE: Client ID, Secret, and Categories are NOT registered here because they are saved via AJAX.
      * Registering them would cause WordPress to delete them when saving other settings
      * (like calendar selection) because they're not present in those forms.
      */
@@ -97,44 +97,9 @@ class GCal_Admin {
                 'sanitize_callback' => 'absint',
             )
         );
-        register_setting(
-            'gcal_tag_filter_options',
-            GCal_Categories::OPTION_CATEGORIES,
-            array(
-                'type' => 'array',
-                'sanitize_callback' => array( $this, 'sanitize_categories' ),
-            )
-        );
-    }
-
-    /**
-     * Sanitize categories array.
-     *
-     * @param array $categories Categories to sanitize.
-     * @return array Sanitized categories.
-     */
-    public function sanitize_categories( $categories ) {
-        if ( ! is_array( $categories ) ) {
-            return array();
-        }
-
-        $sanitized = array();
-        foreach ( $categories as $category ) {
-            if ( is_array( $category ) ) {
-                // Support both old (slug/name) and new (id/display_name) keys for migration
-                $id = isset( $category['id'] ) ? $category['id'] : ( isset( $category['slug'] ) ? $category['slug'] : '' );
-                $display_name = isset( $category['display_name'] ) ? $category['display_name'] : ( isset( $category['name'] ) ? $category['name'] : '' );
-                $color = isset( $category['color'] ) ? $category['color'] : '';
-
-                $sanitized[] = array(
-                    'id'           => strtoupper( sanitize_key( $id ) ),
-                    'display_name' => sanitize_text_field( $display_name ),
-                    'color'        => sanitize_hex_color( $color ) ?: '#4285F4',
-                );
-            }
-        }
-
-        return $sanitized;
+        // NOTE: GCal_Categories::OPTION_CATEGORIES is NOT registered here
+        // because categories are managed via AJAX (see ajax_add_category,
+        // ajax_update_category, ajax_delete_category methods).
     }
 
     /**
