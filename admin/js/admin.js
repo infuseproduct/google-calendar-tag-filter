@@ -312,6 +312,139 @@
         $('#category_id').on('input', function() {
             this.value = this.value.toUpperCase();
         });
+
+        // Export categories
+        $('#gcal-export-categories').on('click', function() {
+            var $button = $(this);
+            $button.prop('disabled', true).text('Exporting...');
+
+            $.ajax({
+                url: gcalAdmin.ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'gcal_export_categories',
+                    nonce: gcalAdmin.nonce
+                },
+                success: function(response) {
+                    $button.prop('disabled', false).text('Export Categories');
+
+                    if (response.success) {
+                        // Create download
+                        var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(response.data.data, null, 2));
+                        var downloadAnchorNode = document.createElement('a');
+                        downloadAnchorNode.setAttribute('href', dataStr);
+                        downloadAnchorNode.setAttribute('download', response.data.filename);
+                        document.body.appendChild(downloadAnchorNode);
+                        downloadAnchorNode.click();
+                        downloadAnchorNode.remove();
+                    } else {
+                        alert(response.data.message || 'Failed to export categories');
+                    }
+                },
+                error: function() {
+                    $button.prop('disabled', false).text('Export Categories');
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+
+        // Import categories - trigger file input
+        $('#gcal-import-categories').on('click', function() {
+            $('#gcal-import-file').click();
+        });
+
+        // Handle file selection
+        var importData = null;
+        $('#gcal-import-file').on('change', function(e) {
+            var file = e.target.files[0];
+            if (!file) return;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    importData = JSON.parse(e.target.result);
+
+                    // Validate structure
+                    if (!importData.categories || !Array.isArray(importData.categories)) {
+                        throw new Error('Invalid file structure');
+                    }
+
+                    // Show preview
+                    var details = '';
+                    if (importData.version) {
+                        details += 'Version: ' + importData.version + '<br>';
+                    }
+                    if (importData.export_date) {
+                        details += 'Exported: ' + importData.export_date + '<br>';
+                    }
+                    details += 'Categories: ' + importData.categories.length;
+
+                    $('#gcal-import-details').html(details);
+                    $('#gcal-import-info').show();
+                    $('#gcal-do-import').prop('disabled', false);
+
+                    // Show modal
+                    $('#gcal-import-category-modal').show();
+                } catch (err) {
+                    alert('Invalid JSON file: ' + err.message);
+                    importData = null;
+                }
+            };
+            reader.readAsText(file);
+
+            // Reset file input
+            $(this).val('');
+        });
+
+        // Do import
+        $('#gcal-do-import').on('click', function() {
+            if (!importData) return;
+
+            var $button = $(this);
+            var merge = $('input[name="import_mode"]:checked').val() === 'merge';
+
+            if (!merge && !confirm('Are you sure you want to REPLACE all existing categories? This cannot be undone.')) {
+                return;
+            }
+
+            $button.prop('disabled', true).text('Importing...');
+
+            $.ajax({
+                url: gcalAdmin.ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'gcal_import_categories',
+                    nonce: gcalAdmin.nonce,
+                    import_data: JSON.stringify(importData),
+                    merge: merge
+                },
+                success: function(response) {
+                    $button.prop('disabled', false).text('Import');
+
+                    if (response.success) {
+                        alert(response.data.message);
+                        $('#gcal-import-category-modal').hide();
+                        location.reload(); // Reload to show new categories
+                    } else {
+                        alert(response.data.message || 'Failed to import categories');
+                    }
+                },
+                error: function() {
+                    $button.prop('disabled', false).text('Import');
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+
+        // Modal close handlers
+        $('.gcal-modal-close, .gcal-modal-backdrop').on('click', function(e) {
+            if (e.target === this) {
+                $('#gcal-import-category-modal').hide();
+                $('#gcal-import-info').hide();
+                $('#gcal-do-import').prop('disabled', true);
+                importData = null;
+            }
+        });
     });
 
 })(jQuery);

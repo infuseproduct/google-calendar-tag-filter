@@ -58,6 +58,8 @@ class GCal_Admin {
         add_action( 'wp_ajax_gcal_add_category', array( $this, 'ajax_add_category' ) );
         add_action( 'wp_ajax_gcal_update_category', array( $this, 'ajax_update_category' ) );
         add_action( 'wp_ajax_gcal_delete_category', array( $this, 'ajax_delete_category' ) );
+        add_action( 'wp_ajax_gcal_export_categories', array( $this, 'ajax_export_categories' ) );
+        add_action( 'wp_ajax_gcal_import_categories', array( $this, 'ajax_import_categories' ) );
     }
 
     /**
@@ -723,5 +725,173 @@ class GCal_Admin {
                 'message' => __( 'Category deleted successfully.', 'gcal-tag-filter' ),
             ) );
         }
+    }
+
+    /**
+     * AJAX: Export categories.
+     */
+    public function ajax_export_categories() {
+        // Clean output buffer to prevent notices from breaking JSON response
+        if ( ob_get_length() ) {
+            ob_clean();
+        }
+
+        check_ajax_referer( 'gcal-admin-nonce', 'nonce' );
+
+        if ( ! GCal_Capabilities::can_manage_categories() ) {
+            wp_send_json_error( array( 'message' => __( 'Permission denied.', 'gcal-tag-filter' ) ) );
+        }
+
+        $categories = GCal_Categories::get_categories();
+
+        if ( empty( $categories ) ) {
+            wp_send_json_error( array( 'message' => __( 'No categories to export.', 'gcal-tag-filter' ) ) );
+        }
+
+        // Create export data with metadata
+        $export_data = array(
+            'version'     => GCAL_TAG_FILTER_VERSION,
+            'export_date' => gmdate( 'Y-m-d H:i:s' ),
+            'categories'  => $categories,
+        );
+
+        wp_send_json_success( array(
+            'data'     => $export_data,
+            'filename' => 'gcal-categories-' . gmdate( 'Y-m-d' ) . '.json',
+        ) );
+    }
+
+    /**
+     * AJAX: Import categories.
+     */
+    public function ajax_import_categories() {
+        // Clean output buffer to prevent notices from breaking JSON response
+        if ( ob_get_length() ) {
+            ob_clean();
+        }
+
+        check_ajax_referer( 'gcal-admin-nonce', 'nonce' );
+
+        if ( ! GCal_Capabilities::can_manage_categories() ) {
+            wp_send_json_error( array( 'message' => __( 'Permission denied.', 'gcal-tag-filter' ) ) );
+        }
+
+        // Get the JSON data from POST
+        $json_data = isset( $_POST['import_data'] ) ? wp_unslash( $_POST['import_data'] ) : '';
+
+        if ( empty( $json_data ) ) {
+            wp_send_json_error( array( 'message' => __( 'No import data provided.', 'gcal-tag-filter' ) ) );
+        }
+
+        // Decode JSON
+        $import_data = json_decode( $json_data, true );
+
+        if ( json_last_error() !== JSON_ERROR_NONE ) {
+            wp_send_json_error( array( 'message' => __( 'Invalid JSON format.', 'gcal-tag-filter' ) ) );
+        }
+
+        // Validate structure
+        if ( ! isset( $import_data['categories'] ) || ! is_array( $import_data['categories'] ) ) {
+            wp_send_json_error( array( 'message' => __( 'Invalid import file structure.', 'gcal-tag-filter' ) ) );
+        }
+
+        $categories = $import_data['categories'];
+
+        if ( empty( $categories ) ) {
+            wp_send_json_error( array( 'message' => __( 'No categories found in import file.', 'gcal-tag-filter' ) ) );
+        }
+
+        // Get merge mode
+        $merge = isset( $_POST['merge'] ) && $_POST['merge'] === 'true';
+
+        // Get existing categories if merging
+        $existing_categories = $merge ? GCal_Categories::get_categories() : array();
+        $existing_ids = array();
+
+        if ( $merge ) {
+            foreach ( $existing_categories as $cat ) {
+                $existing_ids[ $cat['id'] ] = true;
+            }
+        }
+
+        // Process imported categories
+        $imported_count = 0;
+        $skipped_count = 0;
+        $errors = array();
+
+        foreach ( $categories as $category ) {
+            // Validate category structure
+            if ( ! isset( $category['id'] ) || ! isset( $category['display_name'] ) || ! isset( $category['color'] ) ) {
+                $errors[] = __( 'Skipped invalid category entry.', 'gcal-tag-filter' );
+                $skipped_count++;
+                continue;
+            }
+
+            // Skip if merging and category already exists
+            if ( $merge && isset( $existing_ids[ $category['id'] ] ) ) {
+                $skipped_count++;
+                continue;
+            }
+
+            // Add category
+            $result = GCal_Categories::add_category(
+                $category['id'],
+                $category['display_name'],
+                $category['color']
+            );
+
+            if ( is_wp_error( $result ) ) {
+                $errors[] = sprintf(
+                    /* translators: 1: category ID, 2: error message */
+                    __( 'Failed to import %1$s: %2$s', 'gcal-tag-filter' ),
+                    $category['id'],
+                    $result->get_error_message()
+                );
+                $skipped_count++;
+            } else {
+                $imported_count++;
+            }
+        }
+
+        // Build response message
+        $messages = array();
+
+        if ( $imported_count > 0 ) {
+            $messages[] = sprintf(
+                /* translators: %d: number of categories */
+                _n( '%d category imported successfully.', '%d categories imported successfully.', $imported_count, 'gcal-tag-filter' ),
+                $imported_count
+            );
+        }
+
+        if ( $skipped_count > 0 ) {
+            if ( $merge ) {
+                $messages[] = sprintf(
+                    /* translators: %d: number of categories */
+                    _n( '%d existing category skipped.', '%d existing categories skipped.', $skipped_count, 'gcal-tag-filter' ),
+                    $skipped_count
+                );
+            } else {
+                $messages[] = sprintf(
+                    /* translators: %d: number of categories */
+                    _n( '%d category skipped due to errors.', '%d categories skipped due to errors.', $skipped_count, 'gcal-tag-filter' ),
+                    $skipped_count
+                );
+            }
+        }
+
+        if ( ! empty( $errors ) ) {
+            $messages[] = implode( ' ', $errors );
+        }
+
+        if ( $imported_count === 0 && empty( $errors ) ) {
+            wp_send_json_error( array( 'message' => __( 'No new categories to import.', 'gcal-tag-filter' ) ) );
+        }
+
+        wp_send_json_success( array(
+            'message'        => implode( ' ', $messages ),
+            'imported_count' => $imported_count,
+            'skipped_count'  => $skipped_count,
+        ) );
     }
 }

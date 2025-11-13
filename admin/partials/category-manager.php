@@ -73,6 +73,17 @@ if ( ! empty( $gcal_categories ) ) {
                 <?php esc_html_e( 'Add Category', 'gcal-tag-filter' ); ?>
             </button>
         </form>
+
+        <!-- Export/Import Controls -->
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd;">
+            <button type="button" class="button" id="gcal-export-categories">
+                <?php esc_html_e( 'Export Categories', 'gcal-tag-filter' ); ?>
+            </button>
+            <button type="button" class="button" id="gcal-import-categories">
+                <?php esc_html_e( 'Import Categories', 'gcal-tag-filter' ); ?>
+            </button>
+            <input type="file" id="gcal-import-file" accept=".json" style="display: none;" />
+        </div>
     </div>
 
     <!-- Categories List -->
@@ -169,6 +180,44 @@ if ( ! empty( $gcal_categories ) ) {
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Import Category Modal -->
+<div id="gcal-import-category-modal" class="gcal-modal-backdrop" style="display: none;">
+    <div class="gcal-modal-dialog">
+        <div class="gcal-modal-header">
+            <h3><?php esc_html_e( 'Import Categories', 'gcal-tag-filter' ); ?></h3>
+            <button type="button" class="gcal-modal-close">×</button>
+        </div>
+        <div class="gcal-modal-body">
+            <p><?php esc_html_e( 'Upload a JSON file exported from this plugin. You can choose to merge with existing categories or replace all categories.', 'gcal-tag-filter' ); ?></p>
+
+            <div id="gcal-import-info" style="display: none; margin: 15px 0; padding: 10px; background: #f0f0f1; border-left: 4px solid #2271b1;">
+                <strong><?php esc_html_e( 'Import Preview:', 'gcal-tag-filter' ); ?></strong>
+                <div id="gcal-import-details" style="margin-top: 8px;"></div>
+            </div>
+
+            <div style="margin: 15px 0;">
+                <label style="display: flex; align-items: center;">
+                    <input type="radio" name="import_mode" value="merge" checked style="margin-right: 8px;">
+                    <span><?php esc_html_e( 'Merge with existing categories (skip duplicates)', 'gcal-tag-filter' ); ?></span>
+                </label>
+                <label style="display: flex; align-items: center; margin-top: 8px;">
+                    <input type="radio" name="import_mode" value="replace" style="margin-right: 8px;">
+                    <span style="color: #d63638;"><?php esc_html_e( 'Replace all categories (delete existing)', 'gcal-tag-filter' ); ?></span>
+                </label>
+            </div>
+
+            <div class="gcal-modal-footer">
+                <button type="button" class="button button-primary" id="gcal-do-import" disabled>
+                    <?php esc_html_e( 'Import', 'gcal-tag-filter' ); ?>
+                </button>
+                <button type="button" class="button gcal-modal-close">
+                    <?php esc_html_e( 'Cancel', 'gcal-tag-filter' ); ?>
+                </button>
+            </div>
         </div>
     </div>
 </div>
